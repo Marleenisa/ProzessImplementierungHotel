@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 2,
+  "components": [
+    {
+      "text": "# Zimmerbuchung",
+      "type": "text",
+      "id": "Field_1mpsff6"
+    },
+    {
+      "label": "Name des Kunden",
+      "type": "textfield",
+      "id": "Field_0vz9jsy",
+      "key": "guestName",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "values": [
+        {
+          "label": "Suite",
+          "value": "suite"
+        },
+        {
+          "label": "Doppelzimmer",
+          "value": "double"
+        },
+        {
+          "label": "Einzelzimmer",
+          "value": "single"
+        }
+      ],
+      "label": "Bitte wählen Sie das gewünschte Zimmer aus",
+      "type": "select",
+      "id": "Field_03vt2bl",
+      "key": "wish",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Anzahl der Nächte",
+      "type": "number",
+      "id": "Field_1jsyv94",
+      "key": "duration",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "action": "submit",
+      "label": "Verfügbarkeit prüfen",
+      "type": "button",
+      "id": "Field_0iszsrv",
+      "key": "field_05g61ic"
+    }
+  ],
+  "type": "default",
+  "id": "Form_07zgzh8"
+}
