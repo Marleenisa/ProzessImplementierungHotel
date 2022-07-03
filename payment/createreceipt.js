@@ -10,17 +10,17 @@ var roomid = execution.getVariable("room")
 var guestName = execution.getVariable("name")
 
 
-var url = new URL("http://34.79.164.87:8080/hotels/berlin/rooms/" + roomid);
+var url = new URL("http://34.76.112.173:8080/hotels/berlin/rooms/" + roomid);
 
 var con = url.openConnection();
-con.setRequestMethod("PUT");
+con.setRequestMethod("GET");
 con.setDoOutput(true);
 con.setRequestProperty("Content-Type", "application/json");
 con.setRequestProperty("Accept", "application/json");
 con.connect()
 
 
-var content = {status : "occupied", guest : "name"}
+var receipt = { guest : "name", roomtype: "type", price : "roomPrice"}
 
 var jsoncontent = JSON.stringify(content);
 
@@ -38,7 +38,4 @@ ps.close();
 reader = new BufferedReader(new 
   InputStreamReader(con.getInputStream()));
   
-
   reader.close();
-
-

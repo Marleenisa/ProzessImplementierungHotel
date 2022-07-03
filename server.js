@@ -5,13 +5,16 @@ let bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+//Hinzufügen von installment, um bei Ratenzahlung den neuen Preis zu speichern (Gesamt und monatlich)
 let rooms = {};
 for (let i = 100; i < 120; ++i) {
 	rooms[i] = {
 		roomtype : "single",
 		price : 80,
 		guest : "none",
-		status : "free"
+		status : "free",
+		installment: 0,
+		installmentmonthly: 0
 	}
 }
 for (let i = 200; i < 210; ++i) {
@@ -19,7 +22,9 @@ for (let i = 200; i < 210; ++i) {
 		roomtype : "double",
 		price : 120,
 		guest : "none",
-		status : "free"
+		status : "free",
+		installment: 0,
+		installmentmonthly: 0
 	}
 }
 for (let i = 300; i < 305; ++i) {
@@ -27,10 +32,11 @@ for (let i = 300; i < 305; ++i) {
 		roomtype : "suite",
 		price : 250,
 		guest : "none",
-		status : "free"
+		status : "free",
+		installment: 0,
+		installmentmonthly: 0
 	}
 }
-
 
 app.get('/hotels/berlin/rooms', (req, res) => {
 	res.send(Object.keys(rooms));
