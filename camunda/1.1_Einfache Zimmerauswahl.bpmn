@@ -297,7 +297,7 @@ execution.setVariable("roomstatus", roomobj.status)</bpmn:script>
         <camunda:formData>
           <camunda:formField id="name" label="Name" type="string" defaultValue="${guestName}" />
           <camunda:formField id="type" label="Ihr gewünschtes Zimmer:" type="string" defaultValue="${type}" />
-          <camunda:formField id="roomnr" label="Zimmernummer:" type="long" defaultValue="${roomid}" />
+          <camunda:formField id="roomnr" label="Zimmernummer:" type="long" defaultValue="${roomnr}" />
           <camunda:formField id="stayDuration" label="Ihre Aufenthaltsdauer" type="long" defaultValue="${duration}" />
           <camunda:formField id="roomPrice" label="Gesamtpreis: " type="long" defaultValue="${price}" />
           <camunda:formField id="roomStatus" label="Status des Zimmers:" type="string" defaultValue="${roomstatus}" />
