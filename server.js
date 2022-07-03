@@ -13,6 +13,7 @@ for (let i = 100; i < 120; ++i) {
 		price : 80,
 		guest : "none",
 		status : "free",
+		duration : 0 ,
 		installment: 0,
 		installmentmonthly: 0
 	}
@@ -23,6 +24,7 @@ for (let i = 200; i < 210; ++i) {
 		price : 120,
 		guest : "none",
 		status : "free",
+		duration : 0 ,
 		installment: 0,
 		installmentmonthly: 0
 	}
@@ -33,6 +35,7 @@ for (let i = 300; i < 305; ++i) {
 		price : 250,
 		guest : "none",
 		status : "free",
+		duration : 0 ,
 		installment: 0,
 		installmentmonthly: 0
 	}
@@ -55,6 +58,7 @@ app.put('/hotels/berlin/rooms/:roomid', (req, res) => {
 	else if (change.status === "occupied" && change.guest != undefined) {
 		rooms[req.params.roomid].guest = change.guest;
 		rooms[req.params.roomid].status = "occupied";
+		rooms[req.params.roomid].duration = change.duration; 
 	}
 	else {
 		res.sendStatus(400);

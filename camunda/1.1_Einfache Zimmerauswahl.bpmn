@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1j1m9c3" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.11.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1j1m9c3" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.0.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
   <bpmn:collaboration id="Collaboration_16qafuh">
     <bpmn:participant id="Participant_12zbopj" name="Kunde" />
     <bpmn:participant id="Participant_1cinbjq" name="Reisebüro" processRef="Process_01i5px3" />
@@ -30,6 +30,7 @@
     </bpmn:laneSet>
     <bpmn:sequenceFlow id="Flow_0n1sh5q" sourceRef="Activity_01fl3cl" targetRef="Gateway_1sbh7j6" />
     <bpmn:userTask id="Activity_01fl3cl" name="Kunde nach Zimmerwunsch fragen" camunda:formKey="camunda-forms:deployment:Zimmerauswahl.form" camunda:assignee="demo">
+      <bpmn:extensionElements />
       <bpmn:incoming>Flow_1dimczj</bpmn:incoming>
       <bpmn:incoming>Flow_17v3guw</bpmn:incoming>
       <bpmn:outgoing>Flow_0n1sh5q</bpmn:outgoing>
@@ -119,7 +120,7 @@ var reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
 var jsonstring = reader.lines().collect(Collectors.joining("\n"));
 reader.close()
 var resobj = JSON.parse(jsonstring);
-
+console.log(resobj);
 for (var roomid of resobj) {
   url = new URL("http://34.76.112.173:8080/hotels/berlin/rooms/" + 
   roomid)
@@ -216,24 +217,25 @@ var URL = Java.type("java.net.URL");
 var BufferedReader = Java.type("java.io.BufferedReader");
 var InputStreamReader = Java.type("java.io.InputStreamReader");
 var OutputStream = Java.type("java.io.OutputStream");
+var OutputStreamWriter = Java.type("java.io.OutputStreamWriter");
 var PrintWriter = Java.type("java.io.PrintWriter");
 var Collectors = Java.type("java.util.stream.Collectors");
 
 var roomid = execution.getVariable("room")
-var guestName = execution.getVariable("name")
+var guestName = execution.getVariable("guestName")
+var duration = execution.getVariable("duration")
 
 
-var url = new URL("http://34.79.164.87:8080/hotels/berlin/rooms/" + roomid);
+var url = new URL("http://34.76.112.173:8080/hotels/berlin/rooms/" + roomid);
 
 var con = url.openConnection();
-con.setRequestMethod("POST");
+con.setRequestMethod("PUT");
 con.setDoOutput(true);
-con.setRequestProperty("Content-Type", "application/json");
+con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 con.setRequestProperty("Accept", "application/json");
 con.connect()
 
-
-var content = {status : "occupied", guest : "name"}
+var content = {status : "occupied", guest : guestName, duration : duration }
 
 var jsoncontent = JSON.stringify(content);
 
@@ -248,11 +250,9 @@ ps.flush();
 
 ps.close();
 
-reader = new BufferedReader(new 
-  InputStreamReader(con.getInputStream()));
-  
-
-  reader.close();</bpmn:script>
+var out = new OutputStreamWriter(con.getOutputStream());
+out.write(jsoncontent);
+  out.close();</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:sequenceFlow id="Flow_1dpt5ed" sourceRef="buchungAnzeigen" targetRef="Event_0ia4n55" />
     <bpmn:endEvent id="Event_0ia4n55" name="Zimmerwunsch ist eingetragen">
@@ -270,7 +270,7 @@ var Collectors = Java.type("java.util.stream.Collectors");
 var roomid = execution.getVariable("room")
 var duration = execution.getVariable("duration")
 
-var url = new URL("http://34.79.164.87:8080/hotels/berlin/rooms/" + roomid);
+var url = new URL("http://34.76.112.173:8080/hotels/berlin/rooms/" + roomid);
 
   con = url.openConnection();
   con.setRequestMethod("GET");
@@ -297,9 +297,9 @@ execution.setVariable("roomstatus", roomobj.status)</bpmn:script>
         <camunda:formData>
           <camunda:formField id="name" label="Name" type="string" defaultValue="${guestName}" />
           <camunda:formField id="type" label="Ihr gewünschtes Zimmer:" type="string" defaultValue="${type}" />
-          <camunda:formField id="roomnr" label="Zimmernummer:" type="enum" defaultValue="${roomid}" />
-          <camunda:formField id="stayDuration" label="Ihre Aufenthaltsdauer" type="enum" defaultValue="${duration}" />
-          <camunda:formField id="roomPrice" label="Gesamtpreis: " type="string" defaultValue="${price}" />
+          <camunda:formField id="roomnr" label="Zimmernummer:" type="long" defaultValue="${roomid}" />
+          <camunda:formField id="stayDuration" label="Ihre Aufenthaltsdauer" type="long" defaultValue="${duration}" />
+          <camunda:formField id="roomPrice" label="Gesamtpreis: " type="long" defaultValue="${price}" />
           <camunda:formField id="roomStatus" label="Status des Zimmers:" type="string" defaultValue="${roomstatus}" />
         </camunda:formData>
       </bpmn:extensionElements>

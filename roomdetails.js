@@ -7,18 +7,17 @@ var Collectors = Java.type("java.util.stream.Collectors");
 var roomid = execution.getVariable("room")
 var duration = execution.getVariable("duration")
 
-var url = new URL("http://34.79.164.87:8080/hotels/berlin/rooms/" + roomid);
+var url = new URL("http://34.76.112.173:8080/hotels/berlin/rooms/" + roomid);
 
-  con = url.openConnection();
-  con.setRequestMethod("GET");
-  con.connect()
+con = url.openConnection();
+con.setRequestMethod("GET");
+con.connect()
 
-  reader = new BufferedReader(new 
-  InputStreamReader(con.getInputStream()));
-  jsonstring = reader.lines().collect(Collectors.joining("\n"));
-  reader.close()
-  System.out.println("Room: " + jsonstring)
-  var roomobj = JSON.parse(jsonstring);
+reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+jsonstring = reader.lines().collect(Collectors.joining("\n"));
+reader.close()
+System.out.println("Room: " + jsonstring)
+var roomobj = JSON.parse(jsonstring);
 
 //Berechnung des Gesamtpreises der Hotelübernachtungen
 var roomprice = duration * roomobj.price
