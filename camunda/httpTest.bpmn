@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_06jppzu" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+  <bpmn:process id="Process_1gy18ea" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_0pourrf</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0pourrf" sourceRef="StartEvent_1" targetRef="Activity_0zek5q5" />
+    <bpmn:serviceTask id="Activity_0zek5q5" name="Rest Call with Connector">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="method">GET</camunda:inputParameter>
+            <camunda:inputParameter name="url">https://jsonplaceholder.typicode.com/todos/1/</camunda:inputParameter>
+            <camunda:outputParameter name="title">
+              <camunda:script scriptFormat="javascript">var response = connector.getVariable("response");
+var resobj = JSON.parse(response);
+title = resobj.title;</camunda:script>
+            </camunda:outputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0pourrf</bpmn:incoming>
+      <bpmn:outgoing>Flow_0bn2v9n</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0bn2v9n" sourceRef="Activity_0zek5q5" targetRef="Activity_09fkshw" />
+    <bpmn:userTask id="Activity_09fkshw" name="Show Result">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="title" label="Result" type="string" defaultValue="${title}" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0bn2v9n</bpmn:incoming>
+      <bpmn:outgoing>Flow_10qbgtx</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="Event_01zy4is">
+      <bpmn:incoming>Flow_10qbgtx</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_10qbgtx" sourceRef="Activity_09fkshw" targetRef="Event_01zy4is" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1gy18ea">
+      <bpmndi:BPMNEdge id="Flow_10qbgtx_di" bpmnElement="Flow_10qbgtx">
+        <di:waypoint x="540" y="117" />
+        <di:waypoint x="602" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0bn2v9n_di" bpmnElement="Flow_0bn2v9n">
+        <di:waypoint x="380" y="117" />
+        <di:waypoint x="440" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0pourrf_di" bpmnElement="Flow_0pourrf">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="280" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0x4sphg_di" bpmnElement="Activity_0zek5q5">
+        <dc:Bounds x="280" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0136dn1_di" bpmnElement="Activity_09fkshw">
+        <dc:Bounds x="440" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_01zy4is_di" bpmnElement="Event_01zy4is">
+        <dc:Bounds x="602" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

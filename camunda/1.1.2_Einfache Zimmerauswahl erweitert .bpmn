@@ -185,7 +185,7 @@ reader = new BufferedReader(new
         <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1S </bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
-    <bpmn:userTask id="Activity_19qco6d" name="Neue Buchungsübersicht anzeigen">
+    <bpmn:userTask id="Activity_19qco6d" name="Neue Buchungsübersicht anzeigen" camunda:assignee="demo">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="totalPrice" label="Neuer Gesamtpreis (inkl. 1,2% Zinsen):" type="string" />
@@ -595,21 +595,6 @@ execution.setVariable("room", roomid)</bpmn:script>
       <bpmndi:BPMNShape id="Lane_17n5dp4_di" bpmnElement="Lane_17n5dp4" isHorizontal="true">
         <dc:Bounds x="175" y="970" width="3490" height="240" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_04ob12u_di" bpmnElement="TextAnnotation_04ob12u">
-        <dc:Bounds x="2475" y="690" width="160" height="110" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_0iox44l_di" bpmnElement="TextAnnotation_0iox44l">
-        <dc:Bounds x="3115" y="370" width="100" height="67" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_0el8i3v_di" bpmnElement="TextAnnotation_0el8i3v">
-        <dc:Bounds x="465" y="390" width="100" height="67" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_0qdbuja_di" bpmnElement="TextAnnotation_0qdbuja">
-        <dc:Bounds x="845" y="270" width="100" height="95" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_1gvhiwv_di" bpmnElement="TextAnnotation_1gvhiwv">
-        <dc:Bounds x="2290" y="1020" width="99.99715391621127" height="52.82331511839708" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1dpt5ed_di" bpmnElement="Flow_1dpt5ed">
         <di:waypoint x="1740" y="730" />
         <di:waypoint x="1810" y="730" />
@@ -788,77 +773,20 @@ execution.setVariable("room", roomid)</bpmn:script>
         <di:waypoint x="1950" y="480" />
         <di:waypoint x="2020" y="480" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Activity_01fl3cl_di" bpmnElement="Activity_01fl3cl">
-        <dc:Bounds x="385" y="690" width="100" height="80" />
+      <bpmndi:BPMNShape id="zahlungsartWaehlen_di" bpmnElement="zahlungsartWaehlen">
+        <dc:Bounds x="1810" y="690" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0uux4c6_di" bpmnElement="Event_0sfdkmy">
-        <dc:Bounds x="247" y="712" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="222" y="755" width="87" height="27" />
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNShape id="Activity_17dy2of_di" bpmnElement="buchungAnzeigen">
+        <dc:Bounds x="1640" y="690" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1sbh7j6_di" bpmnElement="Gateway_1sbh7j6" isMarkerVisible="true">
-        <dc:Bounds x="570" y="475" width="50" height="50" />
+      <bpmndi:BPMNShape id="Activity_1ibrc83_di" bpmnElement="Activity_1ibrc83">
+        <dc:Bounds x="3015" y="480" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0jqy6a2_di" bpmnElement="checkSingle">
-        <dc:Bounds x="725" y="354" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_1qbv6rm_di" bpmnElement="Activity_1qbv6rm">
+        <dc:Bounds x="2535" y="294" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1tn8c6u_di" bpmnElement="checkDouble">
-        <dc:Bounds x="725" y="460" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0yev30b_di" bpmnElement="checkSuite">
-        <dc:Bounds x="725" y="570" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0hxevlc_di" bpmnElement="Gateway_0hxevlc" isMarkerVisible="true">
-        <dc:Bounds x="930" y="475" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0vb6k4w_di" bpmnElement="Gateway_0vb6k4w" isMarkerVisible="true">
-        <dc:Bounds x="1190" y="475" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1179" y="445" width="74" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_19yvpt0_di" bpmnElement="zimmerVorschlagen">
-        <dc:Bounds x="1045" y="460" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_19j48au_di" bpmnElement="zimmerEintragen">
-        <dc:Bounds x="1325" y="460" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1i08km0_di" bpmnElement="zimmerBuchen">
-        <dc:Bounds x="1495" y="460" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1imzwfz_di" bpmnElement="Gateway_1imzwfz" isMarkerVisible="true">
-        <dc:Bounds x="3190" y="825" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1d0q11l_di" bpmnElement="Gateway_1d0q11l" isMarkerVisible="true">
-        <dc:Bounds x="2020" y="455" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="boniPruefen_di" bpmnElement="boniPruefen">
-        <dc:Bounds x="2095" y="810" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1mg1ygy_di" bpmnElement="Event_1mg1ygy">
-        <dc:Bounds x="2267" y="932" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2322" y="936" width="65" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1gpz2j8_di" bpmnElement="Gateway_1gpz2j8" isMarkerVisible="true">
-        <dc:Bounds x="2700" y="495" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0oi01fx_di" bpmnElement="Gateway_0oi01fx" isMarkerVisible="true">
-        <dc:Bounds x="2410" y="495" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="modalVorschlagen_di" bpmnElement="modalVorschlagen">
-        <dc:Bounds x="2245" y="810" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="kondi3Monate_di" bpmnElement="kondi3Monate">
-        <dc:Bounds x="2535" y="400" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="kondi6Monate_di" bpmnElement="kondi6Monate">
-        <dc:Bounds x="2535" y="560" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_19qco6d_di" bpmnElement="Activity_19qco6d">
-        <dc:Bounds x="2825" y="810" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_0cj9elw_di" bpmnElement="Activity_0cj9elw">
+        <dc:Bounds x="3465" y="810" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0hbkwwd_di" bpmnElement="Event_0hbkwwd">
         <dc:Bounds x="3327" y="832" width="36" height="36" />
@@ -866,43 +794,115 @@ execution.setVariable("room", roomid)</bpmn:script>
           <dc:Bounds x="3313" y="875" width="64" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0cj9elw_di" bpmnElement="Activity_0cj9elw">
-        <dc:Bounds x="3465" y="810" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_19qco6d_di" bpmnElement="Activity_19qco6d">
+        <dc:Bounds x="2825" y="810" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1qbv6rm_di" bpmnElement="Activity_1qbv6rm">
-        <dc:Bounds x="2535" y="294" width="100" height="80" />
+      <bpmndi:BPMNShape id="kondi6Monate_di" bpmnElement="kondi6Monate">
+        <dc:Bounds x="2535" y="560" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1ibrc83_di" bpmnElement="Activity_1ibrc83">
-        <dc:Bounds x="3015" y="480" width="100" height="80" />
+      <bpmndi:BPMNShape id="kondi3Monate_di" bpmnElement="kondi3Monate">
+        <dc:Bounds x="2535" y="400" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_17dy2of_di" bpmnElement="buchungAnzeigen">
-        <dc:Bounds x="1640" y="690" width="100" height="80" />
+      <bpmndi:BPMNShape id="modalVorschlagen_di" bpmnElement="modalVorschlagen">
+        <dc:Bounds x="2245" y="810" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="zahlungsartWaehlen_di" bpmnElement="zahlungsartWaehlen">
-        <dc:Bounds x="1810" y="690" width="100" height="80" />
+      <bpmndi:BPMNShape id="Gateway_0oi01fx_di" bpmnElement="Gateway_0oi01fx" isMarkerVisible="true">
+        <dc:Bounds x="2410" y="495" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_1596pi2_di" bpmnElement="Association_1596pi2">
-        <di:waypoint x="2562" y="640" />
-        <di:waypoint x="2534" y="690" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_17w1wpw_di" bpmnElement="Association_17w1wpw">
-        <di:waypoint x="3095" y="480" />
-        <di:waypoint x="3126" y="437" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_1ny3o93_di" bpmnElement="Association_1ny3o93">
-        <di:waypoint x="818" y="355" />
-        <di:waypoint x="845" y="330" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_1g4loql_di" bpmnElement="Association_1g4loql">
-        <di:waypoint x="2304" y="1020" />
-        <di:waypoint x="2178" y="902" />
-      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Gateway_1gpz2j8_di" bpmnElement="Gateway_1gpz2j8" isMarkerVisible="true">
+        <dc:Bounds x="2700" y="495" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1mg1ygy_di" bpmnElement="Event_1mg1ygy">
+        <dc:Bounds x="2267" y="932" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2322" y="936" width="65" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="boniPruefen_di" bpmnElement="boniPruefen">
+        <dc:Bounds x="2095" y="810" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1d0q11l_di" bpmnElement="Gateway_1d0q11l" isMarkerVisible="true">
+        <dc:Bounds x="2020" y="455" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1imzwfz_di" bpmnElement="Gateway_1imzwfz" isMarkerVisible="true">
+        <dc:Bounds x="3190" y="825" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1i08km0_di" bpmnElement="zimmerBuchen">
+        <dc:Bounds x="1495" y="460" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_19j48au_di" bpmnElement="zimmerEintragen">
+        <dc:Bounds x="1325" y="460" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_19yvpt0_di" bpmnElement="zimmerVorschlagen">
+        <dc:Bounds x="1045" y="460" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0vb6k4w_di" bpmnElement="Gateway_0vb6k4w" isMarkerVisible="true">
+        <dc:Bounds x="1190" y="475" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1179" y="445" width="74" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0hxevlc_di" bpmnElement="Gateway_0hxevlc" isMarkerVisible="true">
+        <dc:Bounds x="930" y="475" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0yev30b_di" bpmnElement="checkSuite">
+        <dc:Bounds x="725" y="570" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1tn8c6u_di" bpmnElement="checkDouble">
+        <dc:Bounds x="725" y="460" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0jqy6a2_di" bpmnElement="checkSingle">
+        <dc:Bounds x="725" y="354" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1sbh7j6_di" bpmnElement="Gateway_1sbh7j6" isMarkerVisible="true">
+        <dc:Bounds x="570" y="475" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0uux4c6_di" bpmnElement="Event_0sfdkmy">
+        <dc:Bounds x="247" y="712" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="222" y="755" width="87" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_01fl3cl_di" bpmnElement="Activity_01fl3cl">
+        <dc:Bounds x="385" y="690" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_1gvhiwv_di" bpmnElement="TextAnnotation_1gvhiwv">
+        <dc:Bounds x="2290" y="1020" width="99.99715391621127" height="52.82331511839708" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0qdbuja_di" bpmnElement="TextAnnotation_0qdbuja">
+        <dc:Bounds x="845" y="270" width="100" height="95" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0el8i3v_di" bpmnElement="TextAnnotation_0el8i3v">
+        <dc:Bounds x="465" y="390" width="100" height="67" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0iox44l_di" bpmnElement="TextAnnotation_0iox44l">
+        <dc:Bounds x="3115" y="370" width="100" height="67" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_04ob12u_di" bpmnElement="TextAnnotation_04ob12u">
+        <dc:Bounds x="2475" y="690" width="160" height="110" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_13viwg1_di" bpmnElement="Event_13viwg1">
         <dc:Bounds x="2147" y="872" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="2178" y="933" width="53" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_1g4loql_di" bpmnElement="Association_1g4loql">
+        <di:waypoint x="2304" y="1020" />
+        <di:waypoint x="2178" y="902" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1ny3o93_di" bpmnElement="Association_1ny3o93">
+        <di:waypoint x="818" y="355" />
+        <di:waypoint x="845" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_17w1wpw_di" bpmnElement="Association_17w1wpw">
+        <di:waypoint x="3095" y="480" />
+        <di:waypoint x="3126" y="437" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1596pi2_di" bpmnElement="Association_1596pi2">
+        <di:waypoint x="2562" y="640" />
+        <di:waypoint x="2534" y="690" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_03ohyty_di" bpmnElement="Flow_03ohyty">
         <di:waypoint x="435" y="690" />
         <di:waypoint x="435" y="140" />
