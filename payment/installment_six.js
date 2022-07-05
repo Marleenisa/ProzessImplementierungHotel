@@ -4,8 +4,10 @@ var BufferedReader = Java.type("java.io.BufferedReader");
 var InputStreamReader = Java.type("java.io.InputStreamReader");
 var Collectors = Java.type("java.util.stream.Collectors");
 
+var roomid = execution.getVariable("room")
+
 //API Call
-var url = new URL("http://34.79.164.87:8080/hotels/berlin/rooms/" + roomid);
+var url = new URL("http://35.195.103.37:8080/hotels/berlin/rooms/" + roomid);
 
   con = url.openConnection();
   con.setRequestMethod("GET");
@@ -23,13 +25,13 @@ var url = new URL("http://34.79.164.87:8080/hotels/berlin/rooms/" + roomid);
 var installtotal = ((duration * roomobj.price)*1,2)
 
 //Variable für Ratenzahlung: 6 Monate mit Zinsatz 1,2% => Monatliche Zahlung für 6 Monate
-var installsix = installtotal/6
+var installmentmonthly = installtotal/6
 
 
 //Ausgabevariablen definieren für Usertask: Modalitäten anzeigen
 execution.setVariable("guestName", roomobj.guest)
 execution.setVariable("type", roomobj.roomtype)
-execution.setVariable("roomnr", roomid)
+execution.setVariable("roomnr", roomnr)
 execution.setVariable("duration", duration)
 //Neue Variablen für Ratenzahlung
 execution.setVariable("totalPrice", roomobj.installment)
