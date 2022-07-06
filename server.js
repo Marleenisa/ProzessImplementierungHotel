@@ -14,8 +14,9 @@ for (let i = 100; i < 120; ++i) {
 		guest : "none",
 		status : "free",
 		duration : 0 ,
-		installment: 0,
-		installmentmonthly: 0
+		payment: "none",
+		total_price: 0,
+		monthly_price: 0
 	}
 }
 for (let i = 200; i < 210; ++i) {
@@ -25,8 +26,9 @@ for (let i = 200; i < 210; ++i) {
 		guest : "none",
 		status : "free",
 		duration : 0 ,
-		installment: 0,
-		installmentmonthly: 0
+		payment: "none",
+		total_price: 0,
+		monthly_price: 0
 	}
 }
 for (let i = 300; i < 305; ++i) {
@@ -36,8 +38,9 @@ for (let i = 300; i < 305; ++i) {
 		guest : "none",
 		status : "free",
 		duration : 0 ,
-		installment: 0,
-		installmentmonthly: 0
+		payment: "none",
+		total_price: 0,
+		monthly_price: 0
 	}
 }
 
@@ -59,7 +62,18 @@ app.put('/hotels/berlin/rooms/:roomid', (req, res) => {
 		rooms[req.params.roomid].guest = change.guest;
 		rooms[req.params.roomid].status = "occupied";
 		rooms[req.params.roomid].duration = change.duration; 
+		rooms[req.params.roomid].total_price = change.total_price; 
+		rooms[req.params.roomid].monthly_price = change.monthly_price; 
 	}
+	else if (change.payment === "invoice") {
+		rooms[req.params.roomid].payment = "invoice";
+		rooms[req.params.roomid].total_price = change.total_price; 
+	}
+	else if (change.payment === "installment") {
+		rooms[req.params.roomid].payment = "installment";
+		rooms[req.params.roomid].total_price = change.total_price; 
+		rooms[req.params.roomid].monthly_price = change.monthly_price;
+}
 	else {
 		res.sendStatus(400);
 		return;

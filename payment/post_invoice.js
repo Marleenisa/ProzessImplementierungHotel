@@ -7,22 +7,22 @@ var PrintWriter = Java.type("java.io.PrintWriter");
 var Collectors = Java.type("java.util.stream.Collectors");
 
 var roomid = execution.getVariable("room")
-var guestName = execution.getVariable("name")
+var totalprice = execution.getVariable("price")
 
 
-var url = new URL("http://34.76.112.173:8080/hotels/berlin/rooms/" + roomid);
+var url = new URL("http://35.205.175.225:8080/hotels/berlin/rooms/" + roomid);
 
 var con = url.openConnection();
-con.setRequestMethod("GET");
+con.setRequestMethod("PUT");
 con.setDoOutput(true);
 con.setRequestProperty("Content-Type", "application/json");
 con.setRequestProperty("Accept", "application/json");
 con.connect()
 
 
-var receipt = { guest : "name", roomtype: "type", price : "roomPrice"}
+var content1 = {payment: "invoice", total_price : totalprice}
 
-var jsoncontent = JSON.stringify(content);
+var jsoncontent = JSON.stringify(content1);
 
 var os = con.getOutputStream();
 var ps = new PrintWriter(os);
@@ -38,4 +38,8 @@ ps.close();
 reader = new BufferedReader(new 
   InputStreamReader(con.getInputStream()));
   
+
   reader.close();
+
+
+//
