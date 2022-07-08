@@ -6,11 +6,7 @@ var OutputStream = Java.type("java.io.OutputStream");
 var PrintWriter = Java.type("java.io.PrintWriter");
 var Collectors = Java.type("java.util.stream.Collectors");
 
-var roomid = execution.getVariable("room")
-var totalprice = execution.getVariable("price")
-
-
-var url = new URL("http://34.78.59.135:8080/hotels/berlin/rooms/" + roomid);
+var url = new URL("http://34.78.33.136:8080/hotels/berlin/rooms/" + 200 );
 
 var con = url.openConnection();
 con.setRequestMethod("PUT");
@@ -19,8 +15,7 @@ con.setRequestProperty("Content-Type", "application/json");
 con.setRequestProperty("Accept", "application/json");
 con.connect()
 
-
-var content1 = {payment: "invoice", total_price : totalprice}
+var content1 = {print: "pdf"}
 
 var jsoncontent = JSON.stringify(content1);
 
@@ -40,4 +35,8 @@ reader = new BufferedReader(new
   
 
   reader.close();
+
+
+
+
 

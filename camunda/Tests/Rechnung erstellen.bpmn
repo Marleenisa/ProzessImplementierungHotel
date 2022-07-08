@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0g7q153" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.0.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.17.0">
+  <bpmn:collaboration id="Collaboration_00vftif">
+    <bpmn:participant id="Participant_0wwcjv8" processRef="Process_1aehb71" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_1aehb71" name="Test Rechnung" isExecutable="true">
+    <bpmn:endEvent id="Event_0c4wm29">
+      <bpmn:incoming>Flow_14qregp</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="Activity_1xj3lev" name="Rechnung ausgeben" camunda:assignee="demo">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="rechnung" label="Rechnung" type="string" defaultValue="bittefuuuunktioniiiere" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0d2r87o</bpmn:incoming>
+      <bpmn:outgoing>Flow_14qregp</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:scriptTask id="Activity_1r5c2pl" name="Rechnung erstellen" scriptFormat="javascript">
+      <bpmn:incoming>Flow_1oeqa5c</bpmn:incoming>
+      <bpmn:outgoing>Flow_0d2r87o</bpmn:outgoing>
+      <bpmn:script>var System = Java.type("java.lang.System");
+var URL = Java.type("java.net.URL");
+var BufferedReader = Java.type("java.io.BufferedReader");
+var InputStreamReader = Java.type("java.io.InputStreamReader");
+var OutputStream = Java.type("java.io.OutputStream");
+var PrintWriter = Java.type("java.io.PrintWriter");
+var Collectors = Java.type("java.util.stream.Collectors");
+
+var url = new URL("http://34.78.33.136:8080/hotels/berlin/rooms/" + 200 );
+
+var con = url.openConnection();
+con.setRequestMethod("PUT");
+con.setDoOutput(true);
+con.setRequestProperty("Content-Type", "application/json");
+con.setRequestProperty("Accept", "application/json");
+con.connect()
+
+var content1 = {print: "pdf"}
+
+var jsoncontent = JSON.stringify(content1);
+
+var os = con.getOutputStream();
+var ps = new PrintWriter(os);
+
+System.out.println(jsoncontent.toString());
+
+ps.println(jsoncontent.toString());
+
+ps.flush();
+
+ps.close();
+
+reader = new BufferedReader(new 
+  InputStreamReader(con.getInputStream()));
+  
+
+  reader.close();</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_1oeqa5c</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0d2r87o" sourceRef="Activity_1r5c2pl" targetRef="Activity_1xj3lev" />
+    <bpmn:sequenceFlow id="Flow_14qregp" sourceRef="Activity_1xj3lev" targetRef="Event_0c4wm29" />
+    <bpmn:sequenceFlow id="Flow_1oeqa5c" sourceRef="StartEvent_1" targetRef="Activity_1r5c2pl" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_00vftif">
+      <bpmndi:BPMNShape id="Participant_0wwcjv8_di" bpmnElement="Participant_0wwcjv8" isHorizontal="true">
+        <dc:Bounds x="160" y="52" width="688" height="250" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0d2r87o_di" bpmnElement="Flow_0d2r87o">
+        <di:waypoint x="560" y="177" />
+        <di:waypoint x="620" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_14qregp_di" bpmnElement="Flow_14qregp">
+        <di:waypoint x="720" y="177" />
+        <di:waypoint x="782" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1oeqa5c_di" bpmnElement="Flow_1oeqa5c">
+        <di:waypoint x="408" y="177" />
+        <di:waypoint x="460" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0c4wm29_di" bpmnElement="Event_0c4wm29">
+        <dc:Bounds x="782" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_06uvjyy_di" bpmnElement="Activity_1xj3lev">
+        <dc:Bounds x="620" y="137" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_13bh8ql_di" bpmnElement="Activity_1r5c2pl">
+        <dc:Bounds x="460" y="137" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="372" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

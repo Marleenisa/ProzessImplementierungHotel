@@ -12,23 +12,7 @@ var guestName = execution.getVariable("guestName")
 var duration = execution.getVariable("duration")
 
 
-var url = new URL("http://35.205.175.225:8080/hotels/berlin/rooms/" + roomid);
-
-var System = Java.type("java.lang.System");
-var URL = Java.type("java.net.URL");
-var BufferedReader = Java.type("java.io.BufferedReader");
-var InputStreamReader = Java.type("java.io.InputStreamReader");
-var OutputStream = Java.type("java.io.OutputStream");
-var OutputStreamWriter = Java.type("java.io.OutputStreamWriter");
-var PrintWriter = Java.type("java.io.PrintWriter");
-var Collectors = Java.type("java.util.stream.Collectors");
-
-var roomid = execution.getVariable("room")
-var guestName = execution.getVariable("guestName")
-var duration = execution.getVariable("duration")
-
-
-var url = new URL("http://35.205.175.225:8080/hotels/berlin/rooms/" + roomid);
+var url = new URL("http://34.78.33.136:8080/hotels/berlin/rooms/" + roomid);
 
 var con = url.openConnection();
 con.setRequestMethod("PUT");

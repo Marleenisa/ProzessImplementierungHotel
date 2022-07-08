@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1mun8ai" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.0.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.17.0">
+  <bpmn:collaboration id="Collaboration_1b3jkmi">
+    <bpmn:participant id="service" name="Service MA" processRef="test_citybooking" />
+  </bpmn:collaboration>
+  <bpmn:process id="test_citybooking" name="Test_Städtebuchung" isExecutable="true">
+    <bpmn:startEvent id="Event_0sfdkmy" name="Buchungswunsch liegt vor">
+      <bpmn:outgoing>Flow_1dimczj</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1dimczj" sourceRef="Event_0sfdkmy" targetRef="Activity_01fl3cl" />
+    <bpmn:userTask id="Activity_01fl3cl" name="Kunde nach Zimmerwunsch fragen" camunda:formKey="camunda-forms:deployment:Zimmerauswahl.form" camunda:assignee="demo">
+      <bpmn:incoming>Flow_1dimczj</bpmn:incoming>
+      <bpmn:outgoing>Flow_05ovmlk</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_05ovmlk" sourceRef="Activity_01fl3cl" targetRef="Event_1trknsm" />
+    <bpmn:endEvent id="Event_1trknsm">
+      <bpmn:incoming>Flow_05ovmlk</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:boundaryEvent id="error" name="Error" camunda:asyncAfter="true" attachedToRef="Activity_01fl3cl">
+      <bpmn:errorEventDefinition errorRef="invalid-credit-card-error" />
+    </bpmn:boundaryEvent>
+  </bpmn:process>
+  <bpmn:error id="Error_14gillm" name="Error_1l97e5k" />
+  <bpmn:message id="Message_38dj29j" name="Message_38dj29j" />
+  <bpmn:message id="Message_07m3loi" name="Nachricht" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1b3jkmi">
+      <bpmndi:BPMNShape id="Participant_01edtzx_di" bpmnElement="service" isHorizontal="true">
+        <dc:Bounds x="170" y="80" width="1450" height="420" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1dimczj_di" bpmnElement="Flow_1dimczj">
+        <di:waypoint x="298" y="290" />
+        <di:waypoint x="450" y="290" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05ovmlk_di" bpmnElement="Flow_05ovmlk">
+        <di:waypoint x="550" y="290" />
+        <di:waypoint x="662" y="290" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0uux4c6_di" bpmnElement="Event_0sfdkmy">
+        <dc:Bounds x="262" y="272" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="237" y="315" width="87" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_01fl3cl_di" bpmnElement="Activity_01fl3cl">
+        <dc:Bounds x="450" y="250" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1trknsm_di" bpmnElement="Event_1trknsm">
+        <dc:Bounds x="662" y="272" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0jtvskf_di" bpmnElement="error">
+        <dc:Bounds x="512" y="312" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="518" y="355" width="25" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

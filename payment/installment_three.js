@@ -7,7 +7,7 @@ var Collectors = Java.type("java.util.stream.Collectors");
 var roomid = execution.getVariable("room")
 var roomprice = execution.getVariable("price")
 //API Call
-var url = new URL("http://35.205.175.225:8080/hotels/berlin/rooms/" + roomid);
+var url = new URL("http://34.78.33.136:8080/hotels/berlin/rooms/" + roomid);
 
   con = url.openConnection();
   con.setRequestMethod("GET");
@@ -22,7 +22,7 @@ var url = new URL("http://35.205.175.225:8080/hotels/berlin/rooms/" + roomid);
 
 
 // Neuer Gesamtbetrag inkl. Zinsatzsatz 1,2%
-var totalPrice = ((duration * roomobj.price)*0,0012) + roomprice
+var totalPrice = ((roomprice)*0,0012) + roomprice
 
 //Variable für Ratenzahlung: 3 Monate mit Zinsatz 1,2% => Monatliche Zahlung für 6 Monate
 var monthlyPrice= totalPrice/3

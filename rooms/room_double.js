@@ -4,7 +4,7 @@ var BufferedReader = Java.type("java.io.BufferedReader");
 var InputStreamReader = Java.type("java.io.InputStreamReader");
 var Collectors = Java.type("java.util.stream.Collectors");
 
-var url = new URL("http://34.76.112.173:8080/hotels/berlin/rooms/")
+var url = new URL("http://34.78.59.135:8080/hotels/berlin/rooms/")
 
 var con = url.openConnection();
 con.setRequestMethod("GET");
@@ -16,7 +16,7 @@ reader.close()
 var resobj = JSON.parse(jsonstring);
 
 for (var roomid of resobj) {
-  url = new URL("http://34.76.112.173:8080/hotels/berlin/rooms/" + 
+  url = new URL("http://34.78.59.135:8080/hotels/berlin/rooms/" + 
   roomid)
 
   con = url.openConnection();

@@ -1,5 +1,4 @@
 {
-  "schemaVersion": 2,
   "components": [
     {
       "text": "# Zimmerbuchung",
@@ -11,6 +10,29 @@
       "type": "textfield",
       "id": "Field_0vz9jsy",
       "key": "guestName",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "values": [
+        {
+          "label": "Berlin",
+          "value": "berlin"
+        },
+        {
+          "label": "Dresden",
+          "value": "dresden"
+        },
+        {
+          "label": "Rostock",
+          "value": "rostock"
+        }
+      ],
+      "label": "Gewünschte Stadt",
+      "type": "select",
+      "id": "Field_0d7kwfi",
+      "key": "city",
       "validate": {
         "required": true
       }
@@ -48,6 +70,26 @@
       }
     },
     {
+      "values": [
+        {
+          "label": "Privat",
+          "value": "private"
+        },
+        {
+          "label": "Geschäftsreise",
+          "value": "businesstrip"
+        },
+        {
+          "label": "Abenteuer",
+          "value": "adventure"
+        }
+      ],
+      "label": "Grund für den Aufenthalt",
+      "type": "select",
+      "id": "Field_0f82a5d",
+      "key": "reason"
+    },
+    {
       "action": "submit",
       "label": "Verfügbarkeit prüfen",
       "type": "button",
@@ -55,6 +97,11 @@
       "key": "field_05g61ic"
     }
   ],
+  "schemaVersion": 4,
   "type": "default",
-  "id": "Form_07zgzh8"
+  "id": "Form_07zgzh8",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.0.0"
+  }
 }

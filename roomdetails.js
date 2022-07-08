@@ -7,7 +7,7 @@ var Collectors = Java.type("java.util.stream.Collectors");
 var roomid = execution.getVariable("room")
 var duration = execution.getVariable("duration")
 
-var url = new URL("http://34.76.112.173:8080/hotels/berlin/rooms/" + roomid);
+var url = new URL("http://34.78.33.136:8080/hotels/berlin/rooms/" + roomid);
 
 con = url.openConnection();
 con.setRequestMethod("GET");

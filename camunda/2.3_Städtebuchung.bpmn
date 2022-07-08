@@ -11,18 +11,19 @@
   <bpmn:process id="EinfacheZimmerauswahlErweitert" name="1.1.2 Einfache Zimmerauswahl erweitert" isExecutable="true">
     <bpmn:laneSet id="LaneSet_0uc9q65">
       <bpmn:lane id="Lane_0loqqla" name="Servicemitarbeiter">
-        <bpmn:flowNodeRef>Activity_19qco6d</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>modalVorschlagen</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Event_1mg1ygy</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>boniPruefen</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>zahlungsartWaehlen</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>buchungAnzeigen</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_0sfdkmy</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_01fl3cl</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>zahlungsartWaehlen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>buchungAnzeigen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_1t145ms</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_19qco6d</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_0hbkwwd</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0cj9elw</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Event_1t145ms</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Event_13viwg1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>modalVorschlagen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_0g4ff22</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_1jet7yp</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>boniPruefen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>infoAbbruch</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_0mjikk6" name="System">
         <bpmn:flowNodeRef>Gateway_1sbh7j6</bpmn:flowNodeRef>
@@ -35,12 +36,12 @@
         <bpmn:flowNodeRef>zimmer</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>zimmerBuchen</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_1d0q11l</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_1imzwfz</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_1gpz2j8</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_0oi01fx</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>kondi3Monate</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>kondi6Monate</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>rechnungAusstellen</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Gateway_1imzwfz</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_12rydgf</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>ratenEintragen</bpmn:flowNodeRef>
       </bpmn:lane>
@@ -48,45 +49,20 @@
         <bpmn:flowNodeRef>ratenGenehmigung</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
-    <bpmn:userTask id="Activity_19qco6d" name="Neue Buchungsübersicht anzeigen" camunda:assignee="demo">
-      <bpmn:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="totalPrice" label="Neuer Gesamtpreis (inkl. 1,2% Zinsen):" type="string" defaultValue="${totalPrice}" />
-          <camunda:formField id="monthlyPrice" label="Monatlich zu zahlen:" type="string" defaultValue="${monthlyPrice}" />
-          <camunda:formField id="confirm" label="Ratenzahlung bestätigen" type="boolean" />
-        </camunda:formData>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0lkkwra</bpmn:incoming>
-      <bpmn:outgoing>Flow_1tc93vx</bpmn:outgoing>
+    <bpmn:sequenceFlow id="Flow_17v3guw" name="nein" sourceRef="Gateway_0vb6k4w" targetRef="Activity_01fl3cl">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!acceptRoom}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0n1sh5q" sourceRef="Activity_01fl3cl" targetRef="Gateway_1sbh7j6" />
+    <bpmn:sequenceFlow id="Flow_1dimczj" sourceRef="Event_0sfdkmy" targetRef="Activity_01fl3cl" />
+    <bpmn:userTask id="Activity_01fl3cl" name="Kunde nach Zimmerwunsch fragen" camunda:formKey="camunda-forms:deployment:Zimmerauswahl.form" camunda:assignee="demo">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_1dimczj</bpmn:incoming>
+      <bpmn:incoming>Flow_17v3guw</bpmn:incoming>
+      <bpmn:outgoing>Flow_0n1sh5q</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="modalVorschlagen" name="Modalitäten vorschlagen" camunda:assignee="demo">
-      <bpmn:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="modality" type="enum">
-            <camunda:value id="three" name="3 Monate" />
-            <camunda:value id="six" name="6 Monate" />
-          </camunda:formField>
-        </camunda:formData>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_08nkpzh</bpmn:incoming>
-      <bpmn:outgoing>Flow_015vqai</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:endEvent id="Event_1mg1ygy" name="Buchung abgebrochen">
-      <bpmn:incoming>Flow_03c1k8r</bpmn:incoming>
-      <bpmn:terminateEventDefinition id="TerminateEventDefinition_0fuwqsb" />
-    </bpmn:endEvent>
-    <bpmn:userTask id="boniPruefen" name="Bonitätsprüfung durchführen" camunda:assignee="demo">
-      <bpmn:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="credit" label="Ergebnis der Bonitätsprüfung?" type="enum">
-            <camunda:value id="positive" name="Positiv - Ratenzahlung möglich" />
-            <camunda:value id="negative" name="Negativ - Ratenzahlung abgelehnt" />
-          </camunda:formField>
-        </camunda:formData>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0cb9vyn</bpmn:incoming>
-      <bpmn:outgoing>Flow_08nkpzh</bpmn:outgoing>
-    </bpmn:userTask>
+    <bpmn:startEvent id="Event_0sfdkmy" name="Buchungswunsch liegt vor">
+      <bpmn:outgoing>Flow_1dimczj</bpmn:outgoing>
+    </bpmn:startEvent>
     <bpmn:userTask id="zahlungsartWaehlen" name="Zahlungsart wählen" camunda:assignee="demo">
       <bpmn:extensionElements>
         <camunda:formData>
@@ -113,41 +89,6 @@
       <bpmn:incoming>Flow_0r7c10e</bpmn:incoming>
       <bpmn:outgoing>Flow_1dpt5ed</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:startEvent id="Event_0sfdkmy" name="Buchungswunsch liegt vor">
-      <bpmn:outgoing>Flow_1dimczj</bpmn:outgoing>
-    </bpmn:startEvent>
-    <bpmn:userTask id="Activity_01fl3cl" name="Kunde nach Zimmerwunsch fragen" camunda:formKey="camunda-forms:deployment:Zimmerauswahl.form" camunda:assignee="demo">
-      <bpmn:extensionElements />
-      <bpmn:incoming>Flow_1dimczj</bpmn:incoming>
-      <bpmn:incoming>Flow_17v3guw</bpmn:incoming>
-      <bpmn:outgoing>Flow_0n1sh5q</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:boundaryEvent id="Event_13viwg1" name="Ablehnung" attachedToRef="boniPruefen">
-      <bpmn:extensionElements>
-        <camunda:executionListener expression="${credit == &#39;negative&#39;}" event="start" />
-      </bpmn:extensionElements>
-      <bpmn:outgoing>Flow_03c1k8r</bpmn:outgoing>
-      <bpmn:errorEventDefinition id="ErrorEventDefinition_0gksgcr" errorRef="Error_11ron9w" camunda:errorCodeVariable="creditworthiness" camunda:errorMessageVariable="deniedPayment" />
-    </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="Flow_17v3guw" name="nein" sourceRef="Gateway_0vb6k4w" targetRef="Activity_01fl3cl">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!acceptRoom}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_0r7c10e" sourceRef="zimmerBuchen" targetRef="buchungAnzeigen" />
-    <bpmn:sequenceFlow id="Flow_0n1sh5q" sourceRef="Activity_01fl3cl" targetRef="Gateway_1sbh7j6" />
-    <bpmn:sequenceFlow id="Flow_01nbyc0" sourceRef="rechnungAusstellen" targetRef="Gateway_1imzwfz" />
-    <bpmn:sequenceFlow id="Flow_15lxvrs" sourceRef="ratenGenehmigung" targetRef="ratenEintragen" />
-    <bpmn:sequenceFlow id="Flow_1qsrhx6" sourceRef="Gateway_1imzwfz" targetRef="Activity_12rydgf" />
-    <bpmn:sequenceFlow id="Flow_0cb9vyn" name="Raten-&#10;zahlung" sourceRef="Gateway_1d0q11l" targetRef="boniPruefen">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${payment == 'installment'}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_08nkpzh" sourceRef="boniPruefen" targetRef="modalVorschlagen" />
-    <bpmn:sequenceFlow id="Flow_03c1k8r" sourceRef="Event_13viwg1" targetRef="Event_1mg1ygy" />
-    <bpmn:sequenceFlow id="Flow_0lkkwra" sourceRef="Gateway_1gpz2j8" targetRef="Activity_19qco6d" />
-    <bpmn:sequenceFlow id="Flow_015vqai" sourceRef="modalVorschlagen" targetRef="Gateway_0oi01fx" />
-    <bpmn:sequenceFlow id="Flow_1tc93vx" sourceRef="Activity_19qco6d" targetRef="ratenGenehmigung" />
-    <bpmn:sequenceFlow id="Flow_133e066" sourceRef="zahlungsartWaehlen" targetRef="Gateway_1d0q11l" />
-    <bpmn:sequenceFlow id="Flow_1dpt5ed" sourceRef="buchungAnzeigen" targetRef="zahlungsartWaehlen" />
-    <bpmn:sequenceFlow id="Flow_1dimczj" sourceRef="Event_0sfdkmy" targetRef="Activity_01fl3cl" />
     <bpmn:exclusiveGateway id="Gateway_1sbh7j6">
       <bpmn:incoming>Flow_0n1sh5q</bpmn:incoming>
       <bpmn:outgoing>Flow_1b50max</bpmn:outgoing>
@@ -163,7 +104,7 @@ var BufferedReader = Java.type("java.io.BufferedReader");
 var InputStreamReader = Java.type("java.io.InputStreamReader");
 var Collectors = Java.type("java.util.stream.Collectors");
 
-var url = new URL("http://35.205.175.225:8080/hotels/berlin/rooms/")
+var url = new URL("http://34.78.59.135:8080/hotels/berlin/rooms/")
 
 var con = url.openConnection();
 con.setRequestMethod("GET");
@@ -175,7 +116,7 @@ reader.close()
 var resobj = JSON.parse(jsonstring);
 
 for (var roomid of resobj) {
-  url = new URL("http://35.205.175.225:8080/hotels/berlin/rooms/" + 
+  url = new URL("http://34.78.59.135:8080/hotels/berlin/rooms/" + 
   roomid)
 
   con = url.openConnection();
@@ -204,7 +145,7 @@ var BufferedReader = Java.type("java.io.BufferedReader");
 var InputStreamReader = Java.type("java.io.InputStreamReader");
 var Collectors = Java.type("java.util.stream.Collectors");
 
-var url = new URL("http://35.205.175.225:8080/hotels/berlin/rooms/")
+var url = new URL("http://34.78.59.135:8080/hotels/berlin/rooms/")
 
 var con = url.openConnection();
 con.setRequestMethod("GET");
@@ -216,7 +157,7 @@ reader.close()
 var resobj = JSON.parse(jsonstring);
 
 for (var roomid of resobj) {
-  url = new URL("http://35.205.175.225:8080/hotels/berlin/rooms/" + 
+  url = new URL("http://34.78.59.135:8080/hotels/berlin/rooms/" + 
   roomid)
 
   con = url.openConnection();
@@ -244,7 +185,7 @@ var BufferedReader = Java.type("java.io.BufferedReader");
 var InputStreamReader = Java.type("java.io.InputStreamReader");
 var Collectors = Java.type("java.util.stream.Collectors");
 
-var url = new URL("http://35.205.175.225:8080/hotels/berlin/rooms/")
+var url = new URL("http://34.78.59.135:8080/hotels/berlin/rooms/")
 
 var con = url.openConnection();
 con.setRequestMethod("GET");
@@ -256,7 +197,7 @@ reader.close()
 var resobj = JSON.parse(jsonstring);
 
 for (var roomid of resobj) {
-  url = new URL("http://35.205.175.225:8080/hotels/berlin/rooms/" + 
+  url = new URL("http://34.78.59.135:8080/hotels/berlin/rooms/" + 
   roomid)
 
   con = url.openConnection();
@@ -314,7 +255,7 @@ var guestName = execution.getVariable("guestName")
 var duration = execution.getVariable("duration")
 
 
-var url = new URL("http://35.205.175.225:8080/hotels/berlin/rooms/" + roomid);
+var url = new URL("http://34.78.59.135:8080/hotels/berlin/rooms/" + roomid);
 
 var System = Java.type("java.lang.System");
 var URL = Java.type("java.net.URL");
@@ -330,7 +271,7 @@ var guestName = execution.getVariable("guestName")
 var duration = execution.getVariable("duration")
 
 
-var url = new URL("http://35.205.175.225:8080/hotels/berlin/rooms/" + roomid);
+var url = new URL("http://34.78.59.135:8080/hotels/berlin/rooms/" + roomid);
 
 var con = url.openConnection();
 con.setRequestMethod("PUT");
@@ -373,7 +314,7 @@ var Collectors = Java.type("java.util.stream.Collectors");
 var roomid = execution.getVariable("room")
 var duration = execution.getVariable("duration")
 
-var url = new URL("http://35.205.175.225:8080/hotels/berlin/rooms/" + roomid);
+var url = new URL("http://34.78.59.135:8080/hotels/berlin/rooms/" + roomid);
 
 con = url.openConnection();
 con.setRequestMethod("GET");
@@ -385,10 +326,8 @@ reader.close()
 System.out.println("Room: " + jsonstring)
 var roomobj = JSON.parse(jsonstring);
 
-//Berechnung des Gesamtpreises der Hotelübernachtungen
 var roomprice = duration * roomobj.price
 
-//Ausgabevariablen definieren für Usertask: Buchungsübersicht anzeigen
 execution.setVariable("guestName", guestName)
 execution.setVariable("type", roomobj.roomtype)
 execution.setVariable("roomnr", roomid)
@@ -400,6 +339,14 @@ execution.setVariable("roomstatus", roomobj.status)</bpmn:script>
       <bpmn:incoming>Flow_133e066</bpmn:incoming>
       <bpmn:outgoing>Flow_16o4913</bpmn:outgoing>
       <bpmn:outgoing>Flow_0cb9vyn</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="Event_1t145ms" name="Buchung abgeschlossen">
+      <bpmn:incoming>Flow_1vr5vm1</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:exclusiveGateway id="Gateway_1imzwfz">
+      <bpmn:incoming>Flow_01nbyc0</bpmn:incoming>
+      <bpmn:incoming>Flow_0m0189v</bpmn:incoming>
+      <bpmn:outgoing>Flow_1qsrhx6</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:exclusiveGateway id="Gateway_1gpz2j8">
       <bpmn:incoming>Flow_1rsacmn</bpmn:incoming>
@@ -423,7 +370,7 @@ var Collectors = Java.type("java.util.stream.Collectors");
 var roomid = execution.getVariable("room")
 var roomprice = execution.getVariable("price")
 
-var url = new URL("http://35.205.175.225:8080/hotels/berlin/rooms/" + roomid);
+var url = new URL("http://34.78.59.135:8080/hotels/berlin/rooms/" + roomid);
 
   con = url.openConnection();
   con.setRequestMethod("GET");
@@ -437,7 +384,7 @@ var url = new URL("http://35.205.175.225:8080/hotels/berlin/rooms/" + roomid);
   var roomobj = JSON.parse(jsonstring);
 
 
-var totalPrice = (roomprice*0,0012) + roomprice
+var totalPrice = ((roomprice)*0,0012) + roomprice
 
 var monthlyPrice= totalPrice/3
 
@@ -460,7 +407,7 @@ var Collectors = Java.type("java.util.stream.Collectors");
 var roomid = execution.getVariable("room")
 var roomprice = execution.getVariable("price")
 
-var url = new URL("http://35.205.175.225:8080/hotels/berlin/rooms/" + roomid);
+var url = new URL("http://34.78.59.135:8080/hotels/berlin/rooms/" + roomid);
 
   con = url.openConnection();
   con.setRequestMethod("GET");
@@ -473,7 +420,7 @@ var url = new URL("http://35.205.175.225:8080/hotels/berlin/rooms/" + roomid);
   System.out.println("Room: " + jsonstring)
   var roomobj = JSON.parse(jsonstring);
 
-var totalPrice = ((roomprice *0,0012) + roomprice
+var totalPrice = ((roomprice)*0,0012) + roomprice
 
 var monthlyPrice= totalPrice/6
 
@@ -484,6 +431,33 @@ execution.setVariable("duration", duration)
 execution.setVariable("totalPrice", totalPrice)
 execution.setVariable("monthlyPrice", monthlyPrice)</bpmn:script>
     </bpmn:scriptTask>
+    <bpmn:userTask id="Activity_19qco6d" name="Neue Buchungsübersicht anzeigen" camunda:assignee="demo">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="totalPrice" label="Neuer Gesamtpreis (inkl. 1,2% Zinsen):" type="string" defaultValue="${totalPrice}" />
+          <camunda:formField id="monthlyPrice" label="Monatlich zu zahlen:" type="string" defaultValue="${monthlyPrice}" />
+          <camunda:formField id="confirm" label="Ratenzahlung bestätigen" type="boolean" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0lkkwra</bpmn:incoming>
+      <bpmn:outgoing>Flow_1tc93vx</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:intermediateCatchEvent id="Event_0hbkwwd" name="Zahlung eingegangen">
+      <bpmn:incoming>Flow_0p8hcsk</bpmn:incoming>
+      <bpmn:outgoing>Flow_1vr5vm1</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_19rz8gi">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1S </bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:userTask id="Activity_0cj9elw" name="Buchungs-bestätigung aushändigen" camunda:assignee="demo">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="zahlungseingang" label="Haben wir es geschafft?" type="string" defaultValue="ja" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1vodlrq</bpmn:incoming>
+      <bpmn:outgoing>Flow_0p8hcsk</bpmn:outgoing>
+    </bpmn:userTask>
     <bpmn:scriptTask id="rechnungAusstellen" name="Rechnung ausstellen" scriptFormat="javascript">
       <bpmn:incoming>Flow_16o4913</bpmn:incoming>
       <bpmn:outgoing>Flow_01nbyc0</bpmn:outgoing>
@@ -499,7 +473,7 @@ var roomid = execution.getVariable("room")
 var totalprice = execution.getVariable("price")
 
 
-var url = new URL("http://35.205.175.225:8080/hotels/berlin/rooms/" + roomid);
+var url = new URL("http://34.78.59.135:8080/hotels/berlin/rooms/" + roomid);
 
 var con = url.openConnection();
 con.setRequestMethod("PUT");
@@ -530,72 +504,10 @@ reader = new BufferedReader(new
 
   reader.close();</bpmn:script>
     </bpmn:scriptTask>
-    <bpmn:sequenceFlow id="Flow_1b50max" name="Doppelzimmer" sourceRef="Gateway_1sbh7j6" targetRef="checkDouble">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${wish == 'double'}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1oyq1u7" name="Einzelzimmer" sourceRef="Gateway_1sbh7j6" targetRef="checkSingle">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${wish == 'single'}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_0dghspt" name="Suite" sourceRef="Gateway_1sbh7j6" targetRef="checkSuite">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${wish == 'suite'}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_175mvjm" sourceRef="checkSingle" targetRef="Gateway_0hxevlc" />
-    <bpmn:sequenceFlow id="Flow_1yyerc3" sourceRef="checkDouble" targetRef="Gateway_0hxevlc" />
-    <bpmn:sequenceFlow id="Flow_11hhqwk" sourceRef="checkSuite" targetRef="Gateway_0hxevlc" />
-    <bpmn:sequenceFlow id="Flow_0nnct5l" sourceRef="Gateway_0hxevlc" targetRef="zimmerVorschlagen" />
-    <bpmn:sequenceFlow id="Flow_0x2llx7" sourceRef="zimmerVorschlagen" targetRef="Gateway_0vb6k4w" />
-    <bpmn:sequenceFlow id="Flow_15p2kug" name="ja" sourceRef="Gateway_0vb6k4w" targetRef="zimmer">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${acceptRoom}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_00z5rn8" sourceRef="zimmer" targetRef="zimmerBuchen" />
-    <bpmn:sequenceFlow id="Flow_16o4913" name="Rechnung" sourceRef="Gateway_1d0q11l" targetRef="rechnungAusstellen">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${payment == 'invoice'}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1rsacmn" sourceRef="kondi3Monate" targetRef="Gateway_1gpz2j8" />
-    <bpmn:sequenceFlow id="Flow_1w2zpnv" sourceRef="kondi6Monate" targetRef="Gateway_1gpz2j8" />
-    <bpmn:sequenceFlow id="Flow_0olu7ki" name="3 Monate" sourceRef="Gateway_0oi01fx" targetRef="kondi3Monate">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${modality == 'three'}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1dtqh8j" name="6 Monate" sourceRef="Gateway_0oi01fx" targetRef="kondi6Monate">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${modality == 'six'}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_0m0189v" sourceRef="ratenEintragen" targetRef="Gateway_1imzwfz" />
-    <bpmn:sequenceFlow id="Flow_1vodlrq" sourceRef="Activity_12rydgf" targetRef="Activity_0cj9elw" />
-    <bpmn:exclusiveGateway id="Gateway_1imzwfz">
-      <bpmn:incoming>Flow_01nbyc0</bpmn:incoming>
-      <bpmn:incoming>Flow_0m0189v</bpmn:incoming>
-      <bpmn:outgoing>Flow_1qsrhx6</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
     <bpmn:task id="Activity_12rydgf" name="Rechnung ausstellen">
       <bpmn:incoming>Flow_1qsrhx6</bpmn:incoming>
       <bpmn:outgoing>Flow_1vodlrq</bpmn:outgoing>
     </bpmn:task>
-    <bpmn:intermediateCatchEvent id="Event_0hbkwwd" name="Zahlung eingegangen">
-      <bpmn:incoming>Flow_0p8hcsk</bpmn:incoming>
-      <bpmn:outgoing>Flow_1vr5vm1</bpmn:outgoing>
-      <bpmn:timerEventDefinition id="TimerEventDefinition_19rz8gi">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1S </bpmn:timeDuration>
-      </bpmn:timerEventDefinition>
-    </bpmn:intermediateCatchEvent>
-    <bpmn:userTask id="ratenGenehmigung" name="Ratenzahlung genehmigen" camunda:assignee="demo">
-      <bpmn:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="name" label="Name des Gastes" type="string" defaultValue="${guestName}">
-            <camunda:properties />
-          </camunda:formField>
-          <camunda:formField id="roomType" label="Art des gebuchten Raumes" type="string" defaultValue="${type}" />
-          <camunda:formField id="roomnr" label="Zimmernummer:" type="string" defaultValue="${roomnr}" />
-          <camunda:formField id="duration" label="Dauer des Aufenthalts:" type="string" defaultValue="${duration}" />
-          <camunda:formField id="bonitaet" label="Ergebnis der Bonität" type="string" defaultValue="${credit}" />
-          <camunda:formField id="modality" label="Gewählte Modalität" type="string" defaultValue="${modality}" />
-          <camunda:formField id="totalPrice" label="Gesamtpreis für Aufenthalt:" type="string" defaultValue="${totalPrice}" />
-          <camunda:formField id="monthlyPrice" label="Monatlich zu zahlender Preis:" type="string" defaultValue="${monthlyPrice}" />
-          <camunda:formField id="finalConfirm" label="Genehmigung" type="boolean" />
-        </camunda:formData>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1tc93vx</bpmn:incoming>
-      <bpmn:outgoing>Flow_15lxvrs</bpmn:outgoing>
-    </bpmn:userTask>
     <bpmn:scriptTask id="ratenEintragen" name="Ratenzahlung eintragen" scriptFormat="javascript">
       <bpmn:incoming>Flow_15lxvrs</bpmn:incoming>
       <bpmn:outgoing>Flow_0m0189v</bpmn:outgoing>
@@ -611,7 +523,7 @@ var roomid = execution.getVariable("room")
 var totalprice = execution.getVariable("totalPrice")
 var monthlyprice = execution.getVariable("monthlyPrice")
 
-var url = new URL("http://35.205.175.225:8080/hotels/berlin/rooms/" + roomid);
+var url = new URL("http://34.78.59.135:8080/hotels/berlin/rooms/" + roomid);
 
 var con = url.openConnection();
 con.setRequestMethod("PUT");
@@ -642,35 +554,123 @@ reader = new BufferedReader(new
 
   reader.close();</bpmn:script>
     </bpmn:scriptTask>
-    <bpmn:sequenceFlow id="Flow_0p8hcsk" sourceRef="Activity_0cj9elw" targetRef="Event_0hbkwwd" />
-    <bpmn:sequenceFlow id="Flow_1vr5vm1" sourceRef="Event_0hbkwwd" targetRef="Event_1t145ms" />
-    <bpmn:userTask id="Activity_0cj9elw" name="Buchungs-bestätigung aushändigen" camunda:assignee="demo">
+    <bpmn:userTask id="modalVorschlagen" name="Modalitäten vorschlagen" camunda:assignee="demo">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="test" label="Haben wir es geschafft?" type="string" defaultValue="ja" />
+          <camunda:formField id="modality" type="enum">
+            <camunda:value id="three" name="3 Monate" />
+            <camunda:value id="six" name="6 Monate" />
+          </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1vodlrq</bpmn:incoming>
-      <bpmn:outgoing>Flow_0p8hcsk</bpmn:outgoing>
+      <bpmn:incoming>Flow_1t0p0dl</bpmn:incoming>
+      <bpmn:outgoing>Flow_015vqai</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:endEvent id="Event_1t145ms">
-      <bpmn:incoming>Flow_1vr5vm1</bpmn:incoming>
+    <bpmn:exclusiveGateway id="Gateway_0g4ff22" name="Ergebnis der Prüfung?">
+      <bpmn:incoming>Flow_08nkpzh</bpmn:incoming>
+      <bpmn:outgoing>Flow_1t0p0dl</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1rxmuy2</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="ratenGenehmigung" name="Ratenzahlung genehmigen" camunda:assignee="demo">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="name" label="Name des Gastes" type="string" defaultValue="${guestName}">
+            <camunda:properties />
+          </camunda:formField>
+          <camunda:formField id="roomType" label="Art des gebuchten Raumes" type="string" defaultValue="${type}" />
+          <camunda:formField id="roomnr" label="Zimmernummer:" type="string" defaultValue="${roomnr}" />
+          <camunda:formField id="duration" label="Dauer des Aufenthalts:" type="string" defaultValue="${duration}" />
+          <camunda:formField id="bonitaet" label="Ergebnis der Bonität" type="string" defaultValue="${credit}" />
+          <camunda:formField id="modality" label="Gewählte Modalität" type="string" defaultValue="${modality}" />
+          <camunda:formField id="totalPrice" label="Gesamtpreis für Aufenthalt:" type="string" defaultValue="${totalPrice}" />
+          <camunda:formField id="monthlyPrice" label="Monatlich zu zahlender Preis:" type="string" defaultValue="${monthlyPrice}" />
+          <camunda:formField id="finalConfirm" label="Genehmigung" type="boolean" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1tc93vx</bpmn:incoming>
+      <bpmn:outgoing>Flow_15lxvrs</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="Event_1jet7yp" name="Buchung abgebrochen">
+      <bpmn:incoming>Flow_1xoefxv</bpmn:incoming>
+      <bpmn:terminateEventDefinition id="TerminateEventDefinition_06si6qp" />
     </bpmn:endEvent>
-    <bpmn:textAnnotation id="TextAnnotation_1gvhiwv">
-      <bpmn:text>geht einfach weiter - ÄNDERN!</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:textAnnotation id="TextAnnotation_04ob12u">
-      <bpmn:text>hier müssten wir den gesamtpreis nehmen und dann durch 6 + Zinsen? :D dann brauchen wir eine neue Variable: newPrice? oder überschreiben wir einfach price?</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:association id="Association_1g4loql" sourceRef="TextAnnotation_1gvhiwv" targetRef="Event_13viwg1" />
-    <bpmn:association id="Association_1596pi2" sourceRef="kondi6Monate" targetRef="TextAnnotation_04ob12u" />
-    <bpmn:textAnnotation id="TextAnnotation_0el8i3v">
-      <bpmn:text>schauen, welches wunschzimmer frei ist</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:textAnnotation id="TextAnnotation_0qdbuja">
-      <bpmn:text>könnten theoretisch noch einbauen: Loop, wenn Zimmer nicht verfügbar</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:association id="Association_1ny3o93" sourceRef="checkSingle" targetRef="TextAnnotation_0qdbuja" />
+    <bpmn:userTask id="boniPruefen" name="Bonitätsprüfung durchführen" camunda:assignee="demo">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="credit" label="Ergebnis der Bonitätsprüfung?" type="enum">
+            <camunda:value id="positive" name="Positiv - Ratenzahlung möglich" />
+            <camunda:value id="negative" name="Negativ - Ratenzahlung abgelehnt" />
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0cb9vyn</bpmn:incoming>
+      <bpmn:outgoing>Flow_08nkpzh</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="infoAbbruch" name="Kunden über Abbruch informieren" camunda:assignee="demo">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="abbruchBuchung" label="Die Buchung musste abgebrochen werden. Grund:" type="string" defaultValue="Bonität ist negativ ausgefallen. Die Buchung wird abgebrochen.">
+            <camunda:properties />
+            <camunda:validation />
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1rxmuy2</bpmn:incoming>
+      <bpmn:outgoing>Flow_1xoefxv</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_1dpt5ed" sourceRef="buchungAnzeigen" targetRef="zahlungsartWaehlen" />
+    <bpmn:sequenceFlow id="Flow_133e066" sourceRef="zahlungsartWaehlen" targetRef="Gateway_1d0q11l" />
+    <bpmn:sequenceFlow id="Flow_0r7c10e" sourceRef="zimmerBuchen" targetRef="buchungAnzeigen" />
+    <bpmn:sequenceFlow id="Flow_1b50max" name="Doppelzimmer" sourceRef="Gateway_1sbh7j6" targetRef="checkDouble">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${wish == 'double'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1oyq1u7" name="Einzelzimmer" sourceRef="Gateway_1sbh7j6" targetRef="checkSingle">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${wish == 'single'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0dghspt" name="Suite" sourceRef="Gateway_1sbh7j6" targetRef="checkSuite">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${wish == 'suite'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_175mvjm" sourceRef="checkSingle" targetRef="Gateway_0hxevlc" />
+    <bpmn:sequenceFlow id="Flow_1yyerc3" sourceRef="checkDouble" targetRef="Gateway_0hxevlc" />
+    <bpmn:sequenceFlow id="Flow_11hhqwk" sourceRef="checkSuite" targetRef="Gateway_0hxevlc" />
+    <bpmn:sequenceFlow id="Flow_0nnct5l" sourceRef="Gateway_0hxevlc" targetRef="zimmerVorschlagen" />
+    <bpmn:sequenceFlow id="Flow_0x2llx7" sourceRef="zimmerVorschlagen" targetRef="Gateway_0vb6k4w" />
+    <bpmn:sequenceFlow id="Flow_15p2kug" name="ja" sourceRef="Gateway_0vb6k4w" targetRef="zimmer">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${acceptRoom}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_00z5rn8" sourceRef="zimmer" targetRef="zimmerBuchen" />
+    <bpmn:sequenceFlow id="Flow_0cb9vyn" name="Raten-&#10;zahlung" sourceRef="Gateway_1d0q11l" targetRef="boniPruefen">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${payment == 'installment'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_16o4913" name="Rechnung" sourceRef="Gateway_1d0q11l" targetRef="rechnungAusstellen">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${payment == 'invoice'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1vr5vm1" sourceRef="Event_0hbkwwd" targetRef="Event_1t145ms" />
+    <bpmn:sequenceFlow id="Flow_01nbyc0" sourceRef="rechnungAusstellen" targetRef="Gateway_1imzwfz" />
+    <bpmn:sequenceFlow id="Flow_0m0189v" sourceRef="ratenEintragen" targetRef="Gateway_1imzwfz" />
+    <bpmn:sequenceFlow id="Flow_1qsrhx6" sourceRef="Gateway_1imzwfz" targetRef="Activity_12rydgf" />
+    <bpmn:sequenceFlow id="Flow_1rsacmn" sourceRef="kondi3Monate" targetRef="Gateway_1gpz2j8" />
+    <bpmn:sequenceFlow id="Flow_1w2zpnv" sourceRef="kondi6Monate" targetRef="Gateway_1gpz2j8" />
+    <bpmn:sequenceFlow id="Flow_0lkkwra" sourceRef="Gateway_1gpz2j8" targetRef="Activity_19qco6d" />
+    <bpmn:sequenceFlow id="Flow_015vqai" sourceRef="modalVorschlagen" targetRef="Gateway_0oi01fx" />
+    <bpmn:sequenceFlow id="Flow_0olu7ki" name="3 Monate" sourceRef="Gateway_0oi01fx" targetRef="kondi3Monate">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${modality == 'three'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1dtqh8j" name="6 Monate" sourceRef="Gateway_0oi01fx" targetRef="kondi6Monate">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${modality == 'six'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1tc93vx" sourceRef="Activity_19qco6d" targetRef="ratenGenehmigung" />
+    <bpmn:sequenceFlow id="Flow_0p8hcsk" sourceRef="Activity_0cj9elw" targetRef="Event_0hbkwwd" />
+    <bpmn:sequenceFlow id="Flow_1vodlrq" sourceRef="Activity_12rydgf" targetRef="Activity_0cj9elw" />
+    <bpmn:sequenceFlow id="Flow_15lxvrs" sourceRef="ratenGenehmigung" targetRef="ratenEintragen" />
+    <bpmn:sequenceFlow id="Flow_1t0p0dl" name="positiv" sourceRef="Gateway_0g4ff22" targetRef="modalVorschlagen">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${credit == 'positive'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_08nkpzh" sourceRef="boniPruefen" targetRef="Gateway_0g4ff22" />
+    <bpmn:sequenceFlow id="Flow_1rxmuy2" name="negativ" sourceRef="Gateway_0g4ff22" targetRef="infoAbbruch">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${credit == 'negative'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1xoefxv" sourceRef="infoAbbruch" targetRef="Event_1jet7yp" />
     <bpmn:textAnnotation id="TextAnnotation_1dgnsbv">
       <bpmn:text>was passiert bei Ablehnung?</bpmn:text>
     </bpmn:textAnnotation>
@@ -679,251 +679,230 @@ reader = new BufferedReader(new
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_16qafuh">
       <bpmndi:BPMNShape id="Participant_12zbopj_di" bpmnElement="Participant_12zbopj" isHorizontal="true">
-        <dc:Bounds x="160" y="80" width="4100" height="60" />
+        <dc:Bounds x="160" y="80" width="5410" height="90" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Participant_1cinbjq_di" bpmnElement="Participant_1cinbjq" isHorizontal="true">
-        <dc:Bounds x="160" y="310" width="4100" height="1070" />
+        <dc:Bounds x="160" y="310" width="5410" height="1210" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Lane_0loqqla_di" bpmnElement="Lane_0loqqla" isHorizontal="true">
-        <dc:Bounds x="190" y="740" width="4070" height="470" />
+      <bpmndi:BPMNShape id="Lane_033a6se_di" bpmnElement="Lane_033a6se" isHorizontal="true">
+        <dc:Bounds x="190" y="1320" width="5380" height="200" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_0mjikk6_di" bpmnElement="Lane_0mjikk6" isHorizontal="true">
-        <dc:Bounds x="190" y="310" width="4070" height="430" />
+        <dc:Bounds x="190" y="310" width="5380" height="430" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Lane_033a6se_di" bpmnElement="Lane_033a6se" isHorizontal="true">
-        <dc:Bounds x="190" y="1210" width="4070" height="170" />
+      <bpmndi:BPMNShape id="Lane_0loqqla_di" bpmnElement="Lane_0loqqla" isHorizontal="true">
+        <dc:Bounds x="190" y="740" width="5380" height="580" />
         <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_1gvhiwv_di" bpmnElement="TextAnnotation_1gvhiwv">
-        <dc:Bounds x="2010" y="1108" width="100" height="53" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_04ob12u_di" bpmnElement="TextAnnotation_04ob12u">
-        <dc:Bounds x="2490" y="898" width="160" height="110" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_0el8i3v_di" bpmnElement="TextAnnotation_0el8i3v">
-        <dc:Bounds x="480" y="450" width="100" height="67" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_0qdbuja_di" bpmnElement="TextAnnotation_0qdbuja">
-        <dc:Bounds x="860" y="330" width="100" height="95" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_1dgnsbv_di" bpmnElement="TextAnnotation_1dgnsbv">
-        <dc:Bounds x="3090" y="1138" width="99.99156545209178" height="40.48582995951417" />
+        <dc:Bounds x="3830" y="1220" width="100" height="40" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_17v3guw_di" bpmnElement="Flow_17v3guw">
-        <di:waypoint x="1230" y="585" />
-        <di:waypoint x="1230" y="1108" />
-        <di:waypoint x="450" y="1108" />
-        <di:waypoint x="450" y="1068" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="803" y="1121" width="21" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0r7c10e_di" bpmnElement="Flow_0r7c10e">
-        <di:waypoint x="1560" y="600" />
-        <di:waypoint x="1560" y="1028" />
-        <di:waypoint x="1655" y="1028" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0n1sh5q_di" bpmnElement="Flow_0n1sh5q">
-        <di:waypoint x="500" y="1028" />
-        <di:waypoint x="530" y="1028" />
-        <di:waypoint x="530" y="560" />
-        <di:waypoint x="585" y="560" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_01nbyc0_di" bpmnElement="Flow_01nbyc0">
-        <di:waypoint x="2650" y="394" />
-        <di:waypoint x="3440" y="394" />
-        <di:waypoint x="3440" y="555" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_15lxvrs_di" bpmnElement="Flow_15lxvrs">
-        <di:waypoint x="3150" y="1300" />
-        <di:waypoint x="3210" y="1300" />
-        <di:waypoint x="3210" y="620" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1qsrhx6_di" bpmnElement="Flow_1qsrhx6">
-        <di:waypoint x="3465" y="580" />
-        <di:waypoint x="3600" y="580" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0cb9vyn_di" bpmnElement="Flow_0cb9vyn">
-        <di:waypoint x="2060" y="565" />
-        <di:waypoint x="2060" y="1058" />
-        <di:waypoint x="2110" y="1058" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2070" y="646" width="39" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08nkpzh_di" bpmnElement="Flow_08nkpzh">
-        <di:waypoint x="2210" y="1058" />
-        <di:waypoint x="2260" y="1058" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_03c1k8r_di" bpmnElement="Flow_03c1k8r">
-        <di:waypoint x="2180" y="1116" />
-        <di:waypoint x="2180" y="1158" />
-        <di:waypoint x="2282" y="1158" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0lkkwra_di" bpmnElement="Flow_0lkkwra">
-        <di:waypoint x="2765" y="580" />
-        <di:waypoint x="2790" y="580" />
-        <di:waypoint x="2790" y="1058" />
-        <di:waypoint x="2840" y="1058" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_015vqai_di" bpmnElement="Flow_015vqai">
-        <di:waypoint x="2360" y="1058" />
-        <di:waypoint x="2400" y="1058" />
-        <di:waypoint x="2400" y="580" />
-        <di:waypoint x="2425" y="580" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1tc93vx_di" bpmnElement="Flow_1tc93vx">
-        <di:waypoint x="2940" y="1058" />
-        <di:waypoint x="2990" y="1058" />
-        <di:waypoint x="2990" y="1300" />
-        <di:waypoint x="3050" y="1300" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_133e066_di" bpmnElement="Flow_133e066">
-        <di:waypoint x="1925" y="1028" />
-        <di:waypoint x="1965" y="1028" />
-        <di:waypoint x="1965" y="540" />
-        <di:waypoint x="2035" y="540" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1dpt5ed_di" bpmnElement="Flow_1dpt5ed">
-        <di:waypoint x="1755" y="1028" />
-        <di:waypoint x="1825" y="1028" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1dimczj_di" bpmnElement="Flow_1dimczj">
         <di:waypoint x="298" y="1028" />
         <di:waypoint x="400" y="1028" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1b50max_di" bpmnElement="Flow_1b50max">
-        <di:waypoint x="635" y="560" />
-        <di:waypoint x="740" y="560" />
+      <bpmndi:BPMNEdge id="Flow_0n1sh5q_di" bpmnElement="Flow_0n1sh5q">
+        <di:waypoint x="500" y="1028" />
+        <di:waypoint x="640" y="1028" />
+        <di:waypoint x="640" y="560" />
+        <di:waypoint x="1075" y="560" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_17v3guw_di" bpmnElement="Flow_17v3guw">
+        <di:waypoint x="1720" y="585" />
+        <di:waypoint x="1720" y="1108" />
+        <di:waypoint x="450" y="1108" />
+        <di:waypoint x="450" y="1068" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="652" y="542" width="72" height="14" />
+          <dc:Bounds x="1731" y="633" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1dpt5ed_di" bpmnElement="Flow_1dpt5ed">
+        <di:waypoint x="2245" y="1028" />
+        <di:waypoint x="2315" y="1028" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_133e066_di" bpmnElement="Flow_133e066">
+        <di:waypoint x="2415" y="1028" />
+        <di:waypoint x="2455" y="1028" />
+        <di:waypoint x="2455" y="540" />
+        <di:waypoint x="2525" y="540" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0r7c10e_di" bpmnElement="Flow_0r7c10e">
+        <di:waypoint x="2050" y="600" />
+        <di:waypoint x="2050" y="1028" />
+        <di:waypoint x="2145" y="1028" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1b50max_di" bpmnElement="Flow_1b50max">
+        <di:waypoint x="1125" y="560" />
+        <di:waypoint x="1230" y="560" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1142" y="542" width="72" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1oyq1u7_di" bpmnElement="Flow_1oyq1u7">
-        <di:waypoint x="610" y="535" />
-        <di:waypoint x="610" y="454" />
-        <di:waypoint x="740" y="454" />
+        <di:waypoint x="1100" y="535" />
+        <di:waypoint x="1100" y="454" />
+        <di:waypoint x="1230" y="454" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="628" y="433" width="67" height="14" />
+          <dc:Bounds x="1118" y="433" width="67" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0dghspt_di" bpmnElement="Flow_0dghspt">
-        <di:waypoint x="610" y="585" />
-        <di:waypoint x="610" y="670" />
-        <di:waypoint x="740" y="670" />
+        <di:waypoint x="1100" y="585" />
+        <di:waypoint x="1100" y="670" />
+        <di:waypoint x="1230" y="670" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="649" y="653" width="26" height="14" />
+          <dc:Bounds x="1139" y="653" width="26" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_175mvjm_di" bpmnElement="Flow_175mvjm">
-        <di:waypoint x="840" y="454" />
-        <di:waypoint x="970" y="454" />
-        <di:waypoint x="970" y="535" />
+        <di:waypoint x="1330" y="454" />
+        <di:waypoint x="1460" y="454" />
+        <di:waypoint x="1460" y="535" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1yyerc3_di" bpmnElement="Flow_1yyerc3">
-        <di:waypoint x="840" y="560" />
-        <di:waypoint x="945" y="560" />
+        <di:waypoint x="1330" y="560" />
+        <di:waypoint x="1435" y="560" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_11hhqwk_di" bpmnElement="Flow_11hhqwk">
-        <di:waypoint x="840" y="670" />
-        <di:waypoint x="970" y="670" />
-        <di:waypoint x="970" y="585" />
+        <di:waypoint x="1330" y="670" />
+        <di:waypoint x="1460" y="670" />
+        <di:waypoint x="1460" y="585" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0nnct5l_di" bpmnElement="Flow_0nnct5l">
-        <di:waypoint x="995" y="560" />
-        <di:waypoint x="1060" y="560" />
+        <di:waypoint x="1485" y="560" />
+        <di:waypoint x="1550" y="560" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0x2llx7_di" bpmnElement="Flow_0x2llx7">
-        <di:waypoint x="1160" y="560" />
-        <di:waypoint x="1205" y="560" />
+        <di:waypoint x="1650" y="560" />
+        <di:waypoint x="1695" y="560" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_15p2kug_di" bpmnElement="Flow_15p2kug">
-        <di:waypoint x="1255" y="560" />
-        <di:waypoint x="1340" y="560" />
+        <di:waypoint x="1745" y="560" />
+        <di:waypoint x="1830" y="560" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1294" y="542" width="9" height="14" />
+          <dc:Bounds x="1784" y="542" width="9" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_00z5rn8_di" bpmnElement="Flow_00z5rn8">
-        <di:waypoint x="1440" y="560" />
-        <di:waypoint x="1510" y="560" />
+        <di:waypoint x="1930" y="560" />
+        <di:waypoint x="2000" y="560" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_16o4913_di" bpmnElement="Flow_16o4913">
-        <di:waypoint x="2060" y="515" />
-        <di:waypoint x="2060" y="394" />
-        <di:waypoint x="2550" y="394" />
+      <bpmndi:BPMNEdge id="Flow_0cb9vyn_di" bpmnElement="Flow_0cb9vyn">
+        <di:waypoint x="2550" y="565" />
+        <di:waypoint x="2550" y="1058" />
+        <di:waypoint x="2650" y="1058" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2215" y="407" width="51" height="14" />
+          <dc:Bounds x="2560" y="646" width="39" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_16o4913_di" bpmnElement="Flow_16o4913">
+        <di:waypoint x="2550" y="515" />
+        <di:waypoint x="2550" y="394" />
+        <di:waypoint x="3330" y="394" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2812" y="407" width="51" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1vr5vm1_di" bpmnElement="Flow_1vr5vm1">
+        <di:waypoint x="4618" y="1058" />
+        <di:waypoint x="4742" y="1058" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_01nbyc0_di" bpmnElement="Flow_01nbyc0">
+        <di:waypoint x="3430" y="394" />
+        <di:waypoint x="4220" y="394" />
+        <di:waypoint x="4220" y="555" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0m0189v_di" bpmnElement="Flow_0m0189v">
+        <di:waypoint x="4040" y="580" />
+        <di:waypoint x="4195" y="580" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1qsrhx6_di" bpmnElement="Flow_1qsrhx6">
+        <di:waypoint x="4245" y="580" />
+        <di:waypoint x="4380" y="580" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1rsacmn_di" bpmnElement="Flow_1rsacmn">
-        <di:waypoint x="2650" y="500" />
-        <di:waypoint x="2740" y="500" />
-        <di:waypoint x="2740" y="555" />
+        <di:waypoint x="3430" y="500" />
+        <di:waypoint x="3520" y="500" />
+        <di:waypoint x="3520" y="555" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1w2zpnv_di" bpmnElement="Flow_1w2zpnv">
-        <di:waypoint x="2650" y="660" />
-        <di:waypoint x="2740" y="660" />
-        <di:waypoint x="2740" y="605" />
+        <di:waypoint x="3430" y="660" />
+        <di:waypoint x="3520" y="660" />
+        <di:waypoint x="3520" y="605" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0lkkwra_di" bpmnElement="Flow_0lkkwra">
+        <di:waypoint x="3545" y="580" />
+        <di:waypoint x="3570" y="580" />
+        <di:waypoint x="3570" y="1058" />
+        <di:waypoint x="3620" y="1058" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_015vqai_di" bpmnElement="Flow_015vqai">
+        <di:waypoint x="3040" y="1018" />
+        <di:waypoint x="3040" y="580" />
+        <di:waypoint x="3205" y="580" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0olu7ki_di" bpmnElement="Flow_0olu7ki">
-        <di:waypoint x="2450" y="555" />
-        <di:waypoint x="2450" y="500" />
-        <di:waypoint x="2550" y="500" />
+        <di:waypoint x="3230" y="555" />
+        <di:waypoint x="3230" y="500" />
+        <di:waypoint x="3330" y="500" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2448" y="482" width="46" height="14" />
+          <dc:Bounds x="3228" y="482" width="46" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1dtqh8j_di" bpmnElement="Flow_1dtqh8j">
-        <di:waypoint x="2450" y="605" />
-        <di:waypoint x="2450" y="660" />
-        <di:waypoint x="2550" y="660" />
+        <di:waypoint x="3230" y="605" />
+        <di:waypoint x="3230" y="660" />
+        <di:waypoint x="3330" y="660" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2457" y="663" width="46" height="14" />
+          <dc:Bounds x="3237" y="663" width="46" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0m0189v_di" bpmnElement="Flow_0m0189v">
-        <di:waypoint x="3260" y="580" />
-        <di:waypoint x="3415" y="580" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1vodlrq_di" bpmnElement="Flow_1vodlrq">
-        <di:waypoint x="3650" y="620" />
-        <di:waypoint x="3650" y="830" />
+      <bpmndi:BPMNEdge id="Flow_1tc93vx_di" bpmnElement="Flow_1tc93vx">
+        <di:waypoint x="3720" y="1058" />
+        <di:waypoint x="3770" y="1058" />
+        <di:waypoint x="3770" y="1420" />
+        <di:waypoint x="3830" y="1420" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0p8hcsk_di" bpmnElement="Flow_0p8hcsk">
-        <di:waypoint x="3650" y="910" />
-        <di:waypoint x="3650" y="1058" />
-        <di:waypoint x="3802" y="1058" />
+        <di:waypoint x="4430" y="910" />
+        <di:waypoint x="4430" y="1058" />
+        <di:waypoint x="4582" y="1058" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1vr5vm1_di" bpmnElement="Flow_1vr5vm1">
-        <di:waypoint x="3838" y="1058" />
-        <di:waypoint x="3962" y="1058" />
+      <bpmndi:BPMNEdge id="Flow_1vodlrq_di" bpmnElement="Flow_1vodlrq">
+        <di:waypoint x="4430" y="620" />
+        <di:waypoint x="4430" y="830" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Activity_19qco6d_di" bpmnElement="Activity_19qco6d">
-        <dc:Bounds x="2840" y="1018" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="modalVorschlagen_di" bpmnElement="modalVorschlagen">
-        <dc:Bounds x="2260" y="1018" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1mg1ygy_di" bpmnElement="Event_1mg1ygy">
-        <dc:Bounds x="2282" y="1140" width="36" height="36" />
+      <bpmndi:BPMNEdge id="Flow_15lxvrs_di" bpmnElement="Flow_15lxvrs">
+        <di:waypoint x="3930" y="1420" />
+        <di:waypoint x="3990" y="1420" />
+        <di:waypoint x="3990" y="620" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1t0p0dl_di" bpmnElement="Flow_1t0p0dl">
+        <di:waypoint x="2855" y="1058" />
+        <di:waypoint x="2990" y="1058" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2337" y="1144" width="65" height="27" />
+          <dc:Bounds x="2907" y="1040" width="32" height="14" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="boniPruefen_di" bpmnElement="boniPruefen">
-        <dc:Bounds x="2110" y="1018" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="zahlungsartWaehlen_di" bpmnElement="zahlungsartWaehlen">
-        <dc:Bounds x="1825" y="988" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_17dy2of_di" bpmnElement="buchungAnzeigen">
-        <dc:Bounds x="1655" y="988" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08nkpzh_di" bpmnElement="Flow_08nkpzh">
+        <di:waypoint x="2750" y="1058" />
+        <di:waypoint x="2805" y="1058" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1rxmuy2_di" bpmnElement="Flow_1rxmuy2">
+        <di:waypoint x="2830" y="1083" />
+        <di:waypoint x="2830" y="1170" />
+        <di:waypoint x="2990" y="1170" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2902" y="1143" width="36" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1xoefxv_di" bpmnElement="Flow_1xoefxv">
+        <di:waypoint x="3090" y="1170" />
+        <di:waypoint x="3152" y="1170" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_0uux4c6_di" bpmnElement="Event_0sfdkmy">
         <dc:Bounds x="262" y="1010" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -933,113 +912,130 @@ reader = new BufferedReader(new
       <bpmndi:BPMNShape id="Activity_01fl3cl_di" bpmnElement="Activity_01fl3cl">
         <dc:Bounds x="400" y="988" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="zahlungsartWaehlen_di" bpmnElement="zahlungsartWaehlen">
+        <dc:Bounds x="2315" y="988" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_17dy2of_di" bpmnElement="buchungAnzeigen">
+        <dc:Bounds x="2145" y="988" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1sbh7j6_di" bpmnElement="Gateway_1sbh7j6" isMarkerVisible="true">
-        <dc:Bounds x="585" y="535" width="50" height="50" />
+        <dc:Bounds x="1075" y="535" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0jqy6a2_di" bpmnElement="checkSingle">
-        <dc:Bounds x="740" y="414" width="100" height="80" />
+        <dc:Bounds x="1230" y="414" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1tn8c6u_di" bpmnElement="checkDouble">
-        <dc:Bounds x="740" y="520" width="100" height="80" />
+        <dc:Bounds x="1230" y="520" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0yev30b_di" bpmnElement="checkSuite">
-        <dc:Bounds x="740" y="630" width="100" height="80" />
+        <dc:Bounds x="1230" y="630" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0hxevlc_di" bpmnElement="Gateway_0hxevlc" isMarkerVisible="true">
-        <dc:Bounds x="945" y="535" width="50" height="50" />
+        <dc:Bounds x="1435" y="535" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0vb6k4w_di" bpmnElement="Gateway_0vb6k4w" isMarkerVisible="true">
-        <dc:Bounds x="1205" y="535" width="50" height="50" />
+        <dc:Bounds x="1695" y="535" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1194" y="505" width="74" height="27" />
+          <dc:Bounds x="1684" y="505" width="74" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_19yvpt0_di" bpmnElement="zimmerVorschlagen">
-        <dc:Bounds x="1060" y="520" width="100" height="80" />
+        <dc:Bounds x="1550" y="520" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_19j48au_di" bpmnElement="zimmer">
-        <dc:Bounds x="1340" y="520" width="100" height="80" />
+        <dc:Bounds x="1830" y="520" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1i08km0_di" bpmnElement="zimmerBuchen">
-        <dc:Bounds x="1510" y="520" width="100" height="80" />
+        <dc:Bounds x="2000" y="520" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1d0q11l_di" bpmnElement="Gateway_1d0q11l" isMarkerVisible="true">
-        <dc:Bounds x="2035" y="515" width="50" height="50" />
+        <dc:Bounds x="2525" y="515" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1gpz2j8_di" bpmnElement="Gateway_1gpz2j8" isMarkerVisible="true">
-        <dc:Bounds x="2715" y="555" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0oi01fx_di" bpmnElement="Gateway_0oi01fx" isMarkerVisible="true">
-        <dc:Bounds x="2425" y="555" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="kondi3Monate_di" bpmnElement="kondi3Monate">
-        <dc:Bounds x="2550" y="460" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="kondi6Monate_di" bpmnElement="kondi6Monate">
-        <dc:Bounds x="2550" y="620" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1qbv6rm_di" bpmnElement="rechnungAusstellen">
-        <dc:Bounds x="2550" y="354" width="100" height="80" />
+      <bpmndi:BPMNShape id="Event_1t145ms_di" bpmnElement="Event_1t145ms">
+        <dc:Bounds x="4742" y="1040" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="4723" y="1083" width="74" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1imzwfz_di" bpmnElement="Gateway_1imzwfz" isMarkerVisible="true">
-        <dc:Bounds x="3415" y="555" width="50" height="50" />
+        <dc:Bounds x="4195" y="555" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_080ixtt_di" bpmnElement="Activity_12rydgf">
-        <dc:Bounds x="3600" y="540" width="100" height="80" />
+      <bpmndi:BPMNShape id="Gateway_1gpz2j8_di" bpmnElement="Gateway_1gpz2j8" isMarkerVisible="true">
+        <dc:Bounds x="3495" y="555" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0oi01fx_di" bpmnElement="Gateway_0oi01fx" isMarkerVisible="true">
+        <dc:Bounds x="3205" y="555" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="kondi3Monate_di" bpmnElement="kondi3Monate">
+        <dc:Bounds x="3330" y="460" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="kondi6Monate_di" bpmnElement="kondi6Monate">
+        <dc:Bounds x="3330" y="620" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_19qco6d_di" bpmnElement="Activity_19qco6d">
+        <dc:Bounds x="3620" y="1018" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0hbkwwd_di" bpmnElement="Event_0hbkwwd">
-        <dc:Bounds x="3802" y="1040" width="36" height="36" />
+        <dc:Bounds x="4582" y="1040" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3788" y="1083" width="64" height="27" />
+          <dc:Bounds x="4568" y="1083" width="64" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0cj9elw_di" bpmnElement="Activity_0cj9elw">
+        <dc:Bounds x="4380" y="830" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1qbv6rm_di" bpmnElement="rechnungAusstellen">
+        <dc:Bounds x="3330" y="354" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_080ixtt_di" bpmnElement="Activity_12rydgf">
+        <dc:Bounds x="4380" y="540" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1pq8zda_di" bpmnElement="ratenEintragen">
+        <dc:Bounds x="3940" y="540" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="modalVorschlagen_di" bpmnElement="modalVorschlagen">
+        <dc:Bounds x="2990" y="1018" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0g4ff22_di" bpmnElement="Gateway_0g4ff22" isMarkerVisible="true">
+        <dc:Bounds x="2805" y="1033" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2798" y="996" width="63" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0mbtz3v_di" bpmnElement="ratenGenehmigung">
-        <dc:Bounds x="3050" y="1260" width="100" height="80" />
+        <dc:Bounds x="3830" y="1380" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1pq8zda_di" bpmnElement="ratenEintragen">
-        <dc:Bounds x="3160" y="540" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0cj9elw_di" bpmnElement="Activity_0cj9elw">
-        <dc:Bounds x="3600" y="830" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1t145ms_di" bpmnElement="Event_1t145ms">
-        <dc:Bounds x="3962" y="1040" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_1g4loql_di" bpmnElement="Association_1g4loql">
-        <di:waypoint x="2110" y="1124" />
-        <di:waypoint x="2163" y="1104" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_1596pi2_di" bpmnElement="Association_1596pi2">
-        <di:waypoint x="2589" y="700" />
-        <di:waypoint x="2533" y="898" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_1ny3o93_di" bpmnElement="Association_1ny3o93">
-        <di:waypoint x="833" y="415" />
-        <di:waypoint x="860" y="390" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_1k6tu8l_di" bpmnElement="Association_1k6tu8l">
-        <di:waypoint x="3111" y="1260" />
-        <di:waypoint x="3133" y="1178" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Event_13viwg1_di" bpmnElement="Event_13viwg1">
-        <dc:Bounds x="2162" y="1080" width="36" height="36" />
+      <bpmndi:BPMNShape id="Event_1rs15rv_di" bpmnElement="Event_1jet7yp">
+        <dc:Bounds x="3152" y="1152" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2193" y="1141" width="53" height="14" />
+          <dc:Bounds x="3138" y="1195" width="65" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="boniPruefen_di" bpmnElement="boniPruefen">
+        <dc:Bounds x="2650" y="1018" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_03e0v9c_di" bpmnElement="infoAbbruch">
+        <dc:Bounds x="2990" y="1130" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_1k6tu8l_di" bpmnElement="Association_1k6tu8l">
+        <di:waypoint x="3880" y="1380" />
+        <di:waypoint x="3879" y="1260" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_03ohyty_di" bpmnElement="Flow_03ohyty">
         <di:waypoint x="450" y="988" />
-        <di:waypoint x="450" y="140" />
+        <di:waypoint x="450" y="170" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0148uu4_di" bpmnElement="Flow_0148uu4">
-        <di:waypoint x="280" y="140" />
+        <di:waypoint x="280" y="170" />
         <di:waypoint x="280" y="1010" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1juqhcc_di" bpmnElement="Flow_1juqhcc">
-        <di:waypoint x="1110" y="520" />
-        <di:waypoint x="1110" y="140" />
+        <di:waypoint x="1600" y="520" />
+        <di:waypoint x="1600" y="170" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

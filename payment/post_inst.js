@@ -10,7 +10,7 @@ var roomid = execution.getVariable("room")
 var totalprice = execution.getVariable("totalPrice")
 var monthlyprice = execution.getVariable("monthlyPrice")
 
-var url = new URL("http://35.205.175.225:8080/hotels/berlin/rooms/" + roomid);
+var url = new URL("http://34.78.33.136:8080/hotels/berlin/rooms/" + roomid);
 
 var con = url.openConnection();
 con.setRequestMethod("PUT");
@@ -18,7 +18,6 @@ con.setDoOutput(true);
 con.setRequestProperty("Content-Type", "application/json");
 con.setRequestProperty("Accept", "application/json");
 con.connect()
-
 
 var content1 = {payment: "installment", total_price : totalprice, monthly_price : monthlyprice}
 
@@ -42,7 +41,6 @@ reader = new BufferedReader(new
   reader.close();
 
 
-//
 
 
 
