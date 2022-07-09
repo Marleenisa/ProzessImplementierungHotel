@@ -10,6 +10,7 @@ var Collectors = Java.type("java.util.stream.Collectors");
 var roomid = execution.getVariable("room")
 var guestName = execution.getVariable("guestName")
 var duration = execution.getVariable("duration")
+var city = execution.getVariable("city")
 
 
 var city = execution.getVariable("city");
@@ -24,7 +25,7 @@ con.setRequestProperty("Accept", "application/json");
 con.connect()
 
 
-var content = {status : "occupied", guest : guestName, duration : duration}
+var content = {status : "occupied", guest : guestName, duration : duration, city: city, roomnr : roomid}
 
 var jsoncontent = JSON.stringify(content);
 
