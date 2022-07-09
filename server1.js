@@ -67,6 +67,27 @@ let rostock =  {
     }
 }
 
+let dresden =  {
+    single: {
+        start:500,
+        end:550,
+        type:"single",
+        price:70
+    },
+    double: {
+        start:600,
+        end:650,
+        type:"double",
+        price:150
+    },
+    suite: {
+        start:700,
+        end:730,
+        type:"suite",
+        price:850
+    }
+}
+
 function generateAllRooms(rooms, city){
     for(let type in city){
         let curObj = city[type];
@@ -75,11 +96,13 @@ function generateAllRooms(rooms, city){
     }
     return rooms;
 }
-//wenn wir erweitern wollen, Z.36&37 kopieren und roomsDresden etc...
+
 let berlin_rooms = {};
 berlin_rooms = generateAllRooms(berlin_rooms, berlin);
 let rostock_rooms ={};
 rostock_rooms = generateAllRooms(rostock_rooms, rostock);
+let dresden_rooms ={};
+dresden_rooms = generateAllRooms(dresden_rooms, dresden);
 let cities = ['berlin','dresden','rostock']
 
 // Check if city in list
@@ -87,13 +110,16 @@ let cities = ['berlin','dresden','rostock']
 function isLegitCity(cityname){
     return cities.includes(cityname.toLowerCase());
 }
-
+//let pakete
 let hotels = {
     berlin: {
         rooms: berlin_rooms
     },
     rostock:{
         rooms: rostock_rooms
+    },
+    dresden:{
+        rooms: dresden_rooms
     }
 }
 
