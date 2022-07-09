@@ -7,7 +7,8 @@ var Collectors = Java.type("java.util.stream.Collectors");
 var roomid = execution.getVariable("room")
 var duration = execution.getVariable("duration")
 
-var url = new URL("http://34.78.33.136:8080/hotels/berlin/rooms/" + roomid);
+var city = execution.getVariable("city");
+var url = new URL("http://34.78.33.136:8080/hotels/"+city+"/rooms/" + roomid)
 
 con = url.openConnection();
 con.setRequestMethod("GET");
@@ -19,11 +20,9 @@ reader.close()
 System.out.println("Room: " + jsonstring)
 var roomobj = JSON.parse(jsonstring);
 
-//Berechnung des Gesamtpreises der Hotelübernachtungen
 var roomprice = duration * roomobj.price
 
-//Ausgabevariablen definieren für Usertask: Buchungsübersicht anzeigen
-execution.setVariable("guestName", roomobj.guest)
+execution.setVariable("guestName", guestName)
 execution.setVariable("type", roomobj.roomtype)
 execution.setVariable("roomnr", roomid)
 execution.setVariable("duration", duration)

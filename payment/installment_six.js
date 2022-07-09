@@ -6,8 +6,9 @@ var Collectors = Java.type("java.util.stream.Collectors");
 
 var roomid = execution.getVariable("room")
 var roomprice = execution.getVariable("price")
-//API Call
-var url = new URL("http://34.78.33.136:8080/hotels/berlin/rooms/" + roomid);
+
+var city = execution.getVariable("city");
+var url = new URL("http://34.78.33.136:8080/hotels/"+city+"/rooms/" + roomid)
 
   con = url.openConnection();
   con.setRequestMethod("GET");
@@ -20,19 +21,13 @@ var url = new URL("http://34.78.33.136:8080/hotels/berlin/rooms/" + roomid);
   System.out.println("Room: " + jsonstring)
   var roomobj = JSON.parse(jsonstring);
 
-
-// Neuer Gesamtbetrag inkl. Zinsatzsatz 1,2%
 var totalPrice = ((roomprice)*0,0012) + roomprice
 
-//Variable für Ratenzahlung: 6 Monate mit Zinsatz 1,2% => Monatliche Zahlung für 6 Monate
 var monthlyPrice= totalPrice/6
 
-
-//Ausgabevariablen definieren für Usertask: Modalitäten anzeigen
 execution.setVariable("guestName", roomobj.guest)
 execution.setVariable("type", roomobj.roomtype)
 execution.setVariable("roomnr", roomnr)
 execution.setVariable("duration", duration)
-//Neue Variablen für Ratenzahlung
 execution.setVariable("totalPrice", totalPrice)
 execution.setVariable("monthlyPrice", monthlyPrice)

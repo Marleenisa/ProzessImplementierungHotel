@@ -12,7 +12,9 @@ var guestName = execution.getVariable("guestName")
 var duration = execution.getVariable("duration")
 
 
-var url = new URL("http://34.78.33.136:8080/hotels/berlin/rooms/" + roomid);
+var city = execution.getVariable("city");
+var url = new URL("http://34.78.33.136:8080/hotels/"+city+"/rooms/" + roomid)
+
 
 var con = url.openConnection();
 con.setRequestMethod("PUT");
@@ -42,32 +44,3 @@ reader = new BufferedReader(new
   
 
   reader.close();
-
-/*
-var con = url.openConnection();
-con.setRequestMethod("PUT");
-con.setDoOutput(true);
-con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-con.setRequestProperty("Accept", "application/json");
-con.connect()
-
-var content = {status : "occupied", guest : guestName, duration : duration }
-
-var jsoncontent = JSON.stringify(content);
-
-var os = con.getOutputStream();
-var ps = new PrintWriter(os);
-
-System.out.println(jsoncontent.toString());
-
-ps.println(jsoncontent.toString());
-
-ps.flush();
-
-ps.close();
-
-var out = new OutputStreamWriter(con.getOutputStream());
-out.write(jsoncontent);
-  out.close(); */
-
-

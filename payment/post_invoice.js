@@ -10,7 +10,8 @@ var roomid = execution.getVariable("room")
 var totalprice = execution.getVariable("price")
 
 
-var url = new URL("http://34.78.59.135:8080/hotels/berlin/rooms/" + roomid);
+var city = execution.getVariable("city");
+var url = new URL("http://34.78.33.136:8080/hotels/"+city+"/rooms/" + roomid)
 
 var con = url.openConnection();
 con.setRequestMethod("PUT");
@@ -40,4 +41,3 @@ reader = new BufferedReader(new
   
 
   reader.close();
-

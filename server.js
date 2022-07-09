@@ -5,86 +5,196 @@ let bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-//räume
 
-let rooms = {};
-for (let i = 100; i < 120; ++i) {
-	rooms[i] = {
-		roomtype : "single",
-		price : 80,
-		guest : "none",
-		status : "free",
-		duration : 0 ,
-		payment: "none",
-		total_price: 0,
-		monthly_price: 0,
-		print: "none"
+function generateRooms (start, end, roomtype, price, rooms) {
+	for (let i = start; i < end; ++i) {
+		rooms[i] = {
+            city : "none",
+			roomtype : roomtype,
+			price : price,
+			guest : "none",
+			status : "free",
+			duration : 0 ,
+			payment: "none",
+			total_price: 0,
+			monthly_price: 0,
+			print: "none"
+		}
 	}
-}
-for (let i = 200; i < 210; ++i) {
-	rooms[i] = {
-		roomtype : "double",
-		price : 120,
-		guest : "none",
-		status : "free",
-		duration : 0 ,
-		payment: "none",
-		total_price: 0,
-		monthly_price: 0,
-		print: "none"
-	}
-}
-for (let i = 300; i < 305; ++i) {
-	rooms[i] = {
-		roomtype : "suite",
-		price : 250,
-		guest : "none",
-		status : "free",
-		duration : 0 ,
-		payment: "none",
-		total_price: 0,
-		monthly_price: 0,
-		print: "none"
-	}
+	return rooms
 }
 
-app.get('/hotels/berlin/rooms', (req, res) => {
-	res.send(Object.keys(rooms));
+let berlin =  {
+    single: {
+        start:100,
+        end:120,
+        type:"single",
+        price:80
+    },
+    double: {
+        start:200,
+        end:210,
+        type:"double",
+        price:120
+    },
+    suite: {
+        start:300,
+        end:305,
+        type:"suite",
+        price:250
+    },
+    
+}
+
+let rostock =  {
+    single: {
+        start:200,
+        end:215,
+        type:"single",
+        price:60
+    },
+    double: {
+        start:220,
+        end:230,
+        type:"double",
+        price:90
+    },
+    suite: {
+        start:240,
+        end:245,
+        type:"suite",
+        price:1000
+    }
+}
+
+let dresden =  {
+    single: {
+        start:500,
+        end:550,
+        type:"single",
+        price:70
+    },
+    double: {
+        start:600,
+        end:650,
+        type:"double",
+        price:150
+    },
+    suite: {
+        start:700,
+        end:730,
+        type:"suite",
+        price:850
+    }
+}
+
+function generateAllRooms(rooms, city){
+    for(let type in city){
+        let curObj = city[type];
+        // Merge old room object with generated rooms
+        rooms = {...rooms, ...generateRooms(curObj.start,curObj.end,curObj.type,curObj.price,rooms)};
+    }
+    return rooms;
+}
+
+let berlin_rooms = {};
+berlin_rooms = generateAllRooms(berlin_rooms, berlin);
+let rostock_rooms ={};
+rostock_rooms = generateAllRooms(rostock_rooms, rostock);
+let dresden_rooms ={};
+dresden_rooms = generateAllRooms(dresden_rooms, dresden);
+let cities = ['berlin','dresden','rostock']
+
+// Check if city in list
+
+function isLegitCity(cityname){
+    return cities.includes(cityname.toLowerCase());
+}
+//let pakete
+let hotels = {
+    berlin: {
+        rooms: berlin_rooms
+    },
+    rostock:{
+        rooms: rostock_rooms
+    },
+    dresden:{
+        rooms: dresden_rooms
+    }
+}
+
+app.get('/hotels/:city/rooms', (req, res) => {
+    let city = req.params.city
+    if(isLegitCity(city)){
+        res.send(Object.keys(hotels[city].rooms));
+    }
+    else{
+        //TODO: Send Error message -> Invalid city
+        res.sendStatus(400)
+    }
+	
 });
 
-app.get('/hotels/berlin/rooms/:roomid', (req, res) => {
-	res.send(rooms[req.params.roomid]);
+app.get('/hotels/:city/rooms/:roomid', (req, res) => {
+    let city = req.params.city
+    let roomId = req.params.roomid
+    if(isLegitCity(city)){
+        res.send(hotels[city].rooms[roomId]);
+    }
+    else{
+        //TODO: Send Error message -> Invalid city
+        res.sendStatus(400)
+    }
 });
 
-app.put('/hotels/berlin/rooms/:roomid', (req, res) => {
+app.put('/hotels/:city/rooms/:roomid', (req, res) => {
 	let change = req.body;
+    
+    // Get params
+    let roomId = req.params.roomid;
+    let city = req.params.city;
+
+    // Get Room
+    let rooms = {}
+    if(isLegitCity(city)){
+       rooms = hotels[city].rooms
+    }else{
+        //TODO: Send Error message -> Invalid city
+        res.send("Wrong city")
+        res.sendStatus(400)
+    }
+
+    let roomData = rooms[roomId];
+
 	if (change.status === "free") {
-		rooms[req.params.roomid].guest = "none";
-		rooms[req.params.roomid].status = "free";
+		roomData.guest = "none";
+		roomData.status = "free";
 	}
 	else if (change.status === "occupied" && change.guest != undefined) {
-		rooms[req.params.roomid].guest = change.guest;
-		rooms[req.params.roomid].status = "occupied";
-		rooms[req.params.roomid].duration = change.duration; 
-		rooms[req.params.roomid].total_price = change.total_price; 
-		rooms[req.params.roomid].monthly_price = change.monthly_price; 
+		roomData.city = change.city;
+        roomData.guest = change.guest;
+		roomData.status = "occupied";
+		roomData.duration = change.duration; 
+		roomData.total_price = change.total_price; 
+		roomData.monthly_price = change.monthly_price; 
 	}
 	else if (change.payment === "invoice") {
-		rooms[req.params.roomid].payment = "invoice";
-		rooms[req.params.roomid].total_price = change.total_price; 
+		roomData.payment = "invoice";
+		roomData.total_price = change.total_price; 
 	}
 	else if (change.payment === "installment") {
-		rooms[req.params.roomid].payment = "installment";
-		rooms[req.params.roomid].total_price = change.total_price; 
-		rooms[req.params.roomid].monthly_price = change.monthly_price;
+		roomData.payment = "installment";
+		roomData.total_price = change.total_price; 
+		roomData.monthly_price = change.monthly_price;
 }
 	else if (change.status === "cancelled") {
-		rooms[req.params.roomid].status = "free";
-		rooms[req.params.roomid].guest = "none"; 
-		rooms[req.params.roomid].duration = 0;
-		rooms[req.params.roomid].payment = "none";
-		rooms[req.params.roomid].total_price = 0;
-		rooms[req.params.roomid].monthly_price = 0;
+        roomData.city = "none";
+		roomData.status = "free";
+		roomData.guest = "none"; 
+		roomData.duration = 0;
+		roomData.payment = "none";
+		roomData.total_price = 0;
+		roomData.monthly_price = 0;
 }
 //To Do: Eigene Schleife aufmachen für Rechnung oder Stornogenerierung
 else if (change.print === "pdf") {
@@ -112,9 +222,13 @@ else if (change.print === "pdf") {
 				});
 }
 	else {
+        res.send("Other cause");
 		res.sendStatus(400);
 		return;
 	}
+    // Save all changes
+    hotels[city].rooms[roomId] = roomData;
+
 	res.sendStatus(200);
 });
 
