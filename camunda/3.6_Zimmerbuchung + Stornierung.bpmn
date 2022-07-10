@@ -9,6 +9,7 @@
     <bpmn:messageFlow id="Flow_09ckgkl" sourceRef="buchungBestaetigen" targetRef="Participant_12zbopj" />
     <bpmn:messageFlow id="Flow_0en0ma3" sourceRef="modalVorschlagen" targetRef="Participant_12zbopj" />
     <bpmn:messageFlow id="Flow_0p9yc7b" sourceRef="Activity_03ldbca" targetRef="Participant_12zbopj" />
+    <bpmn:messageFlow id="Flow_1v1tb13" sourceRef="Activity_0cj9elw" targetRef="Participant_12zbopj" />
   </bpmn:collaboration>
   <bpmn:error id="Error_11ron9w" name="Error_Bonität" errorCode="01" camunda:errorMessage="Bonität abgelehnt" />
   <bpmn:process id="EinfacheZimmerauswahlStorno" name="3.9 Einfache Zimmerauswahl mit Storno" isExecutable="true">
@@ -342,7 +343,7 @@ execution.setVariable("roomstatus", roomobj.status)</bpmn:script>
     <bpmn:endEvent id="Event_1t145ms" name="Buchung abgeschlossen">
       <bpmn:incoming>Flow_0p8hcsk</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:userTask id="Activity_0cj9elw" name="Buchungs-bestätigung aushändigen" camunda:assignee="demo">
+    <bpmn:userTask id="Activity_0cj9elw" name="Buchung aushändigen" camunda:assignee="demo">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="zahlungseingang" label="Haben wir es geschafft?" type="string" defaultValue="ja" />
@@ -354,7 +355,7 @@ execution.setVariable("roomstatus", roomobj.status)</bpmn:script>
     <bpmn:endEvent id="Event_1fslbxu" name="Buchung storniert">
       <bpmn:incoming>Flow_0bzv1es</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:userTask id="Activity_03ldbca" name="Stornierungsbestätigung aushändigen" camunda:assignee="demo">
+    <bpmn:userTask id="Activity_03ldbca" name="Stornierung aushändigen" camunda:assignee="demo">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="done" label="Hats geklappt? " type="string" defaultValue="JA" />
@@ -1202,6 +1203,7 @@ reader = new BufferedReader(new
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0cj9elw_di" bpmnElement="Activity_0cj9elw">
         <dc:Bounds x="5420" y="1010" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1fslbxu_di" bpmnElement="Event_1fslbxu">
         <dc:Bounds x="5622" y="874" width="36" height="36" />
@@ -1322,6 +1324,10 @@ reader = new BufferedReader(new
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0p9yc7b_di" bpmnElement="Flow_0p9yc7b">
         <di:waypoint x="5470" y="852" />
+        <di:waypoint x="5470" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1v1tb13_di" bpmnElement="Flow_1v1tb13">
+        <di:waypoint x="5470" y="1010" />
         <di:waypoint x="5470" y="170" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

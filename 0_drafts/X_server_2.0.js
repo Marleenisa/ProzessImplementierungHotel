@@ -198,43 +198,30 @@ app.put('/hotels/:city/rooms/:roomid', (req, res) => {
 		roomData.total_price = 0;
 		roomData.monthly_price = 0;
 }
-else if (change.print === "invoice") {
-    var fs = require('fs');
+//To Do: Eigene Schleife aufmachen für Rechnung oder Stornogenerierung
+else if (change.print === "pdf") {
+	var fs = require('fs');
                 var i_name = "Name: " + rooms[req.params.roomid].guest;
-                var i_room = "Zimmer Ihrer Wahl: " + rooms[req.params.roomid] ; //Raumnummer ausgeben + eeeeigentlich, auch Doppelzimmer bei double
-                var i_duration = "Ihre Aufenthaltsdauer: " + rooms[req.params.roomid].duration; 
-                var i_price = "Zu zahlender Betrag: " + rooms[req.params.roomid].total_price;
-                var i_payment = "Bezahlart: Rechnung " 
-                var stream = fs.createWriteStream("Rechnung_" + rooms[req.params.roomid].guest+".txt");
+				var i_room = "Zimmer Ihrer Wahl: " + rooms[req.params.roomid] ; //Raumnummer ausgeben + eeeeigentlich, auch Doppelzimmer bei double
+				var i_duration = "Ihre Aufenthaltsdauer: " + rooms[req.params.roomid].duration; 
+				var i_price = "Zu zahlender Betrag: " + rooms[req.params.roomid].total_price;
+				var i_payment = "Bezahlart: " 
+					if (rooms[req.params.roomid].payment === "installment") {
+						" Sie haben gewählt den Betrag in Raten zu zahlen. Ihr monatlich zu zahlender Betrag beläuft sich auf: " + rooms[req.params.roomid].monthly_price;
+					}
+					else {
+						"Sie begleichen den vollen Betrag per Rechnung." ;
+					}
+                var stream = fs.createWriteStream("rechnung.txt");
                 stream.once('open', function(fd) {
                         stream.write("Ihre Rechnung\n");
-                        stream.write(i_name + "\n");
+						stream.write(i_name + "\n");
                         stream.write(i_room + "\n");
-                        stream.write(i_duration + " Tage\n");
+						stream.write(i_duration + " Tage\n");
                         stream.write(i_price + " €\n");
-                        stream.write(i_payment + "\n");
-                        stream.write("Sie begleichen den vollen Betrag per Rechnung. Bitte begleichen Sie den Betrag innerhalb von 14 Tagen. \n")
+						stream.write(i_payment + "\n");
                         stream.end();
-                });
-}
-else if (change.print === "installment") {
-    var fs = require('fs');
-                var i_name = "Name: " + rooms[req.params.roomid].guest;
-                var i_room = "Zimmer Ihrer Wahl: " + rooms[req.params.roomid] ; //Raumnummer ausgeben + eeeeigentlich, auch Doppelzimmer bei double
-                var i_duration = "Ihre Aufenthaltsdauer: " + rooms[req.params.roomid].duration; 
-                var i_price = "Zu zahlender Betrag: " + rooms[req.params.roomid].total_price;
-                var i_payment = "Bezahlart: Ratenzahlung " 
-                var stream = fs.createWriteStream("Rechnung_" + rooms[req.params.roomid].guest+".txt");
-                stream.once('open', function(fd) {
-                        stream.write("Ihre Rechnung\n");
-                        stream.write(i_name + "\n");
-                        stream.write(i_room + "\n");
-                        stream.write(i_duration + " Tage\n");
-                        stream.write(i_price + " €\n");
-                        stream.write(i_payment + "\n");
-                        stream.write("Sie haben gewählt den Betrag in Raten zu zahlen. Ihr monatlich zu zahlender Betrag beläuft sich auf: " + rooms[req.params.roomid].monthly_price + "\n")
-                        stream.end();
-                });
+				});
 }
 	else {
         res.send("Other cause");
@@ -246,6 +233,8 @@ else if (change.print === "installment") {
 
 	res.sendStatus(200);
 });
+
+
 
 let server = app.listen(port, function () {
 	let host = server.address().address;

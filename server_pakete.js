@@ -25,6 +25,14 @@ function generateRooms (start, end, roomtype, price, rooms) {
 	return rooms
 }
 
+//Zusatzpakete
+let paket  = {
+    spreefahrt: {
+        price: 10,
+        description: "Lorem ipsum",
+        }
+}
+
 
 let berlin =  {
     single: {
@@ -112,7 +120,8 @@ let cities = ['berlin','dresden','rostock']
 function isLegitCity(cityname){
     return cities.includes(cityname.toLowerCase());
 }
-//let pakete
+
+
 let hotels = {
     berlin: {
         rooms: berlin_rooms
@@ -124,6 +133,14 @@ let hotels = {
         rooms: dresden_rooms
     }
 }
+//let pakete
+let pakete = {
+    spreefahrt: {
+        
+    }
+}
+
+
 
 app.get('/hotels/:city/rooms', (req, res) => {
     let city = req.params.city
