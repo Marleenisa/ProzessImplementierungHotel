@@ -113,6 +113,70 @@ function isLegitCity(cityname){
     return cities.includes(cityname.toLowerCase());
 }
 
+//let pakete
+let berlin_package = {
+	spree: {
+		title : "Fahrt über die Spree",
+        anbieter : "Mister X", 
+		description : "Lorem ipsum",
+		price : 15
+	},
+	tour: {
+		title : "Kulinariche Tour durch Berlin",
+        anbieter : "Mister Z", 
+		description : "Lorem ipsum",
+		price : 20,
+	},
+    park: {
+		title : "Tour durch den Spreepark",
+        anbieter : "Niemand", 
+		description : "Lorem ipsum",
+		price : 50
+	}
+}
+
+let dresden_package = {
+	kirche: {
+		title : "Besuch in der Frauenkirche",
+        anbieter : "Mister X", 
+		description : "Lorem ipsum",
+		price : 30
+	},
+	zwinger: {
+		title : "Einlass und Führung durch den Zwinger",
+        anbieter : "Mister Z", 
+		description : "Lorem ipsum",
+		price : 20,
+	},
+    elbe: {
+		title : "Fahrt auf der Elbe",
+        anbieter : "Niemand", 
+		description : "Lorem ipsum",
+		price : 50
+	}
+}
+
+let rostock_package = {
+	ostsee: {
+		title : "Mini-Kreuzfahrt über die Ostsee",
+        anbieter : "Mister X", 
+		description : "Lorem ipsum",
+		price : 100
+	},
+	hafen: {
+		title : "Hafenrundfahrt",
+        anbieter : "Mister Z", 
+		description : "Lorem ipsum",
+		price : 30,
+	},
+    zoo: {
+		title : "Besuch im Rostocker Zoo",
+        anbieter : "Niemand", 
+		description : "Lorem ipsum",
+		price : 20
+	}
+}
+
 
 let hotels = {
     berlin: {
@@ -128,69 +192,8 @@ let hotels = {
         packages: dresden_package
     }
 }
-//let pakete
-let berlin_package = {
-	spree = {
-		title : "Fahrt über die Spree",
-        anbieter : "Mister X", 
-		description : "Lorem ipsum",
-		price : 15
-	},
-	tour = {
-		title : "Kulinariche Tour durch Berlin",
-        anbieter : "Mister Z", 
-		description : "Lorem ipsum",
-		price : 20,
-	},
-    park = {
-		title : "Tour durch den Spreepark",
-        anbieter : "Niemand", 
-		description : "Lorem ipsum",
-		price : 50
-	}
-}
 
-let dresden_package = {
-	kirche = {
-		title : "Besuch in der Frauenkirche",
-        anbieter : "Mister X", 
-		description : "Lorem ipsum",
-		price : 30
-	},
-	zwinger = {
-		title : "Einlass und Führung durch den Zwinger",
-        anbieter : "Mister Z", 
-		description : "Lorem ipsum",
-		price : 20,
-	},
-    elbe = {
-		title : "Fahrt auf der Elbe",
-        anbieter : "Niemand", 
-		description : "Lorem ipsum",
-		price : 50
-	}
-}
 
-let rostock_package = {
-	ostsee = {
-		title : "Mini-Kreuzfahrt über die Ostsee",
-        anbieter : "Mister X", 
-		description : "Lorem ipsum",
-		price : 100
-	},
-	hafen = {
-		title : "Hafenrundfahrt",
-        anbieter : "Mister Z", 
-		description : "Lorem ipsum",
-		price : 30,
-	},
-    zoo = {
-		title : "Besuch im Rostocker Zoo",
-        anbieter : "Niemand", 
-		description : "Lorem ipsum",
-		price : 20
-	}
-}
 
 //Aufruf der verfügbaren Pakete je nach Stadt
 app.get('/hotels/:city/packages', (req, res) => {

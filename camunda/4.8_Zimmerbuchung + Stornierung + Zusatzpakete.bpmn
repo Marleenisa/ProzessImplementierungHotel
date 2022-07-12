@@ -875,50 +875,36 @@ var Collectors = Java.type("java.util.stream.Collectors");
 var HashMap = Java.type("java.util.HashMap");
 
 var city = execution.getVariable("city");
+var spree = execution.getVariable("spree");
+var tour = execution.getVariable("tour");
+var park = execution.getVariable("park");
 var url = new URL("http://34.78.33.136:8080/hotels/"+city+"/packages/")
 
 var con = url.openConnection();
 con.setRequestMethod("GET");
 con.connect()
 
-var reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-var jsonstring = reader.lines().collect(Collectors.joining("\n"));
+reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+jsonstring = reader.lines().collect(Collectors.joining("\n"));
 reader.close()
-var resobj = JSON.parse(jsonstring);
- 
-    //pakete
-    let packageObj = JSON.parse(jsonString);
-    // Key = "Flussfahrt über die Spree" Value="spree"
-    //dictionary.put("Flussfahrt über die Spree","spree");
-    execution.setVariable("dictionary", dictionary);
-    let dictionary= new HashMap();
+System.out.println("Paket: " + jsonstring) //anpassen
+var spreeobj = JSON.parse(jsonstring);
+var tourobj = JSON.parse(jsonstring);
+var parkobj = JSON.parse(jsonstring);
 
-    let packageCounter=1;
-    for(let tour in packageObj.keys){
-        let packageTitle = packageObj[tour].title
-        execution.setVariable("package"+packageCounter,packageTitle)
-        packageCounter++;
-        dictionary.put(packageTitle,tour)
-        dictionary.put(packageTitle,spree)
-        dictionary.put(packageTitle,park)
-    }
-
-Execution.setVariable("packageDictionary",dictionary)
-</bpmn:script>
+execution.setVariable("package1", spreeobj.title)
+execution.setVariable("package2", tourobj.title)
+execution.setVariable("package3", parkobj.title)</bpmn:script>
       </bpmn:scriptTask>
       <bpmn:sequenceFlow id="Flow_0bf7mvt" sourceRef="Activity_0s11vho" targetRef="Activity_14h04ku" />
       <bpmn:userTask id="Activity_0s11vho" name="Optionen wählen" camunda:assignee="demo">
         <bpmn:extensionElements>
           <camunda:formData>
-            <camunda:formField id="offeredPackage1" label="Verfügbares Paket 1: " type="boolean" defaultValue="${package1}">
-              <camunda:properties />
-              <camunda:value id="package1" />
-            </camunda:formField>
             <camunda:formField id="offeredPackages" label="Verfügbare Pakete" type="enum">
               <camunda:properties>
-                <camunda:property id="package1" value="${tour}" />
-                <camunda:property id="package2" value="${spree}" />
-                <camunda:property id="package3" value="${park}" />
+                <camunda:property id="package1" value="${package1}" />
+                <camunda:property id="package2" value="${package2}" />
+                <camunda:property id="package3" value="${package3}" />
               </camunda:properties>
             </camunda:formField>
           </camunda:formData>
@@ -1139,15 +1125,13 @@ Execution.setVariable("packageDictionary",dictionary)
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0prshr5_di" bpmnElement="Flow_0prshr5">
         <di:waypoint x="1860" y="645" />
-        <di:waypoint x="1860" y="425" />
-        <di:waypoint x="2140" y="425" />
+        <di:waypoint x="1860" y="520" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1871" y="533" width="9" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10my8y6_di" bpmnElement="Flow_10my8y6">
-        <di:waypoint x="2240" y="425" />
-        <di:waypoint x="2500" y="425" />
+        <di:waypoint x="2500" y="530" />
         <di:waypoint x="2500" y="645" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0h9ules_di" bpmnElement="Flow_0h9ules">
@@ -1252,9 +1236,44 @@ Execution.setVariable("packageDictionary",dictionary)
         <dc:Bounds x="4340" y="1126" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1y3h78y_di" bpmnElement="Activity_1y3h78y" isExpanded="false">
-        <dc:Bounds x="2140" y="385" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_1y3h78y_di" bpmnElement="Activity_1y3h78y" isExpanded="true">
+        <dc:Bounds x="1860" y="320" width="670" height="210" />
         <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0g1r79n_di" bpmnElement="Flow_0g1r79n">
+        <di:waypoint x="1923" y="419" />
+        <di:waypoint x="1977" y="419" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0gf1ibv_di" bpmnElement="Flow_0gf1ibv">
+        <di:waypoint x="2077" y="419" />
+        <di:waypoint x="2137" y="419" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0bf7mvt_di" bpmnElement="Flow_0bf7mvt">
+        <di:waypoint x="2237" y="419" />
+        <di:waypoint x="2287" y="419" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_156g10m_di" bpmnElement="Flow_156g10m">
+        <di:waypoint x="2387" y="419" />
+        <di:waypoint x="2469" y="419" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0kmj1oa_di" bpmnElement="Event_0kmj1oa">
+        <dc:Bounds x="1887" y="401" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1875" y="444" width="60" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1bnxo7u_di" bpmnElement="Activity_1rzf5zo">
+        <dc:Bounds x="1977" y="379" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_02unnsr_di" bpmnElement="Event_02unnsr">
+        <dc:Bounds x="2469" y="401" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_073nk59_di" bpmnElement="Activity_0s11vho">
+        <dc:Bounds x="2137" y="379" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0z92iyg_di" bpmnElement="Activity_14h04ku">
+        <dc:Bounds x="2287" y="379" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Participant_12zbopj_di" bpmnElement="Participant_12zbopj" isHorizontal="true">
         <dc:Bounds x="160" y="80" width="6740" height="90" />
@@ -1496,45 +1515,6 @@ Execution.setVariable("packageDictionary",dictionary)
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1p3s6tq" bpmnElement="Activity_066zbp1">
         <dc:Bounds x="340" y="744" width="100" height="80" />
-      </bpmndi:BPMNShape>
-    </bpmndi:BPMNPlane>
-  </bpmndi:BPMNDiagram>
-  <bpmndi:BPMNDiagram id="BPMNDiagram_0ftxw3v">
-    <bpmndi:BPMNPlane id="BPMNPlane_1hcrg47" bpmnElement="Activity_1y3h78y">
-      <bpmndi:BPMNEdge id="Flow_0g1r79n_di" bpmnElement="Flow_0g1r79n">
-        <di:waypoint x="216" y="120" />
-        <di:waypoint x="270" y="120" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0gf1ibv_di" bpmnElement="Flow_0gf1ibv">
-        <di:waypoint x="370" y="120" />
-        <di:waypoint x="430" y="120" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0bf7mvt_di" bpmnElement="Flow_0bf7mvt">
-        <di:waypoint x="530" y="120" />
-        <di:waypoint x="580" y="120" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_156g10m_di" bpmnElement="Flow_156g10m">
-        <di:waypoint x="680" y="120" />
-        <di:waypoint x="762" y="120" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Event_0kmj1oa_di" bpmnElement="Event_0kmj1oa">
-        <dc:Bounds x="180" y="102" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="168" y="145" width="60" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1bnxo7u_di" bpmnElement="Activity_1rzf5zo">
-        <dc:Bounds x="270" y="80" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_02unnsr_di" bpmnElement="Event_02unnsr">
-        <dc:Bounds x="762" y="102" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_073nk59_di" bpmnElement="Activity_0s11vho">
-        <dc:Bounds x="430" y="80" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0z92iyg_di" bpmnElement="Activity_14h04ku">
-        <dc:Bounds x="580" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
