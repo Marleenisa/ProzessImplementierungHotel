@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0hg7kho" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.0.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.17.0">
+  <bpmn:process id="test" name="Test" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_074aflf</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_074aflf" sourceRef="StartEvent_1" targetRef="Activity_0oqe2jm" />
+    <bpmn:sequenceFlow id="Flow_067d170" sourceRef="Activity_0oqe2jm" targetRef="Activity_083xxdl" />
+    <bpmn:endEvent id="Event_0l3udxb">
+      <bpmn:incoming>Flow_1m2zojw</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:scriptTask id="Activity_0oqe2jm" name="Input" scriptFormat="javascript">
+      <bpmn:incoming>Flow_074aflf</bpmn:incoming>
+      <bpmn:outgoing>Flow_067d170</bpmn:outgoing>
+      <bpmn:script>var System = Java.type("java.lang.System");
+var URL = Java.type("java.net.URL");
+var BufferedReader = Java.type("java.io.BufferedReader");
+var InputStreamReader = Java.type("java.io.InputStreamReader");
+var Collectors = Java.type("java.util.stream.Collectors");
+var HashMap = Java.type("java.util.HashMap");
+
+let dictionary = new HashMap();
+dictionary.put("key1","value1");
+execution.setVariable("dictionary", dictionary)</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="Flow_1m2zojw" sourceRef="Activity_0mr7is0" targetRef="Event_0l3udxb" />
+    <bpmn:userTask id="Activity_0mr7is0" name="Ausgabe" camunda:assignee="demo">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="output" label="Hats geklappt? :D" type="string" defaultValue="${output}" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_145hqya</bpmn:incoming>
+      <bpmn:outgoing>Flow_1m2zojw</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_145hqya" sourceRef="Activity_083xxdl" targetRef="Activity_0mr7is0" />
+    <bpmn:scriptTask id="Activity_083xxdl" name="Process" scriptFormat="javascript">
+      <bpmn:incoming>Flow_067d170</bpmn:incoming>
+      <bpmn:outgoing>Flow_145hqya</bpmn:outgoing>
+      <bpmn:script>var System = Java.type("java.lang.System");
+var URL = Java.type("java.net.URL");
+var BufferedReader = Java.type("java.io.BufferedReader");
+var InputStreamReader = Java.type("java.io.InputStreamReader");
+var Collectors = Java.type("java.util.stream.Collectors");
+var HashMap = Java.type("java.util.HashMap");
+
+var dictionary = execution.getVariable("dictionary")
+var output = dictionary.get("key1");
+execution.setVariable("output", output)
+</bpmn:script>
+    </bpmn:scriptTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="test">
+      <bpmndi:BPMNEdge id="Flow_074aflf_di" bpmnElement="Flow_074aflf">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="300" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_067d170_di" bpmnElement="Flow_067d170">
+        <di:waypoint x="400" y="117" />
+        <di:waypoint x="480" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1m2zojw_di" bpmnElement="Flow_1m2zojw">
+        <di:waypoint x="760" y="117" />
+        <di:waypoint x="872" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_145hqya_di" bpmnElement="Flow_145hqya">
+        <di:waypoint x="580" y="117" />
+        <di:waypoint x="660" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ph711o_di" bpmnElement="Activity_0oqe2jm">
+        <dc:Bounds x="300" y="77" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0l3udxb_di" bpmnElement="Event_0l3udxb">
+        <dc:Bounds x="872" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1t7gbmc_di" bpmnElement="Activity_0mr7is0">
+        <dc:Bounds x="660" y="77" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_07pu5p7_di" bpmnElement="Activity_083xxdl">
+        <dc:Bounds x="480" y="77" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

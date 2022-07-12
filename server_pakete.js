@@ -19,20 +19,12 @@ function generateRooms (start, end, roomtype, price, rooms) {
 			payment: "none",
 			total_price: 0,
 			monthly_price: 0,
-			print: "none"
+			print: "none",
+            packages: "erstmal leer :D"
 		}
 	}
 	return rooms
 }
-
-//Zusatzpakete
-let paket  = {
-    spreefahrt: {
-        price: 10,
-        description: "Lorem ipsum",
-        }
-}
-
 
 let berlin =  {
     single: {
@@ -124,23 +116,94 @@ function isLegitCity(cityname){
 
 let hotels = {
     berlin: {
-        rooms: berlin_rooms
+        rooms: berlin_rooms,
+        packages: berlin_package
     },
     rostock:{
-        rooms: rostock_rooms
+        rooms: rostock_rooms,
+        packages: rostock_package
     },
     dresden:{
-        rooms: dresden_rooms
+        rooms: dresden_rooms,
+        packages: dresden_package
     }
 }
 //let pakete
-let pakete = {
-    spreefahrt: {
-        
-    }
+let berlin_package = {
+	spree = {
+		title : "Fahrt über die Spree",
+        anbieter : "Mister X", 
+		description : "Lorem ipsum",
+		price : 15
+	},
+	tour = {
+		title : "Kulinariche Tour durch Berlin",
+        anbieter : "Mister Z", 
+		description : "Lorem ipsum",
+		price : 20,
+	},
+    park = {
+		title : "Tour durch den Spreepark",
+        anbieter : "Niemand", 
+		description : "Lorem ipsum",
+		price : 50
+	}
 }
 
+let dresden_package = {
+	kirche = {
+		title : "Besuch in der Frauenkirche",
+        anbieter : "Mister X", 
+		description : "Lorem ipsum",
+		price : 30
+	},
+	zwinger = {
+		title : "Einlass und Führung durch den Zwinger",
+        anbieter : "Mister Z", 
+		description : "Lorem ipsum",
+		price : 20,
+	},
+    elbe = {
+		title : "Fahrt auf der Elbe",
+        anbieter : "Niemand", 
+		description : "Lorem ipsum",
+		price : 50
+	}
+}
 
+let rostock_package = {
+	kirche = {
+		title : "Besuch in der Frauenkirche",
+        anbieter : "Mister X", 
+		description : "Lorem ipsum",
+		price : 30
+	},
+	zwinger = {
+		title : "Einlass und Führung durch den Zwinger",
+        anbieter : "Mister Z", 
+		description : "Lorem ipsum",
+		price : 20,
+	},
+    elbe = {
+		title : "Fahrt auf der Elbe",
+        anbieter : "Niemand", 
+		description : "Lorem ipsum",
+		price : 50
+	}
+}
+
+//Aufruf der verfügbaren Pakete je nach Stadt
+app.get('/hotels/:city/packages', (req, res) => {
+    let city = req.params.city
+    if(isLegitCity(city)){
+        res.send(hotels[city].packages);
+    }
+    else{
+        //TODO: Send Error message -> Invalid city
+        res.sendStatus(400)
+    }
+	
+});
 
 app.get('/hotels/:city/rooms', (req, res) => {
     let city = req.params.city
@@ -152,6 +215,18 @@ app.get('/hotels/:city/rooms', (req, res) => {
         res.sendStatus(400)
     }
 	
+});
+
+app.get('/hotels/:city/packages/:packageName', (req, res) => {
+    let city = req.params.city
+    let p_name = req.params.packageName
+    if(isLegitCity(city)){
+        res.send(hotels[city].packages[p_name]);
+    }
+    else{
+        //TODO: Send Error message -> Invalid city
+        res.sendStatus(400)
+    }
 });
 
 app.get('/hotels/:city/rooms/:roomid', (req, res) => {
@@ -177,7 +252,8 @@ app.put('/hotels/:city/rooms/:roomid', (req, res) => {
     let rooms = {}
     if(isLegitCity(city)){
        rooms = hotels[city].rooms
-    }else{
+    }
+    else{
         //TODO: Send Error message -> Invalid city
         res.send("Wrong city")
         res.sendStatus(400)
@@ -206,7 +282,7 @@ app.put('/hotels/:city/rooms/:roomid', (req, res) => {
 		roomData.payment = "installment";
 		roomData.total_price = change.total_price; 
 		roomData.monthly_price = change.monthly_price;
-}
+    }
 	else if (change.status === "cancelled") {
         roomData.city = "none";
 		roomData.status = "free";
@@ -214,16 +290,19 @@ app.put('/hotels/:city/rooms/:roomid', (req, res) => {
 		roomData.duration = 0;
 		roomData.payment = "none";
 		roomData.total_price = 0;
-		roomData.monthly_price = 0;
-}
+		roomData.monthly_price = 0;    
+    }
+    else if (change.packages != undefined) {
+        roomData.packages = change.packages;
+    }
     else if (change.print === "invoice") {
         var fs = require('fs');
-                    var i_name = "Name: " + rooms[req.params.roomid].guest;
-                    var i_room = "Zimmer Ihrer Wahl: " + rooms[req.params.roomid].roomtype+" "+ rooms[req.params.roomid].roomnr ; //Raumnummer ausgeben + eeeeigentlich, auch Doppelzimmer bei double
-                    var i_duration = "Ihre Aufenthaltsdauer: " + rooms[req.params.roomid].duration; 
-                    var i_price = "Zu zahlender Betrag: " + rooms[req.params.roomid].total_price;
+                    var i_name = "Name: " + roomData.guest;
+                    var i_room = "Zimmer Ihrer Wahl: " + roomData.roomtype+" "+ roomData.roomnr ; //Raumnummer ausgeben + eeeeigentlich, auch Doppelzimmer bei double
+                    var i_duration = "Ihre Aufenthaltsdauer: " + roomData.duration; 
+                    var i_price = "Zu zahlender Betrag: " + roomData.total_price;
                     var i_payment = "Bezahlart: Rechnung " 
-                    var stream = fs.createWriteStream("Rechnung_" + rooms[req.params.roomid].guest+".txt");
+                    var stream = fs.createWriteStream("Rechnung_" + roomData.guest+".txt");
                     stream.once('open', function(fd) {
                             stream.write("Ihre Rechnung\n");
                             stream.write(i_name + "\n");
@@ -237,12 +316,12 @@ app.put('/hotels/:city/rooms/:roomid', (req, res) => {
     }
     else if (change.print === "installment") {
         var fs = require('fs');
-                    var i_name = "Name: " + rooms[req.params.roomid].guest;
-                    var i_room = "Zimmer Ihrer Wahl: " + rooms[req.params.roomid].roomtype+" "+ rooms[req.params.roomid].roomnr ; //Raumnummer ausgeben + eeeeigentlich, auch Doppelzimmer bei double
-                    var i_duration = "Ihre Aufenthaltsdauer: " + rooms[req.params.roomid].duration; 
-                    var i_price = "Zu zahlender Betrag: " + rooms[req.params.roomid].total_price;
+                    var i_name = "Name: " + roomData.guest;
+                    var i_room = "Zimmer Ihrer Wahl: " + roomData.roomtype+" "+ roomData.roomnr  ; //Raumnummer ausgeben + eeeeigentlich, auch Doppelzimmer bei double
+                    var i_duration = "Ihre Aufenthaltsdauer: " + roomData.duration;
+                    var i_price = "Zu zahlender Betrag: " + roomData.total_price;
                     var i_payment = "Bezahlart: Ratenzahlung " 
-                    var stream = fs.createWriteStream("Rechnung_" + rooms[req.params.roomid].guest+".txt");
+                    var stream = fs.createWriteStream("Rechnung_" + roomData.guest+".txt");
                     stream.once('open', function(fd) {
                             stream.write("Ihre Rechnung\n");
                             stream.write(i_name + "\n");
@@ -250,7 +329,7 @@ app.put('/hotels/:city/rooms/:roomid', (req, res) => {
                             stream.write(i_duration + " Tage\n");
                             stream.write(i_price + " €\n");
                             stream.write(i_payment + "\n");
-                            stream.write("Sie haben gewählt den Betrag in Raten zu zahlen. Ihr monatlich zu zahlender Betrag beläuft sich auf: " + rooms[req.params.roomid].monthly_price + "\n")
+                            stream.write("Sie haben gewählt den Betrag in Raten zu zahlen. Ihr monatlich zu zahlender Betrag beläuft sich auf: " + roomData.monthly_price+"\n")
                             stream.end();
                     });
     }
