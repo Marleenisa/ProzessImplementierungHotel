@@ -387,7 +387,7 @@ execution.setVariable("roomstatus", roomobj.status)</bpmn:script>
     <bpmn:sequenceFlow id="Flow_1dpt5ed" sourceRef="buchungAnzeigen" targetRef="zahlungsartWaehlen" />
     <bpmn:sequenceFlow id="Flow_1rna4j4" sourceRef="boniPruefen" targetRef="modalVorschlagen" />
     <bpmn:sequenceFlow id="Flow_1tumip8" sourceRef="Event_04klfaw" targetRef="Gateway_03jrbso" />
-    <bpmn:boundaryEvent id="Event_04klfaw" attachedToRef="boniPruefen">
+    <bpmn:boundaryEvent id="Event_04klfaw" name="Prüfung negativ" attachedToRef="boniPruefen">
       <bpmn:outgoing>Flow_1tumip8</bpmn:outgoing>
       <bpmn:conditionalEventDefinition id="ConditionalEventDefinition_0wr44o4">
         <bpmn:condition xsi:type="bpmn:tFormalExpression">${credit == 'negative'}</bpmn:condition>
@@ -1263,6 +1263,9 @@ reader = new BufferedReader(new
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0qxm5zt_di" bpmnElement="Event_04klfaw">
         <dc:Bounds x="2552" y="1080" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2591" y="1103" width="78" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0fjfn4r_di" bpmnElement="Event_14vektg">
         <dc:Bounds x="3592" y="1482" width="36" height="36" />

@@ -172,23 +172,23 @@ let dresden_package = {
 }
 
 let rostock_package = {
-	kirche = {
-		title : "Besuch in der Frauenkirche",
+	ostsee = {
+		title : "Mini-Kreuzfahrt über die Ostsee",
         anbieter : "Mister X", 
 		description : "Lorem ipsum",
-		price : 30
+		price : 100
 	},
-	zwinger = {
-		title : "Einlass und Führung durch den Zwinger",
+	hafen = {
+		title : "Hafenrundfahrt",
         anbieter : "Mister Z", 
 		description : "Lorem ipsum",
-		price : 20,
+		price : 30,
 	},
-    elbe = {
-		title : "Fahrt auf der Elbe",
+    zoo = {
+		title : "Besuch im Rostocker Zoo",
         anbieter : "Niemand", 
 		description : "Lorem ipsum",
-		price : 50
+		price : 20
 	}
 }
 

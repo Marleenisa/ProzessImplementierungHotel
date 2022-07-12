@@ -864,9 +864,47 @@ execution.setVariable("roomstatus", roomobj.status)</bpmn:script>
         <bpmn:incoming>Flow_156g10m</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_0gf1ibv" sourceRef="Activity_1rzf5zo" targetRef="Activity_0s11vho" />
-      <bpmn:scriptTask id="Activity_1rzf5zo" name="Zusatzpakete abrufen">
+      <bpmn:scriptTask id="Activity_1rzf5zo" name="Zusatzpakete abrufen" scriptFormat="javascript">
         <bpmn:incoming>Flow_0g1r79n</bpmn:incoming>
         <bpmn:outgoing>Flow_0gf1ibv</bpmn:outgoing>
+        <bpmn:script>var System = Java.type("java.lang.System");
+var URL = Java.type("java.net.URL");
+var BufferedReader = Java.type("java.io.BufferedReader");
+var InputStreamReader = Java.type("java.io.InputStreamReader");
+var Collectors = Java.type("java.util.stream.Collectors");
+var HashMap = Java.type("java.util.HashMap");
+
+var city = execution.getVariable("city");
+var url = new URL("http://34.78.33.136:8080/hotels/"+city+"/packages/")
+
+var con = url.openConnection();
+con.setRequestMethod("GET");
+con.connect()
+
+var reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+var jsonstring = reader.lines().collect(Collectors.joining("\n"));
+reader.close()
+var resobj = JSON.parse(jsonstring);
+ 
+    //pakete
+    let packageObj = JSON.parse(jsonString);
+    // Key = "Flussfahrt über die Spree" Value="spree"
+    //dictionary.put("Flussfahrt über die Spree","spree");
+    execution.setVariable("dictionary", dictionary);
+    let dictionary= new HashMap();
+
+    let packageCounter=1;
+    for(let tour in packageObj.keys){
+        let packageTitle = packageObj[tour].title
+        execution.setVariable("package"+packageCounter,packageTitle)
+        packageCounter++;
+        dictionary.put(packageTitle,tour)
+        dictionary.put(packageTitle,spree)
+        dictionary.put(packageTitle,park)
+    }
+
+Execution.setVariable("packageDictionary",dictionary)
+</bpmn:script>
       </bpmn:scriptTask>
       <bpmn:sequenceFlow id="Flow_0bf7mvt" sourceRef="Activity_0s11vho" targetRef="Activity_14h04ku" />
       <bpmn:userTask id="Activity_0s11vho" name="Optionen wählen" camunda:assignee="demo">
@@ -878,7 +916,9 @@ execution.setVariable("roomstatus", roomobj.status)</bpmn:script>
             </camunda:formField>
             <camunda:formField id="offeredPackages" label="Verfügbare Pakete" type="enum">
               <camunda:properties>
-                <camunda:property id="package1" value="${package1}" />
+                <camunda:property id="package1" value="${tour}" />
+                <camunda:property id="package2" value="${spree}" />
+                <camunda:property id="package3" value="${park}" />
               </camunda:properties>
             </camunda:formField>
           </camunda:formData>
@@ -887,10 +927,10 @@ execution.setVariable("roomstatus", roomobj.status)</bpmn:script>
         <bpmn:outgoing>Flow_0bf7mvt</bpmn:outgoing>
       </bpmn:userTask>
       <bpmn:sequenceFlow id="Flow_156g10m" sourceRef="Activity_14h04ku" targetRef="Event_02unnsr" />
-      <bpmn:scriptTask id="Activity_14h04ku" name="Zusatzpaket buchen">
+      <bpmn:task id="Activity_14h04ku" name="Zusatzpaket buchen">
         <bpmn:incoming>Flow_0bf7mvt</bpmn:incoming>
         <bpmn:outgoing>Flow_156g10m</bpmn:outgoing>
-      </bpmn:scriptTask>
+      </bpmn:task>
     </bpmn:subProcess>
     <bpmn:exclusiveGateway id="Gateway_0hjnzbv">
       <bpmn:incoming>Flow_08znn4p</bpmn:incoming>
@@ -1493,9 +1533,8 @@ execution.setVariable("roomstatus", roomobj.status)</bpmn:script>
         <dc:Bounds x="430" y="80" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1ew2w53_di" bpmnElement="Activity_14h04ku">
+      <bpmndi:BPMNShape id="Activity_0z92iyg_di" bpmnElement="Activity_14h04ku">
         <dc:Bounds x="580" y="80" width="100" height="80" />
-        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
