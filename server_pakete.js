@@ -18,10 +18,16 @@ function generateRooms (start, end, roomtype, price, rooms) {
 			duration : 0 ,
 			payment: "none",
 			total_price: 0,
+            rate: 0,
 			monthly_price: 0,
 			print: "none",
-            packages: "erstmal leer :D"
-		}
+            packages: "Gebuchtes Zusatzpaket",
+            package: "none",
+            p_booked: "none",
+            p_title: "none",
+            p_price: 0,
+            vendor: "none"
+            }
 	}
 	return rooms
 }
@@ -115,40 +121,40 @@ function isLegitCity(cityname){
 
 //let pakete
 let berlin_package = {
-	spree: {
-		title : "Fahrt über die Spree",
-        anbieter : "Mister X", 
+	package1: {
+		p_title : "Fahrt über die Spree",
+        vendor : "Mister X", 
 		description : "Lorem ipsum",
-		price : 15
+		p_price : 15
 	},
-	tour: {
-		title : "Kulinariche Tour durch Berlin",
-        anbieter : "Mister Z", 
+	package2: {
+		p_title : "Kulinarische Tour durch Berlin",
+        vendor : "Mister Z", 
 		description : "Lorem ipsum",
-		price : 20,
+		p_price : 20,
 	},
-    park: {
-		title : "Tour durch den Spreepark",
-        anbieter : "Niemand", 
+    package3: {
+		p_title : "Tour durch den Spreepark",
+        vendor : "Niemand", 
 		description : "Lorem ipsum",
-		price : 50
+		p_price : 50
 	}
 }
 
 let dresden_package = {
-	kirche: {
+	package1: {
 		title : "Besuch in der Frauenkirche",
         anbieter : "Mister X", 
 		description : "Lorem ipsum",
 		price : 30
 	},
-	zwinger: {
+	package2: {
 		title : "Einlass und Führung durch den Zwinger",
         anbieter : "Mister Z", 
 		description : "Lorem ipsum",
 		price : 20,
 	},
-    elbe: {
+    package3: {
 		title : "Fahrt auf der Elbe",
         anbieter : "Niemand", 
 		description : "Lorem ipsum",
@@ -157,26 +163,25 @@ let dresden_package = {
 }
 
 let rostock_package = {
-	ostsee: {
+	package1: {
 		title : "Mini-Kreuzfahrt über die Ostsee",
         anbieter : "Mister X", 
 		description : "Lorem ipsum",
 		price : 100
 	},
-	hafen: {
+	package2: {
 		title : "Hafenrundfahrt",
         anbieter : "Mister Z", 
 		description : "Lorem ipsum",
 		price : 30,
 	},
-    zoo: {
+    package3: {
 		title : "Besuch im Rostocker Zoo",
         anbieter : "Niemand", 
 		description : "Lorem ipsum",
 		price : 20
 	}
 }
-
 
 let hotels = {
     berlin: {
@@ -193,8 +198,6 @@ let hotels = {
     }
 }
 
-
-
 //Aufruf der verfügbaren Pakete je nach Stadt
 app.get('/hotels/:city/packages', (req, res) => {
     let city = req.params.city
@@ -202,7 +205,7 @@ app.get('/hotels/:city/packages', (req, res) => {
         res.send(hotels[city].packages);
     }
     else{
-        //TODO: Send Error message -> Invalid city
+        //TODO: Send Error message -> Invalid package
         res.sendStatus(400)
     }
 	
@@ -227,7 +230,7 @@ app.get('/hotels/:city/packages/:packageName', (req, res) => {
         res.send(hotels[city].packages[p_name]);
     }
     else{
-        //TODO: Send Error message -> Invalid city
+        //TODO: Send Error message -> Invalid package
         res.sendStatus(400)
     }
 });
@@ -284,7 +287,8 @@ app.put('/hotels/:city/rooms/:roomid', (req, res) => {
 	else if (change.payment === "installment") {
 		roomData.payment = "installment";
 		roomData.total_price = change.total_price; 
-		roomData.monthly_price = change.monthly_price;
+		roomData.monthly_price = change.monthly_price
+        roomData.rate = change.rate;
     }
 	else if (change.status === "cancelled") {
         roomData.city = "none";
@@ -293,46 +297,162 @@ app.put('/hotels/:city/rooms/:roomid', (req, res) => {
 		roomData.duration = 0;
 		roomData.payment = "none";
 		roomData.total_price = 0;
-		roomData.monthly_price = 0;    
+		roomData.monthly_price = 0; 
+        roomData.package = "none";
+        roomData.p_booked = "none";
+        roomData.p_title = "none";
+        roomData.p_price = 0;
+        roomData.vendor = "none"   
     }
-    else if (change.packages != undefined) {
-        roomData.packages = change.packages;
+    //Posting der Packages
+    else if (p_booked = "booked" &&change.package == "spree") {
+        roomData.p_booked = "booked";
+        roomData.p_title = "Fahrt über die Spree";
+        roomData.p_price = 15;
+        roomData.vendor = "Mister Lorem";
+        roomData.description = "Lorem ipsum"
+    }
+    else if (p_booked = "booked" &&change.package == "park") {
+        roomData.p_booked = "booked";
+        roomData.p_title = "Tour durch den Spreepark";
+        roomData.p_price = 50;
+        roomData.vendor = "Agentur ipsum";
+        roomData.description = "Lorem ipsum"
+    }
+    else if (p_booked = "booked" &&change.package == "ostsee") {
+        roomData.p_booked = "booked";
+        roomData.p_title = "Mini-Kreuzfahrt über die Ostsee";
+        roomData.p_price = 100;
+        roomData.vendor = "Agentur Sit";
+        roomData.description = "Lorem ipsum"
+    }
+    else if (p_booked = "booked" &&change.package == "zoo") {
+        roomData.p_booked = "booked";
+        roomData.p_title = "Besuch im Rostocker Zoo";
+        roomData.p_price = 20;
+        roomData.vendor = "Agentur Sit";
+        roomData.description = "Lorem ipsum"
+    }
+    else if (p_booked = "booked" &&change.package == "kirche") {
+        roomData.p_booked = "booked";
+        roomData.p_title = "Besuch in der Frauenkirche";
+        roomData.p_price = 30;
+        roomData.vendor = "Agentur Sit";
+        roomData.description = "Lorem ipsum"
+    }
+    else if (p_booked = "booked" &&change.package == "elbe") {
+        roomData.p_booked = "booked";
+        roomData.p_title = "Fahrt über die Elbe";
+        roomData.p_price = 50;
+        roomData.vendor = "Mister Lorem";
+        roomData.description = "Lorem ipsum"
     }
     else if (change.print === "invoice") {
         var fs = require('fs');
-                    var i_name = "Name: " + roomData.guest;
+                    var d = new Date(); 
+                    var t = new Date().getTime();
+                    var i_number = Math.floor(Math.random() * (1000 -  500000)) + 1000;
+                    i_number = d.getFullYear() + (d.getMonth()+1) + (d.getDate()) + i_number; 
+                    i_number = i_number + t;
+                    var i_name = roomData.guest;
+                    var i_kontakt = "Hotel Anhalter";
+                    var i_adresse = "Lorem-Ipsum-Straße 42";
+                    var i_city = city;
                     var i_room = "Zimmer Ihrer Wahl: " + roomData.roomtype+" "+ roomData.roomnr ; //Raumnummer ausgeben + eeeeigentlich, auch Doppelzimmer bei double
                     var i_duration = "Ihre Aufenthaltsdauer: " + roomData.duration; 
-                    var i_price = "Zu zahlender Betrag: " + roomData.total_price;
+                    var i_ust=(roomData.total_price*0.07);
+                    var i_netto =(roomData.total_price-i_ust);
+                    var i_brutto=roomData.total_price;
                     var i_payment = "Bezahlart: Rechnung " 
                     var stream = fs.createWriteStream("Rechnung_" + roomData.guest+".txt");
+                    //generate date
+                    var date = new Date();
+                    let output = String(date.getDate()).padStart(2, '0') + '/' + String(date.getMonth() + 1).padStart(2, '0') + '/' + date.getFullYear();
+                    //packages
+                    var ip_title = roomData.p_title;
+                    var ip_mwst = (roomData.p_price*0.19);
+                    var ip_netto = (roomData.p_price-ip_mwst);
+                    var ip_brutto = roomData.p_price;
+                    var ip_vendor = roomData.vendor;
                     stream.once('open', function(fd) {
                             stream.write("Ihre Rechnung\n");
-                            stream.write(i_name + "\n");
+                            stream.write(i_kontakt + "\n" + i_adresse + "\n" + i_city + "\n");
+                            stream.write(i_city + ", den " + output + "\n");
+                            stream.write("Rechnungsnummer: "+ i_number + "\n")
+                            stream.write("Gast: "+i_name + "\n");
+                            stream.write("Leistung: Hotelübernachtung"+ "\n")
                             stream.write(i_room + "\n");
                             stream.write(i_duration + " Tage\n");
-                            stream.write(i_price + " €\n");
+                            stream.write("Preis (netto): "+i_netto + " €\n"); //Ausrechnen
+                            stream.write("USt: " + i_ust + "€\n")
+                            stream.write("Preis (brutto inkl. Steuersatz von 7%): "+i_brutto + " €\n");
                             stream.write(i_payment + "\n");
                             stream.write("Sie begleichen den vollen Betrag per Rechnung. Bitte begleichen Sie den Betrag innerhalb von 14 Tagen. \n")
+                            if (p_booked = "booked"){
+                                stream.write("Ihre gewünschten Zusatzleistung: "+"\n");
+                                stream.write(ip_title+"\n");
+                                stream.write("Anbieter: "+ip_vendor + "\n")
+                                stream.write("Preis (netto): "+ip_netto + " €\n");
+                                stream.write("MwSt: " + ip_mwst + "€\n")
+                                stream.write("Preis (brutto inkl. MwSt. von 19%): "+ip_brutto + " €\n");
+                                stream.write("Sie begleichen den vollen Betrag per Rechnung. Bitte begleichen Sie den Betrag innerhalb von 14 Tagen an den Anbieter" + ip_vendor + ".\n")
+                            }
                             stream.end();
                     });
     }
     else if (change.print === "installment") {
         var fs = require('fs');
-                    var i_name = "Name: " + roomData.guest;
-                    var i_room = "Zimmer Ihrer Wahl: " + roomData.roomtype+" "+ roomData.roomnr  ; //Raumnummer ausgeben + eeeeigentlich, auch Doppelzimmer bei double
-                    var i_duration = "Ihre Aufenthaltsdauer: " + roomData.duration;
-                    var i_price = "Zu zahlender Betrag: " + roomData.total_price;
+                    var d = new Date(); 
+                    var t = new Date().getTime();
+                    var i_number = Math.floor(Math.random() * (1000 -  500000)) + 1000;
+                    i_number = d.getFullYear() + (d.getMonth()+1) + (d.getDate()) + i_number; 
+                    i_number = i_number + t;
+                    var i_name = roomData.guest;
+                    var i_kontakt = "Hotel Anhalter";
+                    var i_adresse = "Lorem-Ipsum-Straße 42";
+                    var i_city = city;
+                    //calculate rates
+                    var i_room = "Zimmer Ihrer Wahl: " + roomData.roomtype+" "+ roomData.roomnr ; //Raumnummer ausgeben + eeeeigentlich, auch Doppelzimmer bei double
+                    var i_duration = "Ihre Aufenthaltsdauer: " + roomData.duration; 
+                    var i_ust=(roomData.total_price*0.07);
+                    var i_netto =(roomData.total_price-i_ust);
+                    var i_brutto=roomData.total_price;
                     var i_payment = "Bezahlart: Ratenzahlung " 
+                    //pay per installment
+                    var i_rate = roomData.rate;
+                    //generate date
+                    var date = new Date();
+                    let output = String(date.getDate()).padStart(2, '0') + '/' + String(date.getMonth() + 1).padStart(2, '0') + '/' + date.getFullYear();
+                    //packages
+                    var ip_title = roomData.p_title;
+                    var ip_mwst = (roomData.p_price*0.19);
+                    var ip_netto = (roomData.p_price-ip_mwst);
+                    var ip_brutto = roomData.p_price;
+                    var ip_vendor = roomData.vendor;
                     var stream = fs.createWriteStream("Rechnung_" + roomData.guest+".txt");
                     stream.once('open', function(fd) {
                             stream.write("Ihre Rechnung\n");
-                            stream.write(i_name + "\n");
+                            stream.write(i_kontakt + "\n" + i_adresse + "\n" + i_city + "\n");
+                            stream.write(i_city + ", den " + output + "\n");
+                            stream.write("Rechnungsnummer: "+ i_number + "\n")
+                            stream.write("Gast: "+i_name + "\n");
+                            stream.write("Leistung: Hotelübernachtung"+ "\n")
                             stream.write(i_room + "\n");
                             stream.write(i_duration + " Tage\n");
-                            stream.write(i_price + " €\n");
+                            stream.write("Preis (netto): "+i_netto + " €\n"); //Ausrechnen
+                            stream.write("USt: " + i_ust + "€\n")
+                            stream.write("Preis (brutto inkl. Steuersatz von 7%): "+i_brutto + " €\n");
                             stream.write(i_payment + "\n");
-                            stream.write("Sie haben gewählt den Betrag in Raten zu zahlen. Ihr monatlich zu zahlender Betrag beläuft sich auf: " + roomData.monthly_price+"\n")
+                            stream.write("Sie haben gewählt den Betrag in Raten in " + i_rate + " Monaten zu zahlen. Ihr monatlich zu zahlender Betrag beläuft sich auf: " + roomData.monthly_price+"\n")
+                            if (p_booked = "booked"){
+                                stream.write("Ihre gewünschten Zusatzleistung: "+"\n");
+                                stream.write(ip_title+"\n");
+                                stream.write("Anbieter: "+ip_vendor + "\n")
+                                stream.write("Preis (netto): "+ip_netto + " €\n");
+                                stream.write("MwSt: " + ip_mwst + "€\n")
+                                stream.write("Preis (brutto inkl. MwSt. von 19%): "+ip_brutto + " €\n");
+                                stream.write("Sie begleichen den vollen Betrag per Rechnung. Bitte begleichen Sie den Betrag innerhalb von 14 Tagen an den Anbieter" + ip_vendor + ".\n")
+                            }
                             stream.end();
                     });
     }

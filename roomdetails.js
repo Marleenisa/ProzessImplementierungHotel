@@ -21,6 +21,7 @@ System.out.println("Room: " + jsonstring)
 var roomobj = JSON.parse(jsonstring);
 
 var roomprice = duration * roomobj.price
+//Preis für Zusatzpaket wird extra ausgewiesen
 
 execution.setVariable("guestName", guestName)
 execution.setVariable("type", roomobj.roomtype)
@@ -28,3 +29,8 @@ execution.setVariable("roomnr", roomid)
 execution.setVariable("duration", duration)
 execution.setVariable("price", roomprice)
 execution.setVariable("roomstatus", roomobj.status)
+//Hinzufügen der Zusatzpakete
+execution.setVariable("package_price", roomobj.p_price)
+execution.setVariable("package_title", roomobj.p_title)
+execution.setVariable("package_vendor", roomobj.vendor)
+

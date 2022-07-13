@@ -1,0 +1,54 @@
+{
+  "components": [
+    {
+      "text": "# Zusatzpakete für Rostock",
+      "type": "text",
+      "id": "Field_1h0ctsa"
+    },
+    {
+      "text": "### Mini-Kreuzfahrt über die Ostsee\n\n####Beschreibung: \n\nLorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.\n\n####Preis: 100 €",
+      "type": "text",
+      "id": "Field_02yl0io"
+    },
+    {
+      "text": "### Besuch im Rostocker Zoo\n####Beschreibung: \n\nLorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.\n\n####Preis: 20 €",
+      "type": "text",
+      "id": "Field_1llxmwj"
+    },
+    {
+      "values": [
+        {
+          "label": "Mini-Kreuzfahrt über die Ostsee",
+          "value": "ostsee"
+        },
+        {
+          "label": "Besuch im Rostocker Zoo",
+          "value": "zoo"
+        }
+      ],
+      "label": "Bitte wählen Sie das passende Paket aus:",
+      "type": "select",
+      "id": "Field_1s2z2wz",
+      "key": "chosenPackage",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "action": "submit",
+      "label": "Paket buchen",
+      "type": "button",
+      "id": "Field_0sdnqzd",
+      "key": "field_18z21hb"
+    }
+  ],
+  "type": "default",
+  "id": "rostock_form",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.0.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.17.0",
+  "schemaVersion": 4
+}

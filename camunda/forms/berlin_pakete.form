@@ -1,0 +1,54 @@
+{
+  "components": [
+    {
+      "text": "# Zusatzpakete für Berlin",
+      "type": "text",
+      "id": "Field_1h0ctsa"
+    },
+    {
+      "text": "### Fahrt über die Spree\n\n####Beschreibung: \n\nLorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.\n\n####Preis: 15 €",
+      "type": "text",
+      "id": "Field_02yl0io"
+    },
+    {
+      "text": "### Tour durch den Spreepark\n\n####Beschreibung: \n\nLorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.\n\n####Preis: 50 €",
+      "type": "text",
+      "id": "Field_1llxmwj"
+    },
+    {
+      "values": [
+        {
+          "value": "spree",
+          "label": "Fahrt über die Spree"
+        },
+        {
+          "label": "Tour durch den Spreepark",
+          "value": "park"
+        }
+      ],
+      "label": "Bitte wählen Sie das passende Paket aus:",
+      "type": "select",
+      "id": "Field_0pakc2r",
+      "key": "chosenPackage",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "action": "submit",
+      "label": "Paket buchen",
+      "type": "button",
+      "id": "Field_0sdnqzd",
+      "key": "field_18z21hb"
+    }
+  ],
+  "type": "default",
+  "id": "berlin_form",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.0.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.17.0",
+  "schemaVersion": 4
+}

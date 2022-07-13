@@ -6,6 +6,7 @@ var Collectors = Java.type("java.util.stream.Collectors");
 
 var roomid = execution.getVariable("room")
 var roomprice = execution.getVariable("price")
+var rate = 6
 
 var city = execution.getVariable("city");
 var url = new URL("http://34.78.33.136:8080/hotels/"+city+"/rooms/" + roomid)
@@ -21,9 +22,9 @@ var url = new URL("http://34.78.33.136:8080/hotels/"+city+"/rooms/" + roomid)
   System.out.println("Room: " + jsonstring)
   var roomobj = JSON.parse(jsonstring);
 
-var totalPrice = ((roomprice)*0,0012) + roomprice
+var totalPrice = ((roomprice)*0.012) + roomprice
 
-var monthlyPrice= totalPrice/6
+var monthlyPrice= totalPrice/rate
 
 execution.setVariable("guestName", roomobj.guest)
 execution.setVariable("type", roomobj.roomtype)
@@ -31,3 +32,4 @@ execution.setVariable("roomnr", roomnr)
 execution.setVariable("duration", duration)
 execution.setVariable("totalPrice", totalPrice)
 execution.setVariable("monthlyPrice", monthlyPrice)
+execution.setVariable("rate", rate)
