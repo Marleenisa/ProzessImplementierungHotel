@@ -305,42 +305,42 @@ app.put('/hotels/:city/rooms/:roomid', (req, res) => {
         roomData.vendor = "none"   
     }
     //Posting der Packages
-    else if (p_booked = "booked" &&change.package == "spree") {
+    else if (p_booked = "booked" && change.package == "spree") {
         roomData.p_booked = "booked";
         roomData.p_title = "Fahrt über die Spree";
         roomData.p_price = 15;
         roomData.vendor = "Mister Lorem";
         roomData.description = "Lorem ipsum"
     }
-    else if (p_booked = "booked" &&change.package == "park") {
+    else if (p_booked = "booked" && change.package == "park") {
         roomData.p_booked = "booked";
         roomData.p_title = "Tour durch den Spreepark";
         roomData.p_price = 50;
         roomData.vendor = "Agentur ipsum";
         roomData.description = "Lorem ipsum"
     }
-    else if (p_booked = "booked" &&change.package == "ostsee") {
+    else if (p_booked = "booked" && change.package == "ostsee") {
         roomData.p_booked = "booked";
         roomData.p_title = "Mini-Kreuzfahrt über die Ostsee";
         roomData.p_price = 100;
         roomData.vendor = "Agentur Sit";
         roomData.description = "Lorem ipsum"
     }
-    else if (p_booked = "booked" &&change.package == "zoo") {
+    else if (p_booked = "booked" && change.package == "zoo") {
         roomData.p_booked = "booked";
         roomData.p_title = "Besuch im Rostocker Zoo";
         roomData.p_price = 20;
         roomData.vendor = "Agentur Sit";
         roomData.description = "Lorem ipsum"
     }
-    else if (p_booked = "booked" &&change.package == "kirche") {
+    else if (p_booked = "booked" && change.package == "kirche") {
         roomData.p_booked = "booked";
         roomData.p_title = "Besuch in der Frauenkirche";
         roomData.p_price = 30;
         roomData.vendor = "Agentur Sit";
         roomData.description = "Lorem ipsum"
     }
-    else if (p_booked = "booked" &&change.package == "elbe") {
+    else if (p_booked = "booked" && change.package == "elbe") {
         roomData.p_booked = "booked";
         roomData.p_title = "Fahrt über die Elbe";
         roomData.p_price = 50;
@@ -451,7 +451,7 @@ app.put('/hotels/:city/rooms/:roomid', (req, res) => {
                                 stream.write("Preis (netto): "+ip_netto + " €\n");
                                 stream.write("MwSt: " + ip_mwst + "€\n")
                                 stream.write("Preis (brutto inkl. MwSt. von 19%): "+ip_brutto + " €\n");
-                                stream.write("Sie begleichen den vollen Betrag per Rechnung. Bitte begleichen Sie den Betrag innerhalb von 14 Tagen an den Anbieter" + ip_vendor + ".\n")
+                                stream.write("Sie begleichen den vollen Betrag per Rechnung. Bitte begleichen Sie den Betrag innerhalb von 14 Tagen an den Anbieter " + ip_vendor + ".\n")
                             }
                             stream.end();
                     });

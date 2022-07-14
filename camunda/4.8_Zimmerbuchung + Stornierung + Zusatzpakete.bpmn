@@ -7,8 +7,8 @@
     <bpmn:messageFlow id="Flow_0148uu4" sourceRef="Participant_12zbopj" targetRef="Event_0sfdkmy" />
     <bpmn:messageFlow id="Flow_1juqhcc" sourceRef="zimmerVorschlagen" targetRef="Participant_12zbopj" />
     <bpmn:messageFlow id="Flow_09ckgkl" sourceRef="buchungBestaetigen" targetRef="Participant_12zbopj" />
-    <bpmn:messageFlow id="Flow_0p9yc7b" sourceRef="Activity_03ldbca" targetRef="Participant_12zbopj" />
-    <bpmn:messageFlow id="Flow_1v1tb13" sourceRef="Activity_0cj9elw" targetRef="Participant_12zbopj" />
+    <bpmn:messageFlow id="Flow_0p9yc7b" sourceRef="stornoAusgeben" targetRef="Participant_12zbopj" />
+    <bpmn:messageFlow id="Flow_1v1tb13" sourceRef="buchungAusgeben" targetRef="Participant_12zbopj" />
   </bpmn:collaboration>
   <bpmn:error id="Error_11ron9w" name="Error_Bonität" errorCode="01" camunda:errorMessage="Bonität abgelehnt" />
   <bpmn:process id="EinfacheZimmerauswahlStornoZusatzpakete" name="4.8 Einfache Zimmerauswahl + Storno + Zusatzpakete" isExecutable="true">
@@ -37,9 +37,9 @@
         <bpmn:flowNodeRef>Activity_08szwhr</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>buchungBestaetigen</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_1t145ms</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Activity_0cj9elw</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>buchungAusgeben</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_1fslbxu</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Activity_03ldbca</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>stornoAusgeben</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_02og7ln</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>bezahlungDurchfuehren</bpmn:flowNodeRef>
       </bpmn:lane>
@@ -50,10 +50,10 @@
     <bpmn:sequenceFlow id="Flow_1q88kv0" name="ja" sourceRef="Gateway_02og7ln" targetRef="Activity_1l2d4fc">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${status == 'occupied'}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1hocwr0" sourceRef="Activity_0ksk7s4" targetRef="Activity_03ldbca" />
-    <bpmn:sequenceFlow id="Flow_0bzv1es" sourceRef="Activity_03ldbca" targetRef="Event_1fslbxu" />
-    <bpmn:sequenceFlow id="Flow_11re2rm" sourceRef="Activity_1l2d4fc" targetRef="Activity_0cj9elw" />
-    <bpmn:sequenceFlow id="Flow_0p8hcsk" sourceRef="Activity_0cj9elw" targetRef="Event_1t145ms" />
+    <bpmn:sequenceFlow id="Flow_1hocwr0" sourceRef="Activity_0ksk7s4" targetRef="stornoAusgeben" />
+    <bpmn:sequenceFlow id="Flow_0bzv1es" sourceRef="stornoAusgeben" targetRef="Event_1fslbxu" />
+    <bpmn:sequenceFlow id="Flow_11re2rm" sourceRef="Activity_1l2d4fc" targetRef="buchungAusgeben" />
+    <bpmn:sequenceFlow id="Flow_0p8hcsk" sourceRef="buchungAusgeben" targetRef="Event_1t145ms" />
     <bpmn:sequenceFlow id="Flow_1j56q1r" sourceRef="bezahlungDurchfuehren" targetRef="buchungBestaetigen" />
     <bpmn:sequenceFlow id="Flow_0h9ules" name="nein" sourceRef="Gateway_0hjnzbv" targetRef="Gateway_0hyxfsm">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${additional == 'no'}</bpmn:conditionExpression>
@@ -581,24 +581,16 @@ reader = new BufferedReader(new
       <bpmn:outgoing>Flow_1q88kv0</bpmn:outgoing>
       <bpmn:outgoing>Flow_19iy4n9</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:userTask id="Activity_03ldbca" name="Stornierung aushändigen" camunda:assignee="demo">
-      <bpmn:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="done" label="Hats geklappt? " type="string" defaultValue="JA" />
-        </camunda:formData>
-      </bpmn:extensionElements>
+    <bpmn:userTask id="stornoAusgeben" name="Stornierung aushändigen" camunda:formKey="camunda-forms:deployment:stornierung_abgeschlossen.form" camunda:assignee="demo">
+      <bpmn:extensionElements />
       <bpmn:incoming>Flow_1hocwr0</bpmn:incoming>
       <bpmn:outgoing>Flow_0bzv1es</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:endEvent id="Event_1fslbxu" name="Buchung storniert">
       <bpmn:incoming>Flow_0bzv1es</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:userTask id="Activity_0cj9elw" name="Buchung aushändigen" camunda:assignee="demo">
-      <bpmn:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="zahlungseingang" label="Haben wir es geschafft?" type="string" defaultValue="ja" />
-        </camunda:formData>
-      </bpmn:extensionElements>
+    <bpmn:userTask id="buchungAusgeben" name="Buchung aushändigen" camunda:formKey="camunda-forms:deployment:buchung_abgeschlossen.form" camunda:assignee="demo">
+      <bpmn:extensionElements />
       <bpmn:incoming>Flow_11re2rm</bpmn:incoming>
       <bpmn:outgoing>Flow_0p8hcsk</bpmn:outgoing>
     </bpmn:userTask>
@@ -1073,7 +1065,7 @@ reader = new BufferedReader(new
         <di:waypoint x="450" y="1218" />
         <di:waypoint x="450" y="1178" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1343" y="1233" width="21" height="14" />
+          <dc:Bounds x="1489" y="1223" width="21" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0n1sh5q_di" bpmnElement="Flow_0n1sh5q">
@@ -1269,7 +1261,7 @@ reader = new BufferedReader(new
           <dc:Bounds x="4123" y="1183" width="74" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0cj9elw_di" bpmnElement="Activity_0cj9elw">
+      <bpmndi:BPMNShape id="Activity_0cj9elw_di" bpmnElement="buchungAusgeben">
         <dc:Bounds x="3940" y="1118" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
@@ -1279,7 +1271,7 @@ reader = new BufferedReader(new
           <dc:Bounds x="4117" y="1025" width="87" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1nscx0i_di" bpmnElement="Activity_03ldbca">
+      <bpmndi:BPMNShape id="Activity_1nscx0i_di" bpmnElement="stornoAusgeben">
         <dc:Bounds x="3940" y="960" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
