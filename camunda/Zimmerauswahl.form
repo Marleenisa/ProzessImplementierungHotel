@@ -67,28 +67,9 @@
       "key": "duration",
       "validate": {
         "required": true,
-        "min": 0
+        "min": 0,
+        "max": 30
       }
-    },
-    {
-      "values": [
-        {
-          "label": "Privat",
-          "value": "private"
-        },
-        {
-          "label": "Geschäftsreise",
-          "value": "businesstrip"
-        },
-        {
-          "label": "Abenteuer",
-          "value": "adventure"
-        }
-      ],
-      "label": "Grund für den Aufenthalt",
-      "type": "select",
-      "id": "Field_0f82a5d",
-      "key": "reason"
     },
     {
       "action": "submit",

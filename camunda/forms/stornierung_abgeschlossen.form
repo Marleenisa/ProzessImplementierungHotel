@@ -7,7 +7,7 @@
     }
   ],
   "type": "default",
-  "id": "buchungAbgeschlossen_form",
+  "id": "stornoAbgeschlossen_form",
   "exporter": {
     "name": "Camunda Modeler",
     "version": "5.0.0"

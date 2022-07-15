@@ -30,13 +30,13 @@
         <bpmn:flowNodeRef>Activity_1y3h78y</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_0fytl3c</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_0zt66iu</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Activity_0lcsh4m</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0p4np11</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Activity_0qpr9f3</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Activity_0qjrgu5</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Gateway_0knhxc5</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Gateway_1kuzquw</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_0hjnzbv</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_1kuzquw</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_0knhxc5</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_0qjrgu5</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_0lcsh4m</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_0qpr9f3</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_0loqqla" name="Servicemitarbeiter">
         <bpmn:flowNodeRef>Activity_08szwhr</bpmn:flowNodeRef>
@@ -52,7 +52,6 @@
         <bpmn:flowNodeRef>Event_1t145ms</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>buchungBestaetigen</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0pghaqd</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Activity_1y1r1ki</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_0a4hxit</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_1yb4ujz</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_09pwlz6</bpmn:flowNodeRef>
@@ -61,6 +60,7 @@
         <bpmn:flowNodeRef>Event_0u6rvg1</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>buchungAnzeigen</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_1cwzjfd</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_1y1r1ki</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:sequenceFlow id="Flow_0h9ules" name="nein" sourceRef="Gateway_0hjnzbv" targetRef="Gateway_0hyxfsm">
@@ -624,52 +624,13 @@ reader = new BufferedReader(new
       <bpmn:outgoing>Flow_1jwvv1q</bpmn:outgoing>
       <bpmn:outgoing>Flow_09qsc5q</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:scriptTask id="Activity_0lcsh4m" name="Kondition für 6 Monate ermitteln" scriptFormat="javascript">
-      <bpmn:incoming>Flow_1fka68v</bpmn:incoming>
-      <bpmn:outgoing>Flow_1ug265i</bpmn:outgoing>
-      <bpmn:script>var System = Java.type("java.lang.System");
-var URL = Java.type("java.net.URL");
-var BufferedReader = Java.type("java.io.BufferedReader");
-var InputStreamReader = Java.type("java.io.InputStreamReader");
-var Collectors = Java.type("java.util.stream.Collectors");
-
-var roomid = execution.getVariable("room")
-var roomprice = execution.getVariable("price")
-var rate = 6
-
-var city = execution.getVariable("city");
-var url = new URL("http://34.78.33.136:8080/hotels/"+city+"/rooms/" + roomid)
-
-  con = url.openConnection();
-  con.setRequestMethod("GET");
-  con.connect()
-
-  reader = new BufferedReader(new 
-  InputStreamReader(con.getInputStream()));
-  jsonstring = reader.lines().collect(Collectors.joining("\n"));
-  reader.close()
-  System.out.println("Room: " + jsonstring)
-  var roomobj = JSON.parse(jsonstring);
-
-var totalPrice = ((roomprice)*0.012) + roomprice
-
-var monthlyPrice= totalPrice/rate
-
-execution.setVariable("guestName", roomobj.guest)
-execution.setVariable("type", roomobj.roomtype)
-execution.setVariable("roomnr", roomnr)
-execution.setVariable("duration", duration)
-execution.setVariable("totalPrice", totalPrice)
-execution.setVariable("monthlyPrice", monthlyPrice)
-execution.setVariable("rate", rate)</bpmn:script>
-    </bpmn:scriptTask>
     <bpmn:userTask id="Activity_0pghaqd" name="Neue Buchungsübersicht anzeigen" camunda:assignee="demo">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="totalPrice" label="Neuer Gesamtpreis (inkl. 1,2% Zinsen):" type="string" defaultValue="${totalPrice}" />
           <camunda:formField id="monthlyPrice" label="Monatlich zu zahlen:" type="string" defaultValue="${monthlyPrice}" />
-          <camunda:formField id="confirm" label="Ratenzahlungsanfrage weiterleiten" type="boolean" />
           <camunda:formField id="rate" label="Anzahl der Monate" type="long" defaultValue="${rate}" />
+          <camunda:formField id="confirm" label="Ratenzahlung an Filialleitung weiterleiten" type="boolean" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1ddw4du</bpmn:incoming>
@@ -723,18 +684,6 @@ reader = new BufferedReader(new
 
   reader.close();</bpmn:script>
     </bpmn:scriptTask>
-    <bpmn:userTask id="Activity_1y1r1ki" name="Modalitäten vorschlagen" camunda:assignee="demo">
-      <bpmn:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="modality" type="enum">
-            <camunda:value id="three" name="3 Monate" />
-            <camunda:value id="six" name="6 Monate" />
-          </camunda:formField>
-        </camunda:formData>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0vttxgj</bpmn:incoming>
-      <bpmn:outgoing>Flow_0qdiuj1</bpmn:outgoing>
-    </bpmn:userTask>
     <bpmn:endEvent id="Event_0a4hxit" name="Buchung abgebrochen">
       <bpmn:incoming>Flow_13bwvx4</bpmn:incoming>
       <bpmn:terminateEventDefinition id="TerminateEventDefinition_0vc1cjo" />
@@ -829,16 +778,8 @@ reader = new BufferedReader(new
     <bpmn:sequenceFlow id="Flow_09qsc5q" name="Rechnung" sourceRef="Gateway_0zt66iu" targetRef="Activity_0qpr9f3">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${payment == 'invoice'}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1viznx5" sourceRef="Activity_0qjrgu5" targetRef="Gateway_1kuzquw" />
-    <bpmn:sequenceFlow id="Flow_1ug265i" sourceRef="Activity_0lcsh4m" targetRef="Gateway_1kuzquw" />
     <bpmn:sequenceFlow id="Flow_1ddw4du" sourceRef="Gateway_1kuzquw" targetRef="Activity_0pghaqd" />
     <bpmn:sequenceFlow id="Flow_0qdiuj1" sourceRef="Activity_1y1r1ki" targetRef="Gateway_0knhxc5" />
-    <bpmn:sequenceFlow id="Flow_1j7nffz" name="3 Monate" sourceRef="Gateway_0knhxc5" targetRef="Activity_0qjrgu5">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${modality == 'three'}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1fka68v" name="6 Monate" sourceRef="Gateway_0knhxc5" targetRef="Activity_0lcsh4m">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${modality == 'six'}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0gjvf67" sourceRef="Activity_0pghaqd" targetRef="Activity_0bevkdw" />
     <bpmn:sequenceFlow id="Flow_13t48d6" sourceRef="Activity_0bevkdw" targetRef="Activity_0p4np11" />
     <bpmn:sequenceFlow id="Flow_0vttxgj" sourceRef="Activity_1yb4ujz" targetRef="Activity_1y1r1ki" />
@@ -902,6 +843,114 @@ reader = new BufferedReader(new
         <bpmn:condition xsi:type="bpmn:tFormalExpression">${!finalConfirm}</bpmn:condition>
       </bpmn:conditionalEventDefinition>
     </bpmn:boundaryEvent>
+    <bpmn:exclusiveGateway id="Gateway_0hjnzbv" name="Zusatzpaket gewünscht?">
+      <bpmn:incoming>Flow_08znn4p</bpmn:incoming>
+      <bpmn:outgoing>Flow_0h9ules</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0prshr5</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="Activity_1y1r1ki" name="Modalitäten vorschlagen" camunda:assignee="demo">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="modality" type="enum">
+            <camunda:value id="three" name="3 Monate" />
+            <camunda:value id="six" name="6 Monate" />
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0vttxgj</bpmn:incoming>
+      <bpmn:outgoing>Flow_0qdiuj1</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_1kuzquw">
+      <bpmn:incoming>Flow_1viznx5</bpmn:incoming>
+      <bpmn:incoming>Flow_1ug265i</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ddw4du</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="Gateway_0knhxc5">
+      <bpmn:incoming>Flow_0qdiuj1</bpmn:incoming>
+      <bpmn:outgoing>Flow_1j7nffz</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1fka68v</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:scriptTask id="Activity_0qjrgu5" name="Kondition für 3 Monate ermitteln" scriptFormat="javascript">
+      <bpmn:incoming>Flow_1j7nffz</bpmn:incoming>
+      <bpmn:outgoing>Flow_1viznx5</bpmn:outgoing>
+      <bpmn:script>var System = Java.type("java.lang.System");
+var URL = Java.type("java.net.URL");
+var BufferedReader = Java.type("java.io.BufferedReader");
+var InputStreamReader = Java.type("java.io.InputStreamReader");
+var Collectors = Java.type("java.util.stream.Collectors");
+
+var roomid = execution.getVariable("room")
+var roomprice = execution.getVariable("price")
+var rate = 3
+
+var city = execution.getVariable("city");
+var url = new URL("http://34.78.33.136:8080/hotels/"+city+"/rooms/" + roomid)
+
+  con = url.openConnection();
+  con.setRequestMethod("GET");
+  con.connect()
+
+  reader = new BufferedReader(new 
+  InputStreamReader(con.getInputStream()));
+  jsonstring = reader.lines().collect(Collectors.joining("\n"));
+  reader.close()
+  System.out.println("Room: " + jsonstring)
+  var roomobj = JSON.parse(jsonstring);
+
+
+var totalPrice = ((roomprice)*0.012) + roomprice
+
+var monthlyPrice= totalPrice/rate;
+monthlyPrice =monthlyPrice.toFixed(2);
+
+execution.setVariable("guestName", roomobj.guest)
+execution.setVariable("type", roomobj.roomtype)
+execution.setVariable("roomnr", roomnr)
+execution.setVariable("duration", duration)
+execution.setVariable("totalPrice", totalPrice)
+execution.setVariable("monthlyPrice", monthlyPrice)
+execution.setVariable("rate", rate)</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Activity_0lcsh4m" name="Kondition für 6 Monate ermitteln" scriptFormat="javascript">
+      <bpmn:incoming>Flow_1fka68v</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ug265i</bpmn:outgoing>
+      <bpmn:script>var System = Java.type("java.lang.System");
+var URL = Java.type("java.net.URL");
+var BufferedReader = Java.type("java.io.BufferedReader");
+var InputStreamReader = Java.type("java.io.InputStreamReader");
+var Collectors = Java.type("java.util.stream.Collectors");
+
+var roomid = execution.getVariable("room")
+var roomprice = execution.getVariable("price")
+var rate = 6
+
+var city = execution.getVariable("city");
+var url = new URL("http://34.78.33.136:8080/hotels/"+city+"/rooms/" + roomid)
+
+  con = url.openConnection();
+  con.setRequestMethod("GET");
+  con.connect()
+
+  reader = new BufferedReader(new 
+  InputStreamReader(con.getInputStream()));
+  jsonstring = reader.lines().collect(Collectors.joining("\n"));
+  reader.close()
+  System.out.println("Room: " + jsonstring)
+  var roomobj = JSON.parse(jsonstring);
+
+var totalPrice = ((roomprice)*0.012) + roomprice
+
+var monthlyPrice= totalPrice/rate;
+monthlyPrice =monthlyPrice.toFixed(2);
+
+execution.setVariable("guestName", roomobj.guest)
+execution.setVariable("type", roomobj.roomtype)
+execution.setVariable("roomnr", roomnr)
+execution.setVariable("duration", duration)
+execution.setVariable("totalPrice", totalPrice)
+execution.setVariable("monthlyPrice", monthlyPrice)
+execution.setVariable("rate", rate)</bpmn:script>
+    </bpmn:scriptTask>
     <bpmn:scriptTask id="Activity_0qpr9f3" name="Rechnung ausstellen" scriptFormat="javascript">
       <bpmn:incoming>Flow_09qsc5q</bpmn:incoming>
       <bpmn:outgoing>Flow_1u0qb9m</bpmn:outgoing>
@@ -949,61 +998,14 @@ reader = new BufferedReader(new
 
   reader.close();</bpmn:script>
     </bpmn:scriptTask>
-    <bpmn:scriptTask id="Activity_0qjrgu5" name="Kondition für 3 Monate ermitteln" scriptFormat="javascript">
-      <bpmn:incoming>Flow_1j7nffz</bpmn:incoming>
-      <bpmn:outgoing>Flow_1viznx5</bpmn:outgoing>
-      <bpmn:script>var System = Java.type("java.lang.System");
-var URL = Java.type("java.net.URL");
-var BufferedReader = Java.type("java.io.BufferedReader");
-var InputStreamReader = Java.type("java.io.InputStreamReader");
-var Collectors = Java.type("java.util.stream.Collectors");
-
-var roomid = execution.getVariable("room")
-var roomprice = execution.getVariable("price")
-var rate = 3
-
-var city = execution.getVariable("city");
-var url = new URL("http://34.78.33.136:8080/hotels/"+city+"/rooms/" + roomid)
-
-  con = url.openConnection();
-  con.setRequestMethod("GET");
-  con.connect()
-
-  reader = new BufferedReader(new 
-  InputStreamReader(con.getInputStream()));
-  jsonstring = reader.lines().collect(Collectors.joining("\n"));
-  reader.close()
-  System.out.println("Room: " + jsonstring)
-  var roomobj = JSON.parse(jsonstring);
-
-
-var totalPrice = ((roomprice)*0.012) + roomprice
-
-var monthlyPrice= totalPrice/rate
-
-execution.setVariable("guestName", roomobj.guest)
-execution.setVariable("type", roomobj.roomtype)
-execution.setVariable("roomnr", roomnr)
-execution.setVariable("duration", duration)
-execution.setVariable("totalPrice", totalPrice)
-execution.setVariable("monthlyPrice", monthlyPrice)
-execution.setVariable("rate", rate)</bpmn:script>
-    </bpmn:scriptTask>
-    <bpmn:exclusiveGateway id="Gateway_0knhxc5">
-      <bpmn:incoming>Flow_0qdiuj1</bpmn:incoming>
-      <bpmn:outgoing>Flow_1j7nffz</bpmn:outgoing>
-      <bpmn:outgoing>Flow_1fka68v</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:exclusiveGateway id="Gateway_1kuzquw">
-      <bpmn:incoming>Flow_1viznx5</bpmn:incoming>
-      <bpmn:incoming>Flow_1ug265i</bpmn:incoming>
-      <bpmn:outgoing>Flow_1ddw4du</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:exclusiveGateway id="Gateway_0hjnzbv" name="Zusatzpaket gewünscht?">
-      <bpmn:incoming>Flow_08znn4p</bpmn:incoming>
-      <bpmn:outgoing>Flow_0h9ules</bpmn:outgoing>
-      <bpmn:outgoing>Flow_0prshr5</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1viznx5" sourceRef="Activity_0qjrgu5" targetRef="Gateway_1kuzquw" />
+    <bpmn:sequenceFlow id="Flow_1ug265i" sourceRef="Activity_0lcsh4m" targetRef="Gateway_1kuzquw" />
+    <bpmn:sequenceFlow id="Flow_1j7nffz" name="3 Monate" sourceRef="Gateway_0knhxc5" targetRef="Activity_0qjrgu5">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${modality == 'three'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1fka68v" name="6 Monate" sourceRef="Gateway_0knhxc5" targetRef="Activity_0lcsh4m">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${modality == 'six'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_16qafuh">
@@ -1195,7 +1197,7 @@ execution.setVariable("rate", rate)</bpmn:script>
         <di:waypoint x="6512" y="1150" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_1rinh13" bpmnElement="Flow_1u0qb9m">
-        <di:waypoint x="4152" y="430" />
+        <di:waypoint x="4120" y="430" />
         <di:waypoint x="5262" y="430" />
         <di:waypoint x="5262" y="655" />
       </bpmndi:BPMNEdge>
@@ -1214,48 +1216,22 @@ execution.setVariable("rate", rate)</bpmn:script>
       <bpmndi:BPMNEdge id="BPMNEdge_08ifn6g" bpmnElement="Flow_09qsc5q">
         <di:waypoint x="3272" y="623" />
         <di:waypoint x="3272" y="430" />
-        <di:waypoint x="4052" y="430" />
+        <di:waypoint x="4020" y="430" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="3296" y="519" width="51" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_0vcngk6" bpmnElement="Flow_1viznx5">
-        <di:waypoint x="4152" y="564" />
-        <di:waypoint x="4242" y="564" />
-        <di:waypoint x="4242" y="623" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_0ash8rx" bpmnElement="Flow_1ug265i">
-        <di:waypoint x="4152" y="768" />
-        <di:waypoint x="4242" y="768" />
-        <di:waypoint x="4242" y="673" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_1r6h40o" bpmnElement="Flow_1ddw4du">
-        <di:waypoint x="4267" y="648" />
-        <di:waypoint x="4292" y="648" />
-        <di:waypoint x="4292" y="1166" />
+        <di:waypoint x="4235" y="648" />
+        <di:waypoint x="4270" y="648" />
+        <di:waypoint x="4270" y="1166" />
         <di:waypoint x="4342" y="1166" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_1wru8u3" bpmnElement="Flow_0qdiuj1">
-        <di:waypoint x="3812" y="1166" />
+        <di:waypoint x="3720" y="1166" />
         <di:waypoint x="3852" y="1166" />
         <di:waypoint x="3852" y="648" />
-        <di:waypoint x="3927" y="648" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_01buerh" bpmnElement="Flow_1j7nffz">
-        <di:waypoint x="3952" y="623" />
-        <di:waypoint x="3952" y="564" />
-        <di:waypoint x="4052" y="564" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="3969" y="541" width="46" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_156m76o" bpmnElement="Flow_1fka68v">
-        <di:waypoint x="3952" y="673" />
-        <di:waypoint x="3952" y="768" />
-        <di:waypoint x="4052" y="768" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="3969" y="785" width="46" height="14" />
-        </bpmndi:BPMNLabel>
+        <di:waypoint x="3895" y="648" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_0pvgxm0" bpmnElement="Flow_0gjvf67">
         <di:waypoint x="4442" y="1166" />
@@ -1271,7 +1247,7 @@ execution.setVariable("rate", rate)</bpmn:script>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0vttxgj_di" bpmnElement="Flow_0vttxgj">
         <di:waypoint x="3472" y="1166" />
-        <di:waypoint x="3712" y="1166" />
+        <di:waypoint x="3620" y="1166" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_0ocizhi" bpmnElement="Flow_13bwvx4">
         <di:waypoint x="4152" y="1278" />
@@ -1295,6 +1271,32 @@ execution.setVariable("rate", rate)</bpmn:script>
         <di:waypoint x="4688" y="1828" />
         <di:waypoint x="3782" y="1828" />
         <di:waypoint x="3782" y="1303" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_0vcngk6" bpmnElement="Flow_1viznx5">
+        <di:waypoint x="4120" y="564" />
+        <di:waypoint x="4210" y="564" />
+        <di:waypoint x="4210" y="623" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_0ash8rx" bpmnElement="Flow_1ug265i">
+        <di:waypoint x="4120" y="768" />
+        <di:waypoint x="4210" y="768" />
+        <di:waypoint x="4210" y="673" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_01buerh" bpmnElement="Flow_1j7nffz">
+        <di:waypoint x="3920" y="623" />
+        <di:waypoint x="3920" y="564" />
+        <di:waypoint x="4020" y="564" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3937" y="541" width="46" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_156m76o" bpmnElement="Flow_1fka68v">
+        <di:waypoint x="3920" y="673" />
+        <di:waypoint x="3920" y="768" />
+        <di:waypoint x="4020" y="768" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3937" y="785" width="46" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Activity_1i08km0_di" bpmnElement="zimmerBuchen">
         <dc:Bounds x="2500" y="630" width="100" height="80" />
@@ -1386,18 +1388,12 @@ execution.setVariable("rate", rate)</bpmn:script>
       <bpmndi:BPMNShape id="BPMNShape_0qkzh0z" bpmnElement="Gateway_0zt66iu" isMarkerVisible="true">
         <dc:Bounds x="3247" y="623" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1lv7x86" bpmnElement="Activity_0lcsh4m">
-        <dc:Bounds x="4052" y="728" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0tysnhv" bpmnElement="Activity_0pghaqd">
         <dc:Bounds x="4342" y="1126" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_17x77hw" bpmnElement="Activity_0p4np11">
         <dc:Bounds x="5022" y="640" width="100" height="80" />
         <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_03yircf" bpmnElement="Activity_1y1r1ki">
-        <dc:Bounds x="3712" y="1126" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0jnuezx" bpmnElement="Event_0a4hxit">
         <dc:Bounds x="4234" y="1260" width="36" height="36" />
@@ -1428,23 +1424,29 @@ execution.setVariable("rate", rate)</bpmn:script>
       <bpmndi:BPMNShape id="BPMNShape_1dhnu21" bpmnElement="Activity_0bevkdw">
         <dc:Bounds x="4610" y="1710" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1e2uqjw" bpmnElement="Activity_0qpr9f3">
-        <dc:Bounds x="4052" y="390" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0cq4hhf" bpmnElement="Activity_0qjrgu5">
-        <dc:Bounds x="4052" y="524" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_12ceuhg" bpmnElement="Gateway_0knhxc5" isMarkerVisible="true">
-        <dc:Bounds x="3927" y="623" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_16dwxic" bpmnElement="Gateway_1kuzquw" isMarkerVisible="true">
-        <dc:Bounds x="4217" y="623" width="50" height="50" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0hjnzbv_di" bpmnElement="Gateway_0hjnzbv" isMarkerVisible="true">
         <dc:Bounds x="2025" y="645" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="2020" y="702" width="60" height="27" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_03yircf" bpmnElement="Activity_1y1r1ki">
+        <dc:Bounds x="3620" y="1126" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_16dwxic" bpmnElement="Gateway_1kuzquw" isMarkerVisible="true">
+        <dc:Bounds x="4185" y="623" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_12ceuhg" bpmnElement="Gateway_0knhxc5" isMarkerVisible="true">
+        <dc:Bounds x="3895" y="623" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0cq4hhf" bpmnElement="Activity_0qjrgu5">
+        <dc:Bounds x="4020" y="524" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1lv7x86" bpmnElement="Activity_0lcsh4m">
+        <dc:Bounds x="4020" y="728" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1e2uqjw" bpmnElement="Activity_0qpr9f3">
+        <dc:Bounds x="4020" y="390" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1y3h78y_di" bpmnElement="Activity_1y3h78y" isExpanded="false">
         <dc:Bounds x="2170" y="524" width="100" height="80" />

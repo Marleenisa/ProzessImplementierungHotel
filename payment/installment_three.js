@@ -25,7 +25,8 @@ var url = new URL("http://34.78.33.136:8080/hotels/"+city+"/rooms/" + roomid)
 
 var totalPrice = ((roomprice)*0.012) + roomprice
 
-var monthlyPrice= totalPrice/rate
+var monthlyPrice= totalPrice/rate;
+monthlyPrice =monthlyPrice.toFixed(2);
 
 execution.setVariable("guestName", roomobj.guest)
 execution.setVariable("type", roomobj.roomtype)
