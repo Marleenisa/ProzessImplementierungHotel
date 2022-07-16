@@ -146,7 +146,8 @@ var url = new URL("http://34.78.33.136:8080/hotels/"+city+"/rooms/" + roomid)
 
 var totalPrice = ((roomprice)*0.012) + roomprice
 
-var monthlyPrice= totalPrice/rate
+var monthlyPrice= totalPrice/rate;
+monthlyPrice =monthlyPrice.toFixed(2);
 
 execution.setVariable("guestName", roomobj.guest)
 execution.setVariable("type", roomobj.roomtype)
@@ -185,7 +186,8 @@ var url = new URL("http://34.78.33.136:8080/hotels/"+city+"/rooms/" + roomid)
 
 var totalPrice = ((roomprice)*0.012) + roomprice
 
-var monthlyPrice= totalPrice/rate
+var monthlyPrice= totalPrice/rate;
+monthlyPrice =monthlyPrice.toFixed(2);
 
 execution.setVariable("guestName", roomobj.guest)
 execution.setVariable("type", roomobj.roomtype)
@@ -195,18 +197,6 @@ execution.setVariable("totalPrice", totalPrice)
 execution.setVariable("monthlyPrice", monthlyPrice)
 execution.setVariable("rate", rate)</bpmn:script>
       </bpmn:scriptTask>
-      <bpmn:userTask id="Activity_1c8bddz" name="Neue Buchungsübersicht anzeigen" camunda:assignee="demo">
-        <bpmn:extensionElements>
-          <camunda:formData>
-            <camunda:formField id="totalPrice" label="Neuer Gesamtpreis (inkl. 1,2% Zinsen):" type="string" defaultValue="${totalPrice}" />
-            <camunda:formField id="monthlyPrice" label="Monatlich zu zahlen:" type="string" defaultValue="${monthlyPrice}" />
-            <camunda:formField id="confirm" label="Ratenzahlungsanfrage weiterleiten" type="boolean" />
-            <camunda:formField id="rate" label="Anzahl der Monate" type="long" defaultValue="${rate}" />
-          </camunda:formData>
-        </bpmn:extensionElements>
-        <bpmn:incoming>Flow_0wt6tk8</bpmn:incoming>
-        <bpmn:outgoing>Flow_0tlkdmo</bpmn:outgoing>
-      </bpmn:userTask>
       <bpmn:scriptTask id="Activity_14l2kbm" name="Rechnung ausstellen" scriptFormat="javascript">
         <bpmn:incoming>Flow_0cksely</bpmn:incoming>
         <bpmn:outgoing>Flow_0qud0eh</bpmn:outgoing>
@@ -255,7 +245,7 @@ reader = new BufferedReader(new
   reader.close();</bpmn:script>
       </bpmn:scriptTask>
       <bpmn:scriptTask id="Activity_0ft3byi" name="Ratenzahlung eintragen" scriptFormat="javascript">
-        <bpmn:incoming>Flow_1mel1rn</bpmn:incoming>
+        <bpmn:incoming>Flow_1vlc9f7</bpmn:incoming>
         <bpmn:outgoing>Flow_0m6jl9c</bpmn:outgoing>
         <bpmn:script>var System = Java.type("java.lang.System");
 var URL = Java.type("java.net.URL");
@@ -311,14 +301,9 @@ reader = new BufferedReader(new
             </camunda:formField>
           </camunda:formData>
         </bpmn:extensionElements>
-        <bpmn:incoming>Flow_0jz05zj</bpmn:incoming>
+        <bpmn:incoming>Flow_0krblz8</bpmn:incoming>
         <bpmn:outgoing>Flow_0icif1j</bpmn:outgoing>
       </bpmn:userTask>
-      <bpmn:exclusiveGateway id="Gateway_18x1a9w" name="Ergebnis der Prüfung?">
-        <bpmn:incoming>Flow_0fz2nnc</bpmn:incoming>
-        <bpmn:outgoing>Flow_0jz05zj</bpmn:outgoing>
-        <bpmn:outgoing>Flow_0z0g3qd</bpmn:outgoing>
-      </bpmn:exclusiveGateway>
       <bpmn:userTask id="Activity_1boizvu" name="Ratenzahlung genehmigen" camunda:assignee="demo">
         <bpmn:extensionElements>
           <camunda:formData>
@@ -335,8 +320,8 @@ reader = new BufferedReader(new
             <camunda:formField id="finalConfirm" label="Genehmigung" type="boolean" />
           </camunda:formData>
         </bpmn:extensionElements>
-        <bpmn:incoming>Flow_0tlkdmo</bpmn:incoming>
-        <bpmn:outgoing>Flow_0shgdua</bpmn:outgoing>
+        <bpmn:incoming>Flow_1pt2j30</bpmn:incoming>
+        <bpmn:outgoing>Flow_1vlc9f7</bpmn:outgoing>
       </bpmn:userTask>
       <bpmn:endEvent id="Event_12he8e3" name="Buchung abgebrochen">
         <bpmn:incoming>Flow_0x63lux</bpmn:incoming>
@@ -352,7 +337,7 @@ reader = new BufferedReader(new
           </camunda:formData>
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_0i8d9fi</bpmn:incoming>
-        <bpmn:outgoing>Flow_0fz2nnc</bpmn:outgoing>
+        <bpmn:outgoing>Flow_0krblz8</bpmn:outgoing>
       </bpmn:userTask>
       <bpmn:userTask id="Activity_17xytno" name="Kunden über Abbruch informieren" camunda:assignee="demo">
         <bpmn:extensionElements>
@@ -414,14 +399,9 @@ reader = new BufferedReader(new
 </bpmn:script>
       </bpmn:scriptTask>
       <bpmn:exclusiveGateway id="Gateway_08zpmm3">
-        <bpmn:incoming>Flow_0z0g3qd</bpmn:incoming>
-        <bpmn:incoming>Flow_0w8sz1w</bpmn:incoming>
+        <bpmn:incoming>Flow_0fr5gkj</bpmn:incoming>
+        <bpmn:incoming>Flow_1kbvv8i</bpmn:incoming>
         <bpmn:outgoing>Flow_0ehn3j7</bpmn:outgoing>
-      </bpmn:exclusiveGateway>
-      <bpmn:exclusiveGateway id="Gateway_03nz8lp" name="Ratenzahlung genehmigt?">
-        <bpmn:incoming>Flow_0shgdua</bpmn:incoming>
-        <bpmn:outgoing>Flow_1mel1rn</bpmn:outgoing>
-        <bpmn:outgoing>Flow_0w8sz1w</bpmn:outgoing>
       </bpmn:exclusiveGateway>
       <bpmn:userTask id="Activity_066zbp1" name="Zahlungsart wählen" camunda:assignee="demo">
         <bpmn:extensionElements>
@@ -446,7 +426,7 @@ reader = new BufferedReader(new
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_07azqqi" sourceRef="Activity_0pfwjbh" targetRef="Gateway_0z19klp" />
       <bpmn:sequenceFlow id="Flow_1ezyot3" sourceRef="Activity_1k78zcd" targetRef="Gateway_0z19klp" />
-      <bpmn:sequenceFlow id="Flow_0wt6tk8" sourceRef="Gateway_0z19klp" targetRef="Activity_1c8bddz" />
+      <bpmn:sequenceFlow id="Flow_0wt6tk8" sourceRef="Gateway_0z19klp" targetRef="Activity_0pghaqd" />
       <bpmn:sequenceFlow id="Flow_0icif1j" sourceRef="Activity_0q8e7lm" targetRef="Gateway_0p1g42m" />
       <bpmn:sequenceFlow id="Flow_12hgigr" name="3 Monate" sourceRef="Gateway_0p1g42m" targetRef="Activity_0pfwjbh">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${modality == 'three'}</bpmn:conditionExpression>
@@ -454,29 +434,43 @@ reader = new BufferedReader(new
       <bpmn:sequenceFlow id="Flow_0g7k0gh" name="6 Monate" sourceRef="Gateway_0p1g42m" targetRef="Activity_1k78zcd">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${modality == 'six'}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
-      <bpmn:sequenceFlow id="Flow_0tlkdmo" sourceRef="Activity_1c8bddz" targetRef="Activity_1boizvu" />
-      <bpmn:sequenceFlow id="Flow_1mel1rn" name="ja" sourceRef="Gateway_03nz8lp" targetRef="Activity_0ft3byi">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${finalConfirm}</bpmn:conditionExpression>
-      </bpmn:sequenceFlow>
-      <bpmn:sequenceFlow id="Flow_0jz05zj" name="positiv" sourceRef="Gateway_18x1a9w" targetRef="Activity_0q8e7lm">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${credit == 'positive'}</bpmn:conditionExpression>
-      </bpmn:sequenceFlow>
-      <bpmn:sequenceFlow id="Flow_0fz2nnc" sourceRef="Activity_0rpo29d" targetRef="Gateway_18x1a9w" />
-      <bpmn:sequenceFlow id="Flow_0z0g3qd" name="negativ" sourceRef="Gateway_18x1a9w" targetRef="Gateway_08zpmm3">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${credit == 'negative'}</bpmn:conditionExpression>
-      </bpmn:sequenceFlow>
-      <bpmn:sequenceFlow id="Flow_0shgdua" sourceRef="Activity_1boizvu" targetRef="Gateway_03nz8lp" />
       <bpmn:sequenceFlow id="Flow_0x63lux" sourceRef="Activity_17xytno" targetRef="Event_12he8e3" />
       <bpmn:sequenceFlow id="Flow_07s16qw" sourceRef="Activity_1jscnl7" targetRef="Activity_17xytno" />
       <bpmn:sequenceFlow id="Flow_0ehn3j7" sourceRef="Gateway_08zpmm3" targetRef="Activity_1jscnl7" />
-      <bpmn:sequenceFlow id="Flow_0w8sz1w" name="nein" sourceRef="Gateway_03nz8lp" targetRef="Gateway_08zpmm3">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!finalConfirm}</bpmn:conditionExpression>
-      </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_03ywp7b" sourceRef="Event_13zss6p" targetRef="Activity_066zbp1" />
       <bpmn:endEvent id="Event_0gitfmy">
         <bpmn:incoming>Flow_087kflz</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_087kflz" sourceRef="Gateway_0ky60y9" targetRef="Event_0gitfmy" />
+      <bpmn:boundaryEvent id="Event_0c0k36z" name="Ergebnis negativ" attachedToRef="Activity_0rpo29d">
+        <bpmn:outgoing>Flow_0fr5gkj</bpmn:outgoing>
+        <bpmn:conditionalEventDefinition id="ConditionalEventDefinition_1ylcxjw">
+          <bpmn:condition xsi:type="bpmn:tFormalExpression">${credit == 'negative'}</bpmn:condition>
+        </bpmn:conditionalEventDefinition>
+      </bpmn:boundaryEvent>
+      <bpmn:sequenceFlow id="Flow_0fr5gkj" sourceRef="Event_0c0k36z" targetRef="Gateway_08zpmm3" />
+      <bpmn:sequenceFlow id="Flow_0krblz8" sourceRef="Activity_0rpo29d" targetRef="Activity_0q8e7lm" />
+      <bpmn:sequenceFlow id="Flow_1kbvv8i" sourceRef="Event_1wj7pqx" targetRef="Gateway_08zpmm3" />
+      <bpmn:sequenceFlow id="Flow_1vlc9f7" sourceRef="Activity_1boizvu" targetRef="Activity_0ft3byi" />
+      <bpmn:boundaryEvent id="Event_1wj7pqx" name="Genehmigung abgelehnt" attachedToRef="Activity_1boizvu">
+        <bpmn:outgoing>Flow_1kbvv8i</bpmn:outgoing>
+        <bpmn:conditionalEventDefinition id="ConditionalEventDefinition_0equ4aw">
+          <bpmn:condition xsi:type="bpmn:tFormalExpression">${!finalConfirm}</bpmn:condition>
+        </bpmn:conditionalEventDefinition>
+      </bpmn:boundaryEvent>
+      <bpmn:userTask id="Activity_0pghaqd" name="Neue Buchungsübersicht anzeigen" camunda:assignee="demo">
+        <bpmn:extensionElements>
+          <camunda:formData>
+            <camunda:formField id="totalPrice" label="Neuer Gesamtpreis (inkl. 1,2% Zinsen):" type="string" defaultValue="${totalPrice}" />
+            <camunda:formField id="monthlyPrice" label="Monatlich zu zahlen:" type="string" defaultValue="${monthlyPrice}" />
+            <camunda:formField id="rate" label="Anzahl der Monate" type="long" defaultValue="${rate}" />
+            <camunda:formField id="confirm" label="Ratenzahlung an Filialleitung weiterleiten" type="boolean" />
+          </camunda:formData>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0wt6tk8</bpmn:incoming>
+        <bpmn:outgoing>Flow_1pt2j30</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:sequenceFlow id="Flow_1pt2j30" sourceRef="Activity_0pghaqd" targetRef="Activity_1boizvu" />
     </bpmn:subProcess>
     <bpmn:scriptTask id="Activity_1l2d4fc" name="Rechnung generieren" scriptFormat="javascript">
       <bpmn:incoming>Flow_1q88kv0</bpmn:incoming>
@@ -909,7 +903,7 @@ execution.setVariable("room", roomid)
     <bpmn:subProcess id="Activity_1y3h78y" name="Zusatzpakete buchen">
       <bpmn:incoming>Flow_0prshr5</bpmn:incoming>
       <bpmn:outgoing>Flow_10my8y6</bpmn:outgoing>
-      <bpmn:startEvent id="Event_1xy7ho2">
+      <bpmn:startEvent id="Event_1xy7ho2" name="Zusatzpaket gewünscht">
         <bpmn:outgoing>Flow_0md5ixk</bpmn:outgoing>
       </bpmn:startEvent>
       <bpmn:exclusiveGateway id="Gateway_0hguuws">
@@ -936,8 +930,8 @@ execution.setVariable("room", roomid)
         <bpmn:incoming>Flow_0vdxqqp</bpmn:incoming>
         <bpmn:outgoing>Flow_14hwu7v</bpmn:outgoing>
       </bpmn:userTask>
-      <bpmn:endEvent id="Event_0zieo21">
-        <bpmn:incoming>Flow_07fpwk7</bpmn:incoming>
+      <bpmn:endEvent id="Event_0zieo21" name="Zusatzpaket gebucht">
+        <bpmn:incoming>Flow_0fwrowj</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:scriptTask id="Activity_04chueb" name="Paket buchen" scriptFormat="javascript">
         <bpmn:incoming>Flow_1fl2hvo</bpmn:incoming>
@@ -989,15 +983,6 @@ reader = new BufferedReader(new
 
   reader.close();</bpmn:script>
       </bpmn:scriptTask>
-      <bpmn:userTask id="Activity_0y3iej9" name="Zusatzpaket buchen" camunda:assignee="demo">
-        <bpmn:extensionElements>
-          <camunda:formData>
-            <camunda:formField id="test" label="Ist es durchgelaufen" type="string" defaultValue="jaaa" />
-          </camunda:formData>
-        </bpmn:extensionElements>
-        <bpmn:incoming>Flow_0fwrowj</bpmn:incoming>
-        <bpmn:outgoing>Flow_07fpwk7</bpmn:outgoing>
-      </bpmn:userTask>
       <bpmn:sequenceFlow id="Flow_0md5ixk" sourceRef="Event_1xy7ho2" targetRef="Gateway_0hguuws" />
       <bpmn:sequenceFlow id="Flow_0gplu9y" name="Berlin" sourceRef="Gateway_0hguuws" targetRef="Activity_1rgnmyw">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${city == 'berlin'}</bpmn:conditionExpression>
@@ -1011,8 +996,7 @@ reader = new BufferedReader(new
       <bpmn:sequenceFlow id="Flow_14hwu7v" sourceRef="Activity_044xd05" targetRef="Gateway_0l25myp" />
       <bpmn:sequenceFlow id="Flow_0c94mcy" sourceRef="Activity_1vlp2sy" targetRef="Gateway_0l25myp" />
       <bpmn:sequenceFlow id="Flow_1fl2hvo" sourceRef="Gateway_0l25myp" targetRef="Activity_04chueb" />
-      <bpmn:sequenceFlow id="Flow_07fpwk7" sourceRef="Activity_0y3iej9" targetRef="Event_0zieo21" />
-      <bpmn:sequenceFlow id="Flow_0fwrowj" sourceRef="Activity_04chueb" targetRef="Activity_0y3iej9" />
+      <bpmn:sequenceFlow id="Flow_0fwrowj" sourceRef="Activity_04chueb" targetRef="Event_0zieo21" />
       <bpmn:sequenceFlow id="Flow_0q8l1hh" sourceRef="Activity_1rgnmyw" targetRef="Gateway_0l25myp" />
     </bpmn:subProcess>
   </bpmn:process>
@@ -1140,13 +1124,13 @@ reader = new BufferedReader(new
       <bpmndi:BPMNEdge id="Flow_0prshr5_di" bpmnElement="Flow_0prshr5">
         <di:waypoint x="2050" y="645" />
         <di:waypoint x="2050" y="564" />
-        <di:waypoint x="2185" y="564" />
+        <di:waypoint x="2170" y="564" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="2058" y="573" width="9" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10my8y6_di" bpmnElement="Flow_10my8y6">
-        <di:waypoint x="2290" y="564" />
+        <di:waypoint x="2270" y="564" />
         <di:waypoint x="2390" y="564" />
         <di:waypoint x="2390" y="645" />
       </bpmndi:BPMNEdge>
@@ -1198,81 +1182,16 @@ reader = new BufferedReader(new
           <dc:Bounds x="3369" y="1111" width="21" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Activity_01fl3cl_di" bpmnElement="Activity_01fl3cl">
-        <dc:Bounds x="400" y="1098" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0uux4c6_di" bpmnElement="Event_0sfdkmy">
-        <dc:Bounds x="262" y="1120" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="237" y="1163" width="87" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1sbh7j6_di" bpmnElement="Gateway_1sbh7j6" isMarkerVisible="true">
-        <dc:Bounds x="755" y="645" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0jqy6a2_di" bpmnElement="checkSingle">
-        <dc:Bounds x="910" y="524" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1tn8c6u_di" bpmnElement="checkDouble">
-        <dc:Bounds x="910" y="630" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0yev30b_di" bpmnElement="checkSuite">
-        <dc:Bounds x="910" y="740" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0hxevlc_di" bpmnElement="Gateway_0hxevlc" isMarkerVisible="true">
-        <dc:Bounds x="1115" y="645" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_19yvpt0_di" bpmnElement="zimmerVorschlagen">
-        <dc:Bounds x="1270" y="1098" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0vb6k4w_di" bpmnElement="Gateway_0vb6k4w" isMarkerVisible="true">
-        <dc:Bounds x="1485" y="1113" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1473" y="1076" width="74" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_19j48au_di" bpmnElement="zimmer">
-        <dc:Bounds x="1610" y="1098" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_1ikcpf9_di" bpmnElement="bezahlungDurchfuehren" isExpanded="false">
+        <dc:Bounds x="3020" y="1126" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_17dy2of_di" bpmnElement="buchungAnzeigen">
-        <dc:Bounds x="2830" y="1126" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_1o4yyqe_di" bpmnElement="Activity_1l2d4fc">
+        <dc:Bounds x="3640" y="728" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0hjnzbv_di" bpmnElement="Gateway_0hjnzbv" isMarkerVisible="true">
-        <dc:Bounds x="2025" y="645" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0hyxfsm_di" bpmnElement="Gateway_0hyxfsm" isMarkerVisible="true">
-        <dc:Bounds x="2365" y="645" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1qmizg2_di" bpmnElement="Activity_08szwhr">
-        <dc:Bounds x="1790" y="1098" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1i08km0_di" bpmnElement="zimmerBuchen">
-        <dc:Bounds x="2500" y="630" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1jqk7qb_di" bpmnElement="buchungBestaetigen">
-        <dc:Bounds x="3190" y="1126" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1t145ms_di" bpmnElement="Event_1t145ms">
-        <dc:Bounds x="4142" y="1140" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="4123" y="1183" width="74" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0cj9elw_di" bpmnElement="buchungAusgeben">
-        <dc:Bounds x="3940" y="1118" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1fslbxu_di" bpmnElement="Event_1fslbxu">
-        <dc:Bounds x="4142" y="982" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="4117" y="1025" width="87" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1nscx0i_di" bpmnElement="stornoAusgeben">
-        <dc:Bounds x="3940" y="960" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_0f2ormv_di" bpmnElement="Activity_0ksk7s4">
+        <dc:Bounds x="3640" y="570" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_02og7ln_di" bpmnElement="Gateway_02og7ln" isMarkerVisible="true">
@@ -1281,20 +1200,85 @@ reader = new BufferedReader(new
           <dc:Bounds x="3363" y="1198" width="74" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0f2ormv_di" bpmnElement="Activity_0ksk7s4">
-        <dc:Bounds x="3640" y="570" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_1nscx0i_di" bpmnElement="stornoAusgeben">
+        <dc:Bounds x="3940" y="960" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1o4yyqe_di" bpmnElement="Activity_1l2d4fc">
-        <dc:Bounds x="3640" y="728" width="100" height="80" />
+      <bpmndi:BPMNShape id="Event_1fslbxu_di" bpmnElement="Event_1fslbxu">
+        <dc:Bounds x="4142" y="982" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="4117" y="1025" width="87" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0cj9elw_di" bpmnElement="buchungAusgeben">
+        <dc:Bounds x="3940" y="1118" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1ikcpf9_di" bpmnElement="bezahlungDurchfuehren" isExpanded="false">
-        <dc:Bounds x="3020" y="1126" width="100" height="80" />
+      <bpmndi:BPMNShape id="Event_1t145ms_di" bpmnElement="Event_1t145ms">
+        <dc:Bounds x="4142" y="1140" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="4123" y="1183" width="74" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1jqk7qb_di" bpmnElement="buchungBestaetigen">
+        <dc:Bounds x="3190" y="1126" width="100" height="80" />
         <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1i08km0_di" bpmnElement="zimmerBuchen">
+        <dc:Bounds x="2500" y="630" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1qmizg2_di" bpmnElement="Activity_08szwhr">
+        <dc:Bounds x="1790" y="1098" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0hyxfsm_di" bpmnElement="Gateway_0hyxfsm" isMarkerVisible="true">
+        <dc:Bounds x="2365" y="645" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0hjnzbv_di" bpmnElement="Gateway_0hjnzbv" isMarkerVisible="true">
+        <dc:Bounds x="2025" y="645" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_17dy2of_di" bpmnElement="buchungAnzeigen">
+        <dc:Bounds x="2830" y="1126" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_19j48au_di" bpmnElement="zimmer">
+        <dc:Bounds x="1610" y="1098" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0vb6k4w_di" bpmnElement="Gateway_0vb6k4w" isMarkerVisible="true">
+        <dc:Bounds x="1485" y="1113" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1473" y="1076" width="74" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_19yvpt0_di" bpmnElement="zimmerVorschlagen">
+        <dc:Bounds x="1270" y="1098" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0hxevlc_di" bpmnElement="Gateway_0hxevlc" isMarkerVisible="true">
+        <dc:Bounds x="1115" y="645" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0yev30b_di" bpmnElement="checkSuite">
+        <dc:Bounds x="910" y="740" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1tn8c6u_di" bpmnElement="checkDouble">
+        <dc:Bounds x="910" y="630" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0jqy6a2_di" bpmnElement="checkSingle">
+        <dc:Bounds x="910" y="524" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1sbh7j6_di" bpmnElement="Gateway_1sbh7j6" isMarkerVisible="true">
+        <dc:Bounds x="755" y="645" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0uux4c6_di" bpmnElement="Event_0sfdkmy">
+        <dc:Bounds x="262" y="1120" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="237" y="1163" width="87" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_01fl3cl_di" bpmnElement="Activity_01fl3cl">
+        <dc:Bounds x="400" y="1098" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1y3h78y_di" bpmnElement="Activity_1y3h78y" isExpanded="false">
-        <dc:Bounds x="2190" y="524" width="100" height="80" />
+        <dc:Bounds x="2170" y="524" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_03ohyty_di" bpmnElement="Flow_03ohyty">
@@ -1333,17 +1317,8 @@ reader = new BufferedReader(new
         <di:waypoint x="216" y="784" />
         <di:waypoint x="340" y="784" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_1n20ptg" bpmnElement="Flow_0w8sz1w">
-        <di:waypoint x="2080" y="1393" />
-        <di:waypoint x="2080" y="1468" />
-        <di:waypoint x="1110" y="1468" />
-        <di:waypoint x="1110" y="921" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1585" y="1450" width="21" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_15omikn" bpmnElement="Flow_0ehn3j7">
-        <di:waypoint x="1135" y="896" />
+        <di:waypoint x="1115" y="896" />
         <di:waypoint x="1190" y="896" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_1q4z9hn" bpmnElement="Flow_07s16qw">
@@ -1353,44 +1328,6 @@ reader = new BufferedReader(new
       <bpmndi:BPMNEdge id="BPMNEdge_0611ln1" bpmnElement="Flow_0x63lux">
         <di:waypoint x="1480" y="896" />
         <di:waypoint x="1562" y="896" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_1dnmex9" bpmnElement="Flow_0shgdua">
-        <di:waypoint x="1980" y="1368" />
-        <di:waypoint x="2055" y="1368" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_0vf44b8" bpmnElement="Flow_0z0g3qd">
-        <di:waypoint x="880" y="809" />
-        <di:waypoint x="880" y="896" />
-        <di:waypoint x="1085" y="896" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="892" y="833" width="36" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_0rvd2ws" bpmnElement="Flow_0fz2nnc">
-        <di:waypoint x="800" y="784" />
-        <di:waypoint x="855" y="784" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_1qsvq0y" bpmnElement="Flow_0jz05zj">
-        <di:waypoint x="905" y="784" />
-        <di:waypoint x="1040" y="784" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="957" y="766" width="32" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_09bwdog" bpmnElement="Flow_1mel1rn">
-        <di:waypoint x="2105" y="1368" />
-        <di:waypoint x="2260" y="1368" />
-        <di:waypoint x="2260" y="298" />
-        <di:waypoint x="2350" y="298" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2125" y="1343" width="9" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_14hicr8" bpmnElement="Flow_0tlkdmo">
-        <di:waypoint x="1770" y="784" />
-        <di:waypoint x="1820" y="784" />
-        <di:waypoint x="1820" y="1368" />
-        <di:waypoint x="1880" y="1368" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_12k1qlb" bpmnElement="Flow_0g7k0gh">
         <di:waypoint x="1280" y="331" />
@@ -1416,9 +1353,9 @@ reader = new BufferedReader(new
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_1hud0b4" bpmnElement="Flow_0wt6tk8">
         <di:waypoint x="1595" y="306" />
-        <di:waypoint x="1620" y="306" />
-        <di:waypoint x="1620" y="784" />
+        <di:waypoint x="1670" y="306" />
         <di:waypoint x="1670" y="784" />
+        <di:waypoint x="1740" y="784" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_0bp4pfd" bpmnElement="Flow_1ezyot3">
         <di:waypoint x="1480" y="386" />
@@ -1461,6 +1398,33 @@ reader = new BufferedReader(new
         <di:waypoint x="2590" y="120" />
         <di:waypoint x="2590" y="273" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0fr5gkj_di" bpmnElement="Flow_0fr5gkj">
+        <di:waypoint x="770" y="842" />
+        <di:waypoint x="770" y="896" />
+        <di:waypoint x="1065" y="896" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0krblz8_di" bpmnElement="Flow_0krblz8">
+        <di:waypoint x="800" y="784" />
+        <di:waypoint x="1040" y="784" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1kbvv8i_di" bpmnElement="Flow_1kbvv8i">
+        <di:waypoint x="2020" y="1426" />
+        <di:waypoint x="2020" y="1446" />
+        <di:waypoint x="1090" y="1446" />
+        <di:waypoint x="1090" y="921" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1vlc9f7_di" bpmnElement="Flow_1vlc9f7">
+        <di:waypoint x="2050" y="1368" />
+        <di:waypoint x="2165" y="1368" />
+        <di:waypoint x="2165" y="298" />
+        <di:waypoint x="2350" y="298" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1pt2j30_di" bpmnElement="Flow_1pt2j30">
+        <di:waypoint x="1840" y="784" />
+        <di:waypoint x="1890" y="784" />
+        <di:waypoint x="1890" y="1368" />
+        <di:waypoint x="1950" y="1368" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_13zss6p_di" bpmnElement="Event_13zss6p">
         <dc:Bounds x="180" y="766" width="36" height="36" />
       </bpmndi:BPMNShape>
@@ -1482,9 +1446,6 @@ reader = new BufferedReader(new
       <bpmndi:BPMNShape id="BPMNShape_0393e0m" bpmnElement="Activity_1k78zcd">
         <dc:Bounds x="1380" y="346" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0weo6mv" bpmnElement="Activity_1c8bddz">
-        <dc:Bounds x="1670" y="744" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0smervh" bpmnElement="Activity_14l2kbm">
         <dc:Bounds x="1380" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -1494,15 +1455,6 @@ reader = new BufferedReader(new
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0hr0bu8" bpmnElement="Activity_0q8e7lm">
         <dc:Bounds x="1040" y="744" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1eqerpa" bpmnElement="Gateway_18x1a9w" isMarkerVisible="true">
-        <dc:Bounds x="855" y="759" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="848" y="722" width="63" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1fl8it4" bpmnElement="Activity_1boizvu">
-        <dc:Bounds x="1880" y="1328" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1b8t0mr" bpmnElement="Event_12he8e3">
         <dc:Bounds x="1562" y="878" width="36" height="36" />
@@ -1520,43 +1472,58 @@ reader = new BufferedReader(new
       <bpmndi:BPMNShape id="BPMNShape_0eagml1" bpmnElement="Activity_1jscnl7">
         <dc:Bounds x="1190" y="856" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_07d6632" bpmnElement="Gateway_08zpmm3" isMarkerVisible="true">
-        <dc:Bounds x="1085" y="871" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_06wfv1j" bpmnElement="Gateway_03nz8lp" isMarkerVisible="true">
-        <dc:Bounds x="2055" y="1343" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2046" y="1306" width="68" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1p3s6tq" bpmnElement="Activity_066zbp1">
         <dc:Bounds x="340" y="744" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0gitfmy_di" bpmnElement="Event_0gitfmy">
         <dc:Bounds x="2812" y="280" width="36" height="36" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_07d6632" bpmnElement="Gateway_08zpmm3" isMarkerVisible="true">
+        <dc:Bounds x="1065" y="871" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1fl8it4" bpmnElement="Activity_1boizvu">
+        <dc:Bounds x="1950" y="1328" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0tysnhv" bpmnElement="Activity_0pghaqd">
+        <dc:Bounds x="1740" y="744" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1lak57m_di" bpmnElement="Event_0c0k36z">
+        <dc:Bounds x="752" y="806" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="789" y="833" width="82" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_160s31d_di" bpmnElement="Event_1wj7pqx">
+        <dc:Bounds x="2002" y="1390" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2045" y="1416" width="70" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1yc2xru">
     <bpmndi:BPMNPlane id="BPMNPlane_1iu3yec" bpmnElement="Activity_1y3h78y">
-      <bpmndi:BPMNEdge id="BPMNEdge_018xgwt" bpmnElement="Flow_0md5ixk">
-        <di:waypoint x="188" y="250" />
-        <di:waypoint x="285" y="250" />
+      <bpmndi:BPMNEdge id="Flow_0q8l1hh_di" bpmnElement="Flow_0q8l1hh">
+        <di:waypoint x="520" y="130" />
+        <di:waypoint x="610" y="130" />
+        <di:waypoint x="610" y="225" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_0shd9er" bpmnElement="Flow_0gplu9y">
-        <di:waypoint x="310" y="225" />
-        <di:waypoint x="310" y="130" />
-        <di:waypoint x="420" y="130" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="345" y="113" width="29" height="14" />
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNEdge id="Flow_0fwrowj_di" bpmnElement="Flow_0fwrowj">
+        <di:waypoint x="780" y="250" />
+        <di:waypoint x="852" y="250" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_1odku5o" bpmnElement="Flow_1cocx5s">
-        <di:waypoint x="335" y="250" />
-        <di:waypoint x="420" y="250" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="340" y="232" width="40" height="14" />
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNEdge id="BPMNEdge_02v4ubf" bpmnElement="Flow_1fl2hvo">
+        <di:waypoint x="635" y="250" />
+        <di:waypoint x="680" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_10o5d2o" bpmnElement="Flow_0c94mcy">
+        <di:waypoint x="520" y="250" />
+        <di:waypoint x="585" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_0lna469" bpmnElement="Flow_14hwu7v">
+        <di:waypoint x="520" y="380" />
+        <di:waypoint x="610" y="380" />
+        <di:waypoint x="610" y="275" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_0bflluu" bpmnElement="Flow_0vdxqqp">
         <di:waypoint x="310" y="275" />
@@ -1566,34 +1533,36 @@ reader = new BufferedReader(new
           <dc:Bounds x="339" y="363" width="42" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_0lna469" bpmnElement="Flow_14hwu7v">
-        <di:waypoint x="520" y="380" />
-        <di:waypoint x="610" y="380" />
-        <di:waypoint x="610" y="275" />
+      <bpmndi:BPMNEdge id="BPMNEdge_1odku5o" bpmnElement="Flow_1cocx5s">
+        <di:waypoint x="335" y="250" />
+        <di:waypoint x="420" y="250" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="340" y="232" width="40" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_10o5d2o" bpmnElement="Flow_0c94mcy">
-        <di:waypoint x="520" y="250" />
-        <di:waypoint x="585" y="250" />
+      <bpmndi:BPMNEdge id="BPMNEdge_0shd9er" bpmnElement="Flow_0gplu9y">
+        <di:waypoint x="310" y="225" />
+        <di:waypoint x="310" y="130" />
+        <di:waypoint x="420" y="130" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="345" y="113" width="29" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0q8l1hh_di" bpmnElement="Flow_0q8l1hh">
-        <di:waypoint x="520" y="130" />
-        <di:waypoint x="610" y="130" />
-        <di:waypoint x="610" y="225" />
+      <bpmndi:BPMNEdge id="BPMNEdge_018xgwt" bpmnElement="Flow_0md5ixk">
+        <di:waypoint x="188" y="250" />
+        <di:waypoint x="285" y="250" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_02v4ubf" bpmnElement="Flow_1fl2hvo">
-        <di:waypoint x="635" y="250" />
-        <di:waypoint x="680" y="250" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_0ih1eh4" bpmnElement="Flow_07fpwk7">
-        <di:waypoint x="940" y="250" />
-        <di:waypoint x="1002" y="250" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0fwrowj_di" bpmnElement="Flow_0fwrowj">
-        <di:waypoint x="780" y="250" />
-        <di:waypoint x="840" y="250" />
-      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="BPMNShape_0i6reky" bpmnElement="Event_1xy7ho2">
+        <dc:Bounds x="152" y="232" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="140" y="275" width="60" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0tsdldg" bpmnElement="Gateway_0hguuws" isMarkerVisible="true">
         <dc:Bounds x="285" y="225" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_00br5n8" bpmnElement="Gateway_0l25myp" isMarkerVisible="true">
+        <dc:Bounds x="585" y="225" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0a4xloy" bpmnElement="Activity_1rgnmyw">
         <dc:Bounds x="420" y="90" width="100" height="80" />
@@ -1607,20 +1576,14 @@ reader = new BufferedReader(new
         <dc:Bounds x="420" y="340" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0i6reky" bpmnElement="Event_1xy7ho2">
-        <dc:Bounds x="152" y="232" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_00br5n8" bpmnElement="Gateway_0l25myp" isMarkerVisible="true">
-        <dc:Bounds x="585" y="225" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0z02m63" bpmnElement="Event_0zieo21">
-        <dc:Bounds x="1002" y="232" width="36" height="36" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0zsruhn_di" bpmnElement="Activity_04chueb">
         <dc:Bounds x="680" y="210" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_08xmq4q_di" bpmnElement="Activity_0y3iej9">
-        <dc:Bounds x="840" y="210" width="100" height="80" />
+      <bpmndi:BPMNShape id="BPMNShape_0z02m63" bpmnElement="Event_0zieo21">
+        <dc:Bounds x="852" y="232" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="840" y="275" width="60" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

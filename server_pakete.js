@@ -119,7 +119,7 @@ function isLegitCity(cityname){
     return cities.includes(cityname.toLowerCase());
 }
 
-//let pakete
+//Idee zur Zusatzpaketanlage, wird aber nicht aktiv genutzt
 let berlin_package = {
 	package1: {
 		p_title : "Fahrt über die Spree",
